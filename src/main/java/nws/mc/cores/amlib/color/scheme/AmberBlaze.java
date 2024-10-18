@@ -1,0 +1,18 @@
+package nws.mc.cores.amlib.color.scheme;
+
+import nws.dev.core.color.scheme._ColorScheme;
+
+public class AmberBlaze extends _ColorScheme {
+    @Override
+    public void pushColor() {
+        _ColorScheme.Color c = new _ColorScheme.Color(0xFFFFB300, 0xFFFFA000,0xFFFF8F00);
+        addColor("border",c);
+        addColor("element_border",c);
+        c = new _ColorScheme.Color(0xFFFFF3E0, 0x66FFCC80,0x4DFFB74D);
+        addColor("background",c);
+        addColor("element_background",c);
+        c = new _ColorScheme.Color(0xFF4E342E, 0x994E342E,0xCC4E342E);
+        addColor("text",c);
+        addColor("element_text",c);
+    }
+}

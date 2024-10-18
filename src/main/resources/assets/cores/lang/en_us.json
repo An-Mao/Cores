@@ -1,0 +1,32 @@
+{
+  "cores": "Cores",
+  "key.category.cores.mc": "Cores",
+  "key.cores.open_menu": "Open Menu",
+
+
+  "color_scheme.cores.default": "Default",
+  "color_scheme.cores.cold_gray": "Cold Gray",
+  "color_scheme.cores.blue_fresh": "Blue Fresh",
+  "color_scheme.cores.natural_greenery": "Natural Greenery",
+  "color_scheme.cores.ocean_breeze": "Ocean Breeze",
+  "color_scheme.cores.sunset_glow": "Sunset Glow",
+  "color_scheme.cores.fresh_mint": "Fresh Mint",
+  "color_scheme.cores.autumn_leaves": "Autumn Leaves",
+  "color_scheme.cores.twilight_purple": "Twilight Purple",
+
+  "color_scheme.cores.midnight_blue": "Midnight Blue",
+  "color_scheme.cores.coral_reef": "Coral Reef",
+  "color_scheme.cores.emerald_green": "Emerald Green",
+  "color_scheme.cores.soft_lavender": "Soft Lavender",
+  "color_scheme.cores.golden_sands": "Golden Sands",
+  "color_scheme.cores.crimson_tide": "Crimson Tide",
+  "color_scheme.cores.misty_violet": "Misty Violet",
+  "color_scheme.cores.teal_whisper": "Teal Whisper",
+  "color_scheme.cores.amber_blaze": "Amber Blaze",
+  "color_scheme.cores.peach_melba": "Peach Melba",
+
+  "screen.cores.settings.title": "Setting",
+  "screen.cores.settings.label.select_color": "Select Color Scheme",
+  "screen.cores.settings.drop_down_select.color_scheme": "Color Scheme",
+  "screen.cores.settings.button.save": "Save"
+}
