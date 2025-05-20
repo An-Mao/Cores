@@ -19,11 +19,14 @@ public class Cores {
         //load();
         ColorSchemeRegister.register(modEventBus);
         DataRegister.register(modEventBus);
+
         /*
         _EasyJS easyJS = _EasyJS.NotSafe();
         System.out.println(easyJS.runCode("1+1"));
 
          */
+
+
     }
     private void load(){
         //_File.checkAndCreateDir(CONFIG_DIR);

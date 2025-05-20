@@ -15,7 +15,10 @@ version = mod_version
 group = mod_group_id
 
 repositories {
-    mavenLocal()
+    //mavenLocal()
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 base {
@@ -62,10 +65,36 @@ configurations {
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
-    implementation("dev.anye:core:${core_version}")
-    libraries "dev.anye:core:${core_version}"
-    jarJar(group:'dev.anye', name:'core', version:"[${core_version},)")
+    //libraries("dev.anye:core:${core_version}-mc")
+    libraries jarJar(group:'dev.anye', name:'core', version:"${core_version}-mc")
 }
+
+/*
+jarJar.fromRuntimeConfiguration()
+
+jarJar {
+    // Include or exclude dependencies here from runtime configuration
+    dependencies {
+        // Exclude any dependency which begins with 'com.google.gson.'
+        exclude(dependency('com.google.gson.*'))
+    }
+}
+
+
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 tasks.withType(ProcessResources).configureEach {
     var replaceProperties = [
