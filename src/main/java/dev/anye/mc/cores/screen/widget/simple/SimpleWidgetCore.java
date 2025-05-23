@@ -1,13 +1,13 @@
 package dev.anye.mc.cores.screen.widget.simple;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.core.math._Math;
 import dev.anye.mc.cores.render.Draw;
 import dev.anye.mc.cores.screen.widget.RenderWidgetCore;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
@@ -269,6 +269,11 @@ public abstract class SimpleWidgetCore<T extends SimpleWidgetCore<T>> extends Re
     }
     @Override
     protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        PoseStack poseStack = pGuiGraphics.pose();
+        poseStack.pushPose();
+        pGuiGraphics.fill(0,0,100,100,0xff0000);
+        poseStack.popPose();
+
         if (this.visible) {
             int borderColor = getBorderUsualColor();
             int fillColor = getBackgroundUsualColor();
@@ -276,12 +281,14 @@ public abstract class SimpleWidgetCore<T extends SimpleWidgetCore<T>> extends Re
                 borderColor = getBorderHoverColor();
                 fillColor = getBackgroundHoverColor();
             }
-            PoseStack poseStack = pGuiGraphics.pose();
+            /*
             poseStack.pushPose();
             poseStack.translate(0, 0, layerZ);
             renderShape(pGuiGraphics,borderColor,fillColor);
             renderContent(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
             poseStack.popPose();
+
+             */
         }
     }
     protected abstract void renderContent(GuiGraphics guiGraphics,int mouseX, int mouseY, float partialTick);

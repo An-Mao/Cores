@@ -1,10 +1,7 @@
 package dev.anye.mc.cores.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.renderer.GameRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix4f;
 
 public class DrawImage {
     public static void test(){}
