@@ -21,6 +21,7 @@ public abstract class RenderWidgetCore<T extends RenderWidgetCore<T>> extends Ab
     protected Font font;
     protected int messageWidth,singleCharacterWidth;
     protected int textUsualColor, textHoverColor,textSelectColor, backgroundUsualColor, backgroundHoverColor, backgroundSelectColor;
+    protected _ColorScheme.Color textColor,backgroundColor,borderColor,eBorderColor,eTextColor,eBackgroundColor;
     protected int layerZ = 1000;
     protected int halfFontLine ;
     protected List<Component> customToolTip = new ArrayList<>();
@@ -33,15 +34,24 @@ public abstract class RenderWidgetCore<T extends RenderWidgetCore<T>> extends Ab
         setColorScheme(ColorSchemes.getGlobal());
     }
 
+    public _ColorScheme colorScheme(){
+        return ColorSchemes.getGlobal();
+    }
+
+
     public T setColorScheme(_ColorScheme colorScheme) {
-        _ColorScheme.Color color = colorScheme.getColor("text");
-        this.textHoverColor = color.HoverColor();
-        this.textUsualColor = color.UsualColor();
-        this.textSelectColor = color.SelectColor();
-        color = colorScheme.getColor("background");
-        this.backgroundHoverColor = color.HoverColor();
-        this.backgroundUsualColor = color.UsualColor();
-        this.backgroundSelectColor = color.SelectColor();
+        textColor = colorScheme.getColor(_ColorScheme.TEXT);
+        this.textHoverColor = textColor.HoverColor();
+        this.textUsualColor = textColor.UsualColor();
+        this.textSelectColor = textColor.SelectColor();
+        backgroundColor = colorScheme.getColor(_ColorScheme.BACKGROUND);
+        this.backgroundHoverColor = backgroundColor.HoverColor();
+        this.backgroundUsualColor = backgroundColor.UsualColor();
+        this.backgroundSelectColor = backgroundColor.SelectColor();
+        this.borderColor = colorScheme.getColor(_ColorScheme.BORDER);
+        this.eBorderColor = colorScheme.getColor(_ColorScheme.ELEMENT_BORDER);
+        this.eTextColor = colorScheme.getColor(_ColorScheme.ELEMENT_TEXT);
+        this.eBackgroundColor = colorScheme.getColor(_ColorScheme.ELEMENT_BACKGROUND);
         return self();
     }
     protected T self(){

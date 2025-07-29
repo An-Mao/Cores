@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import dev.anye.core.debug._DeBug;
 import dev.anye.core.math._Math;
-import dev.anye.mc.cores.render.Draw;
+import dev.anye.mc.cores.render.DrawSector;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -186,7 +186,7 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
                 poseStack.pushPose();
                 poseStack.translate(centerX,centerY,0);
                 poseStack.mulPose(Axis.ZP.rotation((float) (startAngle)));
-                Draw.drawSector(poseStack.last().pose(),innerRadius,outerRadius,-halfFanArc,halfFanArc,bgc);
+                DrawSector.draw(poseStack.last().pose(),innerRadius,outerRadius,-halfFanArc,halfFanArc,bgc);
                 if (isValidIndex(sIndex)) {
                     DT_ListBoxData boxData = getData(sIndex);
                     drawName(guiGraphics,startAngle,boxData.getComponent().getString(),tc,size);

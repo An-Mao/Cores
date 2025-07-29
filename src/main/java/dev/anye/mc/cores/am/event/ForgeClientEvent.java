@@ -34,7 +34,8 @@ public class ForgeClientEvent {
         }
 
          */
-        if (event.getKey() == KeyBinding.OPEN_MENU.getKey().getValue()) {
+        //event.getKey() == KeyBinding.OPEN_MENU.getKey().getValue()
+        if (KeyBinding.OPEN_MENU.consumeClick()) {
             Screen screen = Minecraft.getInstance().screen;
             if (event.getAction() == 1) {
                 if (screen == null) {

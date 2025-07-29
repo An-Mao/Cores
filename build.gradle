@@ -15,7 +15,7 @@ version = mod_version
 group = mod_group_id
 
 repositories {
-    //mavenLocal()
+    mavenLocal()
     flatDir {
         dirs 'libs'
     }
@@ -66,7 +66,8 @@ configurations {
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
     //libraries("dev.anye:core:${core_version}-mc")
-    libraries jarJar(group:'dev.anye', name:'core', version:"${core_version}-mc")
+    libraries jarJar(group:'dev.anye', name:'core', version:"[${core_version},)")
+    implementation "dev.anye.mc:graaljs:1.21.x-24.2.1-1-Neo-all"
 }
 
 /*

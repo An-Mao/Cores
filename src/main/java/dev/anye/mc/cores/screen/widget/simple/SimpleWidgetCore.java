@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.core.math._Math;
-import dev.anye.mc.cores.render.Draw;
+import dev.anye.mc.cores.render.DrawSector;
 import dev.anye.mc.cores.screen.widget.RenderWidgetCore;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
@@ -234,13 +234,13 @@ public abstract class SimpleWidgetCore<T extends SimpleWidgetCore<T>> extends Re
         poseStack.pushPose();
         poseStack.translate(x,y,0);
         poseStack.translate(radius, radius, 0);
-        Draw.drawSector(poseStack.last().pose(),0,radius, _Math.ARC_180,_Math.ARC_270,color);
+        DrawSector.draw(poseStack.last().pose(),0,radius, _Math.ARC_180,_Math.ARC_270,color);
         poseStack.translate(width-2*radius, 0, 0);
-        Draw.drawSector(poseStack.last().pose(),0,radius,_Math.ARC_270,_Math.ARC_360,color);
+        DrawSector.draw(poseStack.last().pose(),0,radius,_Math.ARC_270,_Math.ARC_360,color);
         poseStack.translate(0, height-2 * radius, 0);
-        Draw.drawSector(poseStack.last().pose(),0,radius,0,_Math.ARC_90,color);
+        DrawSector.draw(poseStack.last().pose(),0,radius,0,_Math.ARC_90,color);
         poseStack.translate(-(width-2*radius), 0, 0);
-        Draw.drawSector(poseStack.last().pose(),0,radius,_Math.ARC_90,_Math.ARC_180,color);
+        DrawSector.draw(poseStack.last().pose(),0,radius,_Math.ARC_90,_Math.ARC_180,color);
         poseStack.popPose();
     }
     protected void addVertex(BufferBuilder buffer, int x, int y, int color) {

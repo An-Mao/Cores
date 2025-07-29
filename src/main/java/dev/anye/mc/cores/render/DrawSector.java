@@ -6,20 +6,20 @@ import dev.anye.core.math._MathCDT;
 import net.minecraft.client.renderer.GameRenderer;
 import org.joml.Matrix4f;
 
-public class Draw {
-    public static void drawSector(int outerRadius, double startAngle, double endAngle, int color) {
-        drawSector(0, outerRadius, startAngle, endAngle, color, _MathCDT.ARC);
+public class DrawSector {
+    public static void draw(int outerRadius, double startAngle, double endAngle, int color) {
+        draw(0, outerRadius, startAngle, endAngle, color, _MathCDT.ARC);
     }
 
-    public static void drawSector(int outerRadius, double startAngle, double endAngle, int color, double arc) {
-        drawSector(0, outerRadius, startAngle, endAngle, color, arc);
+    public static void draw(int outerRadius, double startAngle, double endAngle, int color, double arc) {
+        draw(0, outerRadius, startAngle, endAngle, color, arc);
     }
 
-    public static void drawSector(int innerRadius, int outerRadius, double startAngle, double endAngle, int color) {
-        drawSector(innerRadius, outerRadius, startAngle, endAngle, color, _MathCDT.ARC);
+    public static void draw(int innerRadius, int outerRadius, double startAngle, double endAngle, int color) {
+        draw(innerRadius, outerRadius, startAngle, endAngle, color, _MathCDT.ARC);
     }
 
-    public static void drawSector(int innerRadius, int outerRadius, double startAngle, double endAngle, int color, double arc) {
+    public static void draw(int innerRadius, int outerRadius, double startAngle, double endAngle, int color, double arc) {
         Tesselator tesselator = Tesselator.getInstance();
         RenderSystem.disableCull();
         RenderSystem.enableBlend();
@@ -39,7 +39,7 @@ public class Draw {
         BufferUploader.drawWithShader(buffer.buildOrThrow());
     }
 
-    public static void drawSector(Matrix4f matrix4f, int innerRadius, int outerRadius, double startArc, double endArc, int color) {
+    public static void draw(Matrix4f matrix4f, int innerRadius, int outerRadius, double startArc, double endArc, int color) {
         Tesselator tesselator = Tesselator.getInstance();
         RenderSystem.disableCull();
         RenderSystem.enableBlend();
@@ -54,18 +54,16 @@ public class Draw {
             buffer.addVertex(matrix4f, (float) x1, (float) y1, 0).setColor(color);//.endVertex();
 
         }
-        //tesselator.end();
-        //buffer.build().close();
         BufferUploader.drawWithShader(buffer.buildOrThrow());
     }
-    public static void drawSector(PoseStack poseStack, int innerRadius, int outerRadius, double startArc, double endArc, int color) {
-        drawSector(poseStack.last().pose(), innerRadius, outerRadius, startArc, endArc, color);
+    public static void draw(PoseStack poseStack, int innerRadius, int outerRadius, double startArc, double endArc, int color) {
+        draw(poseStack.last().pose(), innerRadius, outerRadius, startArc, endArc, color);
     }
-    public static void drawSector(PoseStack poseStack, int innerRadiusX, int innerRadiusY, int outerRadiusX, int outerRadiusY, double startArc, double endArc, int color){
-        drawSector(poseStack.last().pose(),innerRadiusX,innerRadiusY,outerRadiusX,outerRadiusY,startArc,endArc,color);
+    public static void draw(PoseStack poseStack, int innerRadiusX, int innerRadiusY, int outerRadiusX, int outerRadiusY, double startArc, double endArc, int color){
+        draw(poseStack.last().pose(),innerRadiusX,innerRadiusY,outerRadiusX,outerRadiusY,startArc,endArc,color);
     }
 
-    public static void drawSector(Matrix4f matrix4f, int innerRadiusX, int innerRadiusY, int outerRadiusX, int outerRadiusY, double startArc, double endArc, int color) {
+    public static void draw(Matrix4f matrix4f, int innerRadiusX, int innerRadiusY, int outerRadiusX, int outerRadiusY, double startArc, double endArc, int color) {
         Tesselator tesselator = Tesselator.getInstance();
         RenderSystem.disableCull();
         RenderSystem.enableBlend();
@@ -82,6 +80,4 @@ public class Draw {
         }
         BufferUploader.drawWithShader(buffer.buildOrThrow());
     }
-
-
 }

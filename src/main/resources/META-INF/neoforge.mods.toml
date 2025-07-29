@@ -90,3 +90,18 @@ description='''${mod_description}'''
 # stop your mod loading on the server for example.
 #[features.${mod_id}]
 #openGLVersion="[3.2,)"
+
+[[dependencies.${mod_id}]] #optional
+# the modid of the dependency
+modId="graaljs" #mandatory
+# The type of the dependency. Can be one of "required", "optional", "incompatible" or "discouraged" (case insensitive).
+# 'required' requires the mod to exist, 'optional' does not
+# 'incompatible' will prevent the game from loading when the mod exists, and 'discouraged' will show a warning
+type="optional" #mandatory
+# Optional field describing why the dependency is required or why it is incompatible
+# reason="..."
+# The version range of the dependency
+versionRange="[1.21.x-24.2.1-1,)"
+ordering="AFTER"
+# Side this dependency is applied on - BOTH, CLIENT, or SERVER
+side="BOTH"
