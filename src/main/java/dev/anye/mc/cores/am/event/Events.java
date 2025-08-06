@@ -10,7 +10,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 public class Events {
-    @EventBusSubscriber(modid = Cores.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = Cores.MOD_ID)
     public static class ModEvents {
         @SubscribeEvent
         public static void commonSetup(final FMLCommonSetupEvent event)
@@ -18,7 +18,7 @@ public class Events {
         }
     }
 
-    @EventBusSubscriber(modid = Cores.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
+    @EventBusSubscriber(modid = Cores.MOD_ID)
     public static class GameEvents {
         /*
         @SubscribeEvent

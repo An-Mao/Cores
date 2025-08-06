@@ -24,7 +24,7 @@ public class ColorSchemeRegister {
             .sync(false)
             .maxId(256)
             .create();
-    @EventBusSubscriber(modid = Cores.MOD_ID,bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = Cores.MOD_ID)
     public static class reg{
         @SubscribeEvent
         public static void registerRegistries(NewRegistryEvent event) {

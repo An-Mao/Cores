@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.170'
+    id 'net.neoforged.gradle.userdev' version '7.0.192'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -18,6 +18,10 @@ repositories {
     mavenLocal()
     flatDir {
         dirs 'libs'
+    }
+    maven {
+        name = "AnYe"
+        url = "https://maven.anye.dev/releases/"
     }
 }
 
@@ -65,12 +69,30 @@ configurations {
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
+
+    /*
+    implementation("org.ow2.asm:asm:9.7") // 或者你想要使用的版本
+    implementation("org.ow2.asm:asm-commons:9.7") // 如果你使用 asm-commons，请包含
+    implementation("org.ow2.asm:asm-tree:9.7")    // 如果你使用 asm-tree，请包含
+    implementation("org.ow2.asm:asm-analysis:9.7") // 如果你使用 asm-analysis，请包含
+    implementation("org.ow2.asm:asm-util:9.7")    // 如果你使用 asm-util，请包含
+
+     */
     //libraries("dev.anye:core:${core_version}-mc")
     libraries jarJar(group:'dev.anye', name:'core', version:"[${core_version},)")
     implementation "dev.anye.mc:graaljs:1.21.x-24.2.1-1-Neo-all"
 }
 
 /*
+configurations.configureEach {
+    resolutionStrategy {
+        force "org.ow2.asm:asm:7.3.1" // 强制指定 ASM 的特定版本
+        force "org.ow2.asm:asm-commons:7.3.1"
+        force "org.ow2.asm:asm-tree:7.3.1"
+        force "org.ow2.asm:asm-analysis:7.3.1"
+        force "org.ow2.asm:asm-util:7.3.1"
+    }
+}
 jarJar.fromRuntimeConfiguration()
 
 jarJar {
@@ -93,16 +115,11 @@ jarJar {
 
 
 
-
-
-
-
 tasks.withType(ProcessResources).configureEach {
     var replaceProperties = [
             minecraft_version      : minecraft_version,
             minecraft_version_range: minecraft_version_range,
             neo_version            : neo_version,
-            neo_version_range      : neo_version_range,
             loader_version_range   : loader_version_range,
             mod_id                 : mod_id,
             mod_name               : mod_name,

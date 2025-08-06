@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.*;
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.core.dt._BoundingBox;
 import dev.anye.core.math._Math;
+import dev.anye.mc.cores.render.BufferHelper;
 import dev.anye.mc.cores.render.DrawSector;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
@@ -12,12 +13,8 @@ import org.joml.Matrix4f;
 
 public class RoundedBorderStyle extends BorderStyle{
     private int radius;
-    public RoundedBorderStyle(_ColorScheme colorScheme, int radius){
-        super(colorScheme);
-        setRadius(radius);
-    }
     public RoundedBorderStyle(int radius){
-        super();
+        super(radius,radius,radius,radius);
         setRadius(radius);
     }
 
@@ -34,11 +31,8 @@ public class RoundedBorderStyle extends BorderStyle{
         _ColorScheme.Color background = colorScheme.getColor(_ColorScheme.BACKGROUND);
         int fillColor = hover ? background.HoverColor() : background.UsualColor();
 
-        renderShape(guiGraphics.pose(),boundingBox.getX(),boundingBox.getY(),boundingBox.getW(),boundingBox.getH(),radius,borderColor,fillColor);
+        drawRoundedRect(guiGraphics.pose(),boundingBox.getX(),boundingBox.getY(),boundingBox.getW(),boundingBox.getH(),radius,borderColor,fillColor);
         boundingBox.retraction(radius);
-    }
-    protected void renderShape(PoseStack poseStack, int x, int y, int width, int height, int radius, int borderColor, int fillColor) {
-        drawRoundedRect(poseStack,x, y, width, height, radius, borderColor, fillColor);
     }
 
     protected void drawRoundedRect(PoseStack poseStack, int x, int y, int width, int height, int radius, int borderColor, int fillColor) {
@@ -50,10 +44,10 @@ public class RoundedBorderStyle extends BorderStyle{
         BufferBuilder buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
         poseStack.pushPose();
         Matrix4f matrix = poseStack.last().pose();
-        addVertex(buffer,matrix, x + radius, y + radius, fillColor);
-        addVertex(buffer,matrix, x + width - radius, y + radius, fillColor);
-        addVertex(buffer,matrix, x + width - radius, y + height - radius, fillColor);
-        addVertex(buffer,matrix, x + radius, y + height - radius, fillColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + radius, y + radius, fillColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + width - radius, y + radius, fillColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + width - radius, y + height - radius, fillColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + radius, y + height - radius, fillColor);
         BufferUploader.drawWithShader(buffer.buildOrThrow());
         poseStack.popPose();
         // Draw borders and corners
@@ -69,25 +63,25 @@ public class RoundedBorderStyle extends BorderStyle{
     }
     protected void drawBorder(BufferBuilder buffer,Matrix4f matrix, int x, int y, int width, int height, int radius, int borderColor) {
         // Top border
-        addVertex(buffer,matrix, x + radius, y, borderColor);
-        addVertex(buffer,matrix, x + width - radius, y, borderColor);
-        addVertex(buffer,matrix, x + width - radius, y + radius, borderColor);
-        addVertex(buffer,matrix, x + radius, y + radius, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + radius, y, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + width - radius, y, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + width - radius, y + radius, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + radius, y + radius, borderColor);
         // Bottom border
-        addVertex(buffer,matrix, x + radius, y + height - radius, borderColor);
-        addVertex(buffer,matrix, x + width - radius, y + height - radius, borderColor);
-        addVertex(buffer,matrix, x + width - radius, y + height, borderColor);
-        addVertex(buffer,matrix, x + radius, y + height, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + radius, y + height - radius, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + width - radius, y + height - radius, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + width - radius, y + height, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + radius, y + height, borderColor);
         // Left border
-        addVertex(buffer,matrix, x, y + radius, borderColor);
-        addVertex(buffer,matrix, x + radius, y + radius, borderColor);
-        addVertex(buffer,matrix, x + radius, y + height - radius, borderColor);
-        addVertex(buffer,matrix, x, y + height - radius, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x, y + radius, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + radius, y + radius, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + radius, y + height - radius, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x, y + height - radius, borderColor);
         // Right border
-        addVertex(buffer,matrix, x + width - radius, y + radius, borderColor);
-        addVertex(buffer,matrix, x + width, y + radius, borderColor);
-        addVertex(buffer,matrix, x + width, y + height - radius, borderColor);
-        addVertex(buffer,matrix, x + width - radius, y + height - radius, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + width - radius, y + radius, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + width, y + radius, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + width, y + height - radius, borderColor);
+        BufferHelper.addColorVertex(buffer,matrix, x + width - radius, y + height - radius, borderColor);
     }
     protected void drawCorners(PoseStack poseStack, int x, int y, int width, int height, int radius, int color) {
         //PoseStack poseStack = guiGraphics.pose();
@@ -102,11 +96,5 @@ public class RoundedBorderStyle extends BorderStyle{
         poseStack.translate(-(width-2*radius), 0, 0);
         DrawSector.draw(poseStack.last().pose(),0,radius,_Math.ARC_90,_Math.ARC_180,color);
         poseStack.popPose();
-    }
-    protected void addVertex(BufferBuilder buffer, int x, int y, int color) {
-        buffer.addVertex(x, y, 0).setColor((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, (color >> 24) & 0xFF);//.endVertex();
-    }
-    protected void addVertex(BufferBuilder buffer, Matrix4f matrix, int x, int y, int color) {
-        buffer.addVertex(matrix,x, y, 0).setColor((color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, (color >> 24) & 0xFF);//.endVertex();
     }
 }

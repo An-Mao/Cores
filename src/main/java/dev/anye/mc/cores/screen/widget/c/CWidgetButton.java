@@ -9,11 +9,11 @@ public class CWidgetButton extends CWidgetLabel{
     private final OnPress onPress;
 
     public CWidgetButton(_BoundingBox boundingBox, BorderStyle borderStyle, Component pMessage,OnPress onPress) {
-        this(boundingBox, borderStyle, pMessage,true,onPress);
+        this(boundingBox, borderStyle, pMessage,true,true,onPress);
     }
 
-    public CWidgetButton(_BoundingBox boundingBox, BorderStyle borderStyle, Component pMessage, boolean centerText,OnPress onPress) {
-        super(boundingBox, borderStyle, pMessage, centerText);
+    public CWidgetButton(_BoundingBox boundingBox, BorderStyle borderStyle, Component pMessage, boolean centerText,boolean autoW,OnPress onPress) {
+        super(boundingBox, borderStyle, pMessage, centerText,autoW);
         this.onPress = onPress;
     }
     @Override

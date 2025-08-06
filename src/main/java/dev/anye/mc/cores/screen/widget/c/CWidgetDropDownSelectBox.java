@@ -22,7 +22,6 @@ public class CWidgetDropDownSelectBox extends CWidgetBaseCore<CWidgetDropDownSel
 
             pages;
     private final boolean center;
-    private _BoundingBox contentBox;
     private int elementH;
 
     public CWidgetDropDownSelectBox(_BoundingBox boundingBox, BorderStyle borderStyle, Component pMessage,int line,boolean center,DT_ListBoxData... data) {
@@ -126,7 +125,6 @@ public class CWidgetDropDownSelectBox extends CWidgetBaseCore<CWidgetDropDownSel
     }
     public void updateIndex(double mouseY,int  page){
         int i = (int) ((mouseY - contentBox.getY()) / elementH);
-        System.out.println(i);
         if (i > 0){
             nowSelectIndex = i - 1;
             nowSelectIndex += (page- 1) * line;
@@ -159,18 +157,17 @@ public class CWidgetDropDownSelectBox extends CWidgetBaseCore<CWidgetDropDownSel
         if (visible) {
             PoseStack poseStack = pGuiGraphics.pose();
 
-            _BoundingBox newBoundingBox = showList ? new _BoundingBox(boundingBox.getX(),boundingBox.getY(),boundingBox.getW(),boundingBox.getH() + lineHeight):boundingBox.copy();
+            contentBox = showList ? new _BoundingBox(boundingBox.getX(),boundingBox.getY(),boundingBox.getW(),boundingBox.getH() + lineHeight):boundingBox.copy();
             poseStack.pushPose();
             poseStack.translate(0, 0, layerZ);
-            borderStyle.render(pGuiGraphics, newBoundingBox,this.colorScheme(), pMouseX, pMouseY);
-            if (this.lineHeight == 0) this.lineHeight = line * newBoundingBox.getH();
-            renderContentX(pGuiGraphics, newBoundingBox, pMouseX, pMouseY, pPartialTick);
+            borderStyle.render(pGuiGraphics, contentBox,this.colorScheme(), pMouseX, pMouseY);
+            if (this.lineHeight == 0) this.lineHeight = line * contentBox.getH();
+            renderContentX(pGuiGraphics, contentBox, pMouseX, pMouseY, pPartialTick);
             poseStack.popPose();
         }
     }
 
     protected void renderContentX(GuiGraphics guiGraphics,_BoundingBox boundingBox, int mouseX, int mouseY, float partialTick) {
-        contentBox = boundingBox;
         PoseStack poseStack = guiGraphics.pose();
         poseStack.pushPose();
 
@@ -183,10 +180,10 @@ public class CWidgetDropDownSelectBox extends CWidgetBaseCore<CWidgetDropDownSel
 
 
         int sx = boundingBox.getX();
-        int sy = boundingBox.getY();
-        int linePosY = center ? Math.max(_Math.half(elementH - font.lineHeight),0):0;
+        int sy = center ?  CenterY(boundingBox.getY(),this.boundingBox.getH() - borderStyle.w()):boundingBox.getY();
+        //int linePosY = center ? Math.max(_Math.half(elementH - font.lineHeight),0):0;
 
-        guiGraphics.drawString(getFont(),Component.literal(FixStrWidth(c)),sx,sy+linePosY,getTextHoverColor(),false);
+        guiGraphics.drawString(getFont(),Component.literal(FixStrWidth(c)),sx,sy,getTextHoverColor(),false);
 
 
 
@@ -203,7 +200,7 @@ public class CWidgetDropDownSelectBox extends CWidgetBaseCore<CWidgetDropDownSel
                     guiGraphics.renderTooltip(font,getDataTooltip(i), Optional.empty(),mouseX,mouseY);
                     guiGraphics.fill(boundingBox.getX(),lineY,boundingBox.getMaxX(), lineY+ elementH, backgroundSelectColor);
                 }
-                guiGraphics.drawString(getFont(),Component.literal(FixStrWidth(select)),sx,sy+lineH+ linePosY,tc,false);
+                guiGraphics.drawString(getFont(),Component.literal(FixStrWidth(select)),sx,sy+lineH,tc,false);
             }
         }
         poseStack.popPose();

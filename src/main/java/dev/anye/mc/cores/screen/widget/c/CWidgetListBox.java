@@ -55,17 +55,12 @@ public class CWidgetListBox extends CWidgetBaseCore<CWidgetListBox>{
                         _BoundingBox eb = new _BoundingBox(elemX,elemY,elementalWidth,elementalHeight);
                         this.borderStyle.renderElement(guiGraphics,eb,colorScheme(),mouseX,mouseY);
                         int txtColor = eTextColor.UsualColor();
-                        if (
-                                mouseX > elemX
-                                        && mouseX < elemX + elementalWidth
-                                        && mouseY > elemY
-                                        && mouseY < elemY + elementalHeight
-                        ) {
+                        if (eb.isInBox(mouseX,mouseY)) {
                             txtColor = eTextColor.HoverColor();
                             idex = elemIndex;
                             guiGraphics.renderTooltip(font, getData(elemIndex).getTooltip(), Optional.empty(), mouseX, mouseY);
                         }
-                        drawString(guiGraphics, eb.getX()+ strX, eb.getY(), txtColor, FixStrWidth(getDataComponent(elemIndex),elementalWidth));
+                        drawString(guiGraphics, eb.getX()+ strX, eb.getY(), txtColor, FixStrWidth(getDataComponent(elemIndex),eb.getW()));
                     }
                 } else {
                     break;
@@ -92,9 +87,9 @@ public class CWidgetListBox extends CWidgetBaseCore<CWidgetListBox>{
     @Override
     public boolean mouseScrolled(double pMouseX, double pMouseY, double sx,double sy) {
         if (sy < 0 && startIndex < data.size() - row){
-            startIndex = startIndex + row;
+            startIndex += row;
         }else if (startIndex >= row){
-            startIndex = startIndex - row;
+            startIndex -=row;
         }
         index = -1;
         return super.mouseScrolled(pMouseX, pMouseY, sx,sy);

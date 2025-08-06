@@ -9,10 +9,10 @@ import net.minecraft.network.chat.Component;
 public class CWidgetLabel extends CWidgetBaseCore<CWidgetLabel>{
     private final boolean centerText;
     public CWidgetLabel(_BoundingBox boundingBox, BorderStyle borderStyle, Component pMessage) {
-        this(boundingBox, borderStyle, pMessage,true);
+        this(boundingBox, borderStyle, pMessage,true,true);
     }
-    public CWidgetLabel(_BoundingBox boundingBox, BorderStyle borderStyle, Component pMessage,boolean centerText) {
-        super(boundingBox, borderStyle, pMessage);
+    public CWidgetLabel(_BoundingBox boundingBox, BorderStyle borderStyle, Component pMessage,boolean centerText,boolean autoW) {
+        super(autoW ? AutoWidth(boundingBox,pMessage.getString(),borderStyle.w()) : boundingBox,borderStyle, pMessage);
         this.centerText = centerText;
     }
 
@@ -29,8 +29,8 @@ public class CWidgetLabel extends CWidgetBaseCore<CWidgetLabel>{
         if (isCenterText()){
             guiGraphics.drawString(font,
                     getMessage(),
-                    boundingBox.getX() + (boundingBox.getW() >>1) - _Math.half(font.width(getMessage())),
-                    boundingBox.getY() + (boundingBox.getH() >> 1) - (font.lineHeight >> 1),
+                    CenterX(boundingBox.getX(),boundingBox.getW()),
+                    CenterY(boundingBox.getY(),boundingBox.getH()),
                     tc,false);
             //guiGraphics.drawCenteredString(font,getMessage(),getDrawX(),getDrawY(), tc);
         }else {
