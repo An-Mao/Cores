@@ -1,0 +1,35 @@
+{
+  "cores": "Cores",
+  "key.category.cores.cores": "Cores",
+  "key.cores.open_menu": "打开设置",
+  "command.cores.mixin.player_level": "玩家等级Mixin:",
+  "command.cores.mixin.player_level.enable": "§1启用",
+  "command.cores.mixin.player_level.disable": "§4禁用",
+
+  "color_scheme.cores.default": "默认",
+  "color_scheme.cores.cold_gray": "冷灰色",
+  "color_scheme.cores.blue_fresh": "蓝色清新",
+  "color_scheme.cores.natural_greenery": "自然绿意",
+  "color_scheme.cores.ocean_breeze": "海洋微风",
+  "color_scheme.cores.sunset_glow": "落日余晖",
+  "color_scheme.cores.fresh_mint": "清新薄荷",
+  "color_scheme.cores.autumn_leaves": "秋叶",
+  "color_scheme.cores.twilight_purple": "暮光紫",
+
+  "color_scheme.cores.midnight_blue": "午夜蓝",
+  "color_scheme.cores.coral_reef": "珊瑚礁",
+  "color_scheme.cores.emerald_green": "翡翠绿",
+  "color_scheme.cores.soft_lavender": "柔和薰衣草",
+  "color_scheme.cores.golden_sands": "金色沙滩",
+
+  "color_scheme.cores.crimson_tide": "深红潮汐",
+  "color_scheme.cores.misty_violet": "薄雾紫罗兰",
+  "color_scheme.cores.teal_whisper": "青色低语",
+  "color_scheme.cores.amber_blaze": "琥珀之焰",
+  "color_scheme.cores.peach_melba": "蜜桃梅尔巴",
+
+  "screen.cores.settings.title": "设置",
+  "screen.cores.settings.label.select_color": "选择配色方案",
+  "screen.cores.settings.drop_down_select.color_scheme": "配色方案",
+  "screen.cores.settings.button.save": "保存"
+}
