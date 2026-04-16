@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 @Mod(Cores.MOD_ID)
 public class Cores {
     public static final String MOD_ID = "cores";
-    public static final String CONFIG_DIR = _File.getFileFullPathWithRun("config",Cores.MOD_ID);
+    public static final String CONFIG_DIR = _File.getFileFullPathWithRun("","config",Cores.MOD_ID);
     private static final Logger LOGGER = LogUtils.getLogger();
     static {
         _File.checkAndCreateDir(CONFIG_DIR);

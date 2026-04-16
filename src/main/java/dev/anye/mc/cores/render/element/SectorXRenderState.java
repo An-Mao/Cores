@@ -29,6 +29,7 @@ public record SectorXRenderState(
 
     @Override
     public void buildVertices(@NotNull VertexConsumer vertexConsumer) {
+
         pose.pushMatrix();
         pose.translate(x,y);
         double arc = endArc - startArc;

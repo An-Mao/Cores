@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.constant$data$Table;
+package dev.anye.mc.cores.constant;
 
 public class PlayerCDT {
     public static final int HOT_BAR_SLOT_COUNT = 9;
