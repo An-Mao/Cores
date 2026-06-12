@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CoresRegs {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    public static final String Pack = "dev.anye.mc.register";
-    public static final Map<String, IEntityRender> ENTITY_RENDER_REG =new HashMap<>();
+	private static final Logger LOGGER = LogUtils.getLogger();
+	public static final String Pack = "dev.anye.mc.register";
+	public static final Map<String, IEntityRender> ENTITY_RENDER_REG = new HashMap<>();
 
 }

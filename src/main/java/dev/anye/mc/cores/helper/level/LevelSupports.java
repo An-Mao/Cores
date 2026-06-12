@@ -12,19 +12,19 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class LevelSupports {
-    @Nullable
-    public static Level getLevel(ResourceKey<Level> pDimension) {
-        return ServerSupports.getLevel(ServerLevel.OVERWORLD);
-    }
+	@Nullable
+	public static Level getLevel(ResourceKey<Level> pDimension) {
+		return ServerSupports.getLevel(ServerLevel.OVERWORLD);
+	}
 
-    public static void sendMsg(Level level,String key,Object... data){
-        if (level.getServer() != null) {
-            List<ServerPlayer> players = level.getServer().getPlayerList().getPlayers();
-            for (ServerPlayer player:players) {
-                String s = Component.translatable(key).getString();
-                ComponentHelp.sendFormatMsg(player,s,"/n",data);
-            }
-        }
-    }
+	public static void sendMsg(Level level, String key, Object... data) {
+		if (level.getServer() != null) {
+			List<ServerPlayer> players = level.getServer().getPlayerList().getPlayers();
+			for (ServerPlayer player : players) {
+				String s = Component.translatable(key).getString();
+				ComponentHelp.sendFormatMsg(player, s, "/n", data);
+			}
+		}
+	}
 
 }

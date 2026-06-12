@@ -5,46 +5,47 @@ import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class RouletteMenu extends RenderWidgetCore<RouletteMenu> {
-    private int sectors = 9;
-    private int outerRadius = 80;
-    private int highlightColor = 0x50646464;
-    private int normalColor = 0x50898989;
-    private double addAngle = Math.PI / (5 * outerRadius);
-    public RouletteMenu(int x, int y, int w, int h, Component pMessage) {
-        super(x, y, w, h, pMessage);
-    }
+	private int sectors = 9;
+	private int outerRadius = 80;
+	private int highlightColor = 0x50646464;
+	private int normalColor = 0x50898989;
+	private double addAngle = Math.PI / (5 * outerRadius);
 
-    public void setAddAngle(double addAngle) {
-        this.addAngle = addAngle;
-    }
+	public RouletteMenu(int x, int y, int w, int h, Component pMessage) {
+		super(x, y, w, h, pMessage);
+	}
 
-    public void setHighlightColor(int highlightColor) {
-        this.highlightColor = highlightColor;
-    }
+	public void setAddAngle(double addAngle) {
+		this.addAngle = addAngle;
+	}
 
-    public void setNormalColor(int normalColor) {
-        this.normalColor = normalColor;
-    }
+	public void setHighlightColor(int highlightColor) {
+		this.highlightColor = highlightColor;
+	}
 
-    public void setOuterRadius(int outerRadius) {
-        this.outerRadius = outerRadius;
-    }
+	public void setNormalColor(int normalColor) {
+		this.normalColor = normalColor;
+	}
 
-    public void setSectors(int sectors) {
-        this.sectors = sectors;
-    }
+	public void setOuterRadius(int outerRadius) {
+		this.outerRadius = outerRadius;
+	}
 
-    @Override
-    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float v) {
-        if (visible){
-            int centerX = getX();
-            int centerY = getY();
-            double angle = Math.atan2(mouseY - centerY, mouseX - centerX);
-            if (angle < 0) {
-                angle += Math.PI * 2;
-            }
-            double sectorAngle =  2 * Math.PI / sectors;
-            double finalAngle = angle;
+	public void setSectors(int sectors) {
+		this.sectors = sectors;
+	}
+
+	@Override
+	protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float v) {
+		if (visible) {
+			int centerX = getX();
+			int centerY = getY();
+			double angle = Math.atan2(mouseY - centerY, mouseX - centerX);
+			if (angle < 0) {
+				angle += Math.PI * 2;
+			}
+			double sectorAngle = 2 * Math.PI / sectors;
+			double finalAngle = angle;
             /*
             guiGraphics.drawSpecial(multiBufferSource -> {
                 VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.debugTriangleFan());
@@ -83,6 +84,6 @@ public class RouletteMenu extends RenderWidgetCore<RouletteMenu> {
             //tesselator.end();
 
              */
-        }
-    }
+		}
+	}
 }

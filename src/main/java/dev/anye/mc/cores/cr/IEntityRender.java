@@ -7,5 +7,5 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.entity.LivingEntity;
 
 public interface IEntityRender {
-    void render(LivingEntity entity, LivingEntityRenderState renderState, LivingEntityRenderer<LivingEntity,?,?> renderer, SubmitNodeCollector submitNodeCollector, PoseStack poseStack);
+	void render(LivingEntity entity, LivingEntityRenderState renderState, LivingEntityRenderer<LivingEntity, ?, ?> renderer, SubmitNodeCollector submitNodeCollector, PoseStack poseStack);
 }

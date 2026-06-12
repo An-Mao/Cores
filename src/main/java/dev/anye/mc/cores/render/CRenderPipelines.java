@@ -1,7 +1,5 @@
 package dev.anye.mc.cores.render;
 
-import java.util.Optional;
-
 import com.mojang.blaze3d.pipeline.BlendFunction;
 import com.mojang.blaze3d.pipeline.ColorTargetState;
 import com.mojang.blaze3d.pipeline.DepthStencilState;
@@ -10,13 +8,13 @@ import com.mojang.blaze3d.platform.CompareOp;
 import com.mojang.blaze3d.shaders.UniformType;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-
 import dev.anye.mc.cores.Cores;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
+
+import java.util.Optional;
 
 @EventBusSubscriber(modid = Cores.MOD_ID, value = Dist.CLIENT)
 public class CRenderPipelines {
@@ -35,6 +33,7 @@ public class CRenderPipelines {
 			.withVertexShader("core/position_color")
 			.withFragmentShader("core/position_color")
 			.build();
+
 	@SubscribeEvent
 	public static void onPipelineRegister(RegisterRenderPipelinesEvent event) {
 		event.registerPipeline(SPHERE);

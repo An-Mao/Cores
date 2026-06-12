@@ -4,35 +4,36 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
 public class SimpleProgressBar extends SimpleWidgetCore<SimpleProgressBar> {
-    protected int progress,maxProgress,direction;
-    public SimpleProgressBar(int x, int y, int w, int h,int progress,int maxProgress,int direction, Component pMessage) {
-        super(x, y, w, h, pMessage);
-        this.direction = direction;
-        setProgress(progress);
-        setMaxProgress(maxProgress);
-    }
+	protected int progress, maxProgress, direction;
 
-    public void setMaxProgress(int maxProgress) {
-        this.maxProgress = maxProgress;
-    }
+	public SimpleProgressBar(int x, int y, int w, int h, int progress, int maxProgress, int direction, Component pMessage) {
+		super(x, y, w, h, pMessage);
+		this.direction = direction;
+		setProgress(progress);
+		setMaxProgress(maxProgress);
+	}
 
-    public void setProgress(int progress) {
-        this.progress = progress;
-    }
+	public void setMaxProgress(int maxProgress) {
+		this.maxProgress = maxProgress;
+	}
 
-    @Override
-    protected void renderContent(GuiGraphicsExtractor guiGraphics, int i, int i1, float v) {
-        int endX = getContentEndX();
-        int endY = getContentEndY();
-        if (direction == 0) {
-            endX = getContentX() + getScaleProgress(getContentW());
-        }else if (direction == 1) {
-            endY = getContentY() + getScaleProgress(getContentH());
-        }
-        guiGraphics.fill(getContentX(),getContentY(),endX,endY,getBorderHoverColor());
-    }
+	public void setProgress(int progress) {
+		this.progress = progress;
+	}
 
-    public int getScaleProgress(int i){
-        return maxProgress != 0 && progress != 0 ? progress * i / maxProgress : 0;
-    }
+	@Override
+	protected void renderContent(GuiGraphicsExtractor guiGraphics, int i, int i1, float v) {
+		int endX = getContentEndX();
+		int endY = getContentEndY();
+		if (direction == 0) {
+			endX = getContentX() + getScaleProgress(getContentW());
+		} else if (direction == 1) {
+			endY = getContentY() + getScaleProgress(getContentH());
+		}
+		guiGraphics.fill(getContentX(), getContentY(), endX, endY, getBorderHoverColor());
+	}
+
+	public int getScaleProgress(int i) {
+		return maxProgress != 0 && progress != 0 ? progress * i / maxProgress : 0;
+	}
 }

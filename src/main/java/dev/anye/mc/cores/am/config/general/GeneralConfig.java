@@ -6,12 +6,13 @@ import dev.anye.core.system._File;
 import dev.anye.mc.cores.Cores;
 
 public class GeneralConfig extends _JsonConfig<GeneralConfigData> {
-	public static final String file = _File.getFilePath(Cores.CONFIG_DIR,"general.json");
+	public static final String file = _File.getFilePath(Cores.CONFIG_DIR, "general.json");
+
 	public GeneralConfig() {
 		super(file, """
-                    {
-                        "showTipGui": true
-                    }""", new TypeToken<>() {
-        });
-    }
+				{
+				    "showTipGui": true
+				}""", new TypeToken<>() {
+		});
+	}
 }

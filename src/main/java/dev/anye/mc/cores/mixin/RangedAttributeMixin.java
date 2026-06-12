@@ -14,19 +14,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(RangedAttribute.class)
 public class RangedAttributeMixin {
-    @Mutable
-    @Shadow @Final private double minValue;
-    @Mutable
-    @Shadow @Final private double maxValue;
+	@Mutable
+	@Shadow
+	@Final
+	private double minValue;
+	@Mutable
+	@Shadow
+	@Final
+	private double maxValue;
 
-    @Inject(method = "<init>", at = @At("RETURN"))
-    private void cores$init$modifyMaxHealth(String pDescriptionId, double pDefaultValue, double pMin, double pMax, CallbackInfo ci) {
-        if (MixinConfigs.EnableFixAttributes){
-            AttributeData attributeData = Configs.attribute.getConfig(pDescriptionId);
-            if (attributeData != null){
-                this.minValue = attributeData.getMin();
-                this.maxValue = attributeData.getMax();
-            }
-        }
-    }
+	@Inject(method = "<init>", at = @At("RETURN"))
+	private void cores$init$modifyMaxHealth(String pDescriptionId, double pDefaultValue, double pMin, double pMax, CallbackInfo ci) {
+		if (MixinConfigs.EnableFixAttributes) {
+			AttributeData attributeData = Configs.attribute.getConfig(pDescriptionId);
+			if (attributeData != null) {
+				this.minValue = attributeData.getMin();
+				this.maxValue = attributeData.getMax();
+			}
+		}
+	}
 }

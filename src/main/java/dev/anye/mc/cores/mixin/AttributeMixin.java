@@ -14,14 +14,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Attribute.class)
 public class AttributeMixin {
-    @Mutable
-    @Shadow @Final private double defaultValue;
+	@Mutable
+	@Shadow
+	@Final
+	private double defaultValue;
 
-    @Inject(method = "<init>", at = @At("RETURN"))
-    private void cores$init$fix(String pDescriptionId, double pDefaultValue, CallbackInfo ci) {
-        if (MixinConfigs.EnableFixAttributes){
-            AttributeData attributeData = Configs.attribute.getConfig(pDescriptionId);
-            if (attributeData != null) this.defaultValue = attributeData.getDef();
-        }
-    }
+	@Inject(method = "<init>", at = @At("RETURN"))
+	private void cores$init$fix(String pDescriptionId, double pDefaultValue, CallbackInfo ci) {
+		if (MixinConfigs.EnableFixAttributes) {
+			AttributeData attributeData = Configs.attribute.getConfig(pDescriptionId);
+			if (attributeData != null) this.defaultValue = attributeData.getDef();
+		}
+	}
 }

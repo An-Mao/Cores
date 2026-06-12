@@ -21,31 +21,36 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 
 public class EnchantmentSupports {
-    public static Registry<Enchantment> getRegistry() {
-        return ServerSupports.getOverworldLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
-    }
-    public static Registry<Enchantment> getRegistry(Level level) {
-        return level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
-    }
-    public static @Nullable Holder<Enchantment> getHolder(Registry<Enchantment> registry, Identifier res) {
-        return registry.get(res).isPresent() ? registry.get(res).get() : null;
-    }
-    public static ItemEnchantments getBookEnchantments(ItemStack itemStack) {
-        return itemStack.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
-    }
-    public static ItemEnchantments getItemEnchantments(ItemStack itemStack) {
-        if (itemStack.is(Items.ENCHANTED_BOOK)){
-            return getBookEnchantments(itemStack);
-        }
-        return itemStack.getTagEnchantments();
-    }
-    public static Component getEnchantmentDescString(Holder<Enchantment> pEnchantment) {
-        MutableComponent mutablecomponent = pEnchantment.value().description().copy();
-        if (pEnchantment.is(EnchantmentTags.CURSE)) {
-            ComponentUtils.mergeStyles(mutablecomponent, Style.EMPTY.withColor(ChatFormatting.RED));
-        } else {
-            ComponentUtils.mergeStyles(mutablecomponent, Style.EMPTY.withColor(ChatFormatting.GRAY));
-        }
-        return mutablecomponent;
-    }
+	public static Registry<Enchantment> getRegistry() {
+		return ServerSupports.getOverworldLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+	}
+
+	public static Registry<Enchantment> getRegistry(Level level) {
+		return level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+	}
+
+	public static @Nullable Holder<Enchantment> getHolder(Registry<Enchantment> registry, Identifier res) {
+		return registry.get(res).isPresent() ? registry.get(res).get() : null;
+	}
+
+	public static ItemEnchantments getBookEnchantments(ItemStack itemStack) {
+		return itemStack.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
+	}
+
+	public static ItemEnchantments getItemEnchantments(ItemStack itemStack) {
+		if (itemStack.is(Items.ENCHANTED_BOOK)) {
+			return getBookEnchantments(itemStack);
+		}
+		return itemStack.getTagEnchantments();
+	}
+
+	public static Component getEnchantmentDescString(Holder<Enchantment> pEnchantment) {
+		MutableComponent mutablecomponent = pEnchantment.value().description().copy();
+		if (pEnchantment.is(EnchantmentTags.CURSE)) {
+			ComponentUtils.mergeStyles(mutablecomponent, Style.EMPTY.withColor(ChatFormatting.RED));
+		} else {
+			ComponentUtils.mergeStyles(mutablecomponent, Style.EMPTY.withColor(ChatFormatting.GRAY));
+		}
+		return mutablecomponent;
+	}
 }

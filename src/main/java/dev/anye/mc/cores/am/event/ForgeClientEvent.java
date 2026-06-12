@@ -20,8 +20,8 @@ import net.neoforged.neoforge.client.event.InputEvent;
 @EventBusSubscriber(modid = Cores.MOD_ID, value = Dist.CLIENT)
 public class ForgeClientEvent {
 
-    @SubscribeEvent
-    public static void onKeyInput(InputEvent.Key event) {
+	@SubscribeEvent
+	public static void onKeyInput(InputEvent.Key event) {
         /*
         Player player = Minecraft.getInstance().player;
         if (player != null) {
@@ -34,21 +34,22 @@ public class ForgeClientEvent {
         }
 
          */
-        if (event.getKey() == KeyBinding.OPEN_MENU.getKey().getValue()) {
-            Screen screen = Minecraft.getInstance().screen;
-            if (event.getAction() == 1) {
-                if (screen == null) {
-                    Minecraft.getInstance().setScreen(new SettingScreen());
-                }
-            }
-        }
-    }
-    public static void outputAttributes(){
-        Minecraft minecraft = Minecraft.getInstance();
-        LocalPlayer player = minecraft.player;
-        if (player != null){
-            Multimap<Holder<Attribute>, AttributeModifier> modifiers = ItemHelper.getAttributeModifiers(player.getMainHandItem(), EquipmentSlot.MAINHAND);
-            System.out.println(modifiers);
-        }
-    }
+		if (event.getKey() == KeyBinding.OPEN_MENU.getKey().getValue()) {
+			Screen screen = Minecraft.getInstance().screen;
+			if (event.getAction() == 1) {
+				if (screen == null) {
+					Minecraft.getInstance().setScreen(new SettingScreen());
+				}
+			}
+		}
+	}
+
+	public static void outputAttributes() {
+		Minecraft minecraft = Minecraft.getInstance();
+		LocalPlayer player = minecraft.player;
+		if (player != null) {
+			Multimap<Holder<Attribute>, AttributeModifier> modifiers = ItemHelper.getAttributeModifiers(player.getMainHandItem(), EquipmentSlot.MAINHAND);
+			System.out.println(modifiers);
+		}
+	}
 }

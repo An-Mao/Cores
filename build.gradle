@@ -113,7 +113,7 @@ dependencies {
     compileOnly "org.openjdk.nashorn:nashorn-core:15.4"
     compileOnly "net.java.dev.jna:jna-platform:5.15.0"
 
-    libraries jarJar(group:'dev.anye', name:'core', version:"[${core_version},)")
+    libraries jarJar("dev.anye:core:[$core_version,)")
     compileOnly "dev.anye.mc:graaljs:26.x-24.2.1-1-Neo-all"
 }
 

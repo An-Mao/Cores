@@ -9,32 +9,36 @@ import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ImageWidgetCore<T extends ImageWidgetCore<T>> extends RenderWidgetCore<T> {
-    protected Identifier texture;
+	protected Identifier texture;
 
-    public ImageWidgetCore(int x, int y, int w, int h, Component pMessage) {
-        super(x, y, w, h, pMessage);
-    }
-    public ImageWidgetCore(Identifier texture,int x, int y, int w, int h, Component pMessage) {
-        super(x, y, w, h, pMessage);
-        setTexture(texture);
-    }
-    public Identifier getTexture() {
-        return texture;
-    }
-    public T setTexture(Identifier texture) {
-        this.texture = texture;
-        return self();
-    }
+	public ImageWidgetCore(int x, int y, int w, int h, Component pMessage) {
+		super(x, y, w, h, pMessage);
+	}
 
-    public void drawImage(GuiGraphicsExtractor guiGraphics, DT_XYWHUV xywhuv){
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED,texture,xywhuv.getX(),xywhuv.getY(),xywhuv.getUOffset(),xywhuv.getVOffset(),xywhuv.getWidth(),xywhuv.getHeight(),xywhuv.getWidth(),xywhuv.getHeight());
-    }
+	public ImageWidgetCore(Identifier texture, int x, int y, int w, int h, Component pMessage) {
+		super(x, y, w, h, pMessage);
+		setTexture(texture);
+	}
 
-    @Override
-    protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        if (this.visible) {
-            renderContent(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-        }
-    }
-    protected abstract void renderContent(GuiGraphicsExtractor guiGraphics,int mouseX, int mouseY, float partialTick);
+	public Identifier getTexture() {
+		return texture;
+	}
+
+	public T setTexture(Identifier texture) {
+		this.texture = texture;
+		return self();
+	}
+
+	public void drawImage(GuiGraphicsExtractor guiGraphics, DT_XYWHUV xywhuv) {
+		guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, xywhuv.getX(), xywhuv.getY(), xywhuv.getUOffset(), xywhuv.getVOffset(), xywhuv.getWidth(), xywhuv.getHeight(), xywhuv.getWidth(), xywhuv.getHeight());
+	}
+
+	@Override
+	protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+		if (this.visible) {
+			renderContent(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
+		}
+	}
+
+	protected abstract void renderContent(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick);
 }

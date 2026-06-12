@@ -21,42 +21,47 @@ import java.util.Collection;
 import java.util.Objects;
 
 public class ItemHelper {
-    public static Item getItem(String id){
-        if (Objects.equals(id, "")){
-            return null;
-        }
-            return BuiltInRegistries.ITEM.get(Identifier.tryParse(id)).get().value();
-    }
-    public static double getMainItemDamage(LivingEntity livingEntity){
-        return getItemDamage(livingEntity.getMainHandItem());
-    }
-    public static double getItemDamage(String id){
-        Item item = getItem(id);
-        if (item == null){
-            return 0;
-        }
-        return getItemDamage(new ItemStack(item));
-    }
-    public static double getItemDamage(ItemStack itemStack){
-        Collection<AttributeModifier> atk = getAttributeModifiers(itemStack,EquipmentSlot.MAINHAND).get(Attributes.ATTACK_DAMAGE);
-        return AttributeHelper.getAttributeModifierValue(atk);
-    }
-    public static Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(ItemStack itemStack,EquipmentSlot pSlot) {
-        Multimap<Holder<Attribute>, AttributeModifier> multimap;
-        multimap = HashMultimap.create();
-        if (itemStack.has(DataComponents.ATTRIBUTE_MODIFIERS)) {
-            ItemAttributeModifiers data = itemStack.get(DataComponents.ATTRIBUTE_MODIFIERS);
-            if (data != null) {
-                data.modifiers().forEach(entry -> {
-                    if (entry.slot().test(pSlot)) {
-                        multimap.put(entry.attribute(), entry.modifier());
-                    }
-                });
-            }
-        }
-        return multimap;
-    }
-    public static boolean hasEnchant(ItemStack itemStack, Enchantment enchantment){
-        return itemStack.getEnchantmentLevel(Holder.direct(enchantment)) > 0;
-    }
+	public static Item getItem(String id) {
+		if (Objects.equals(id, "")) {
+			return null;
+		}
+		return BuiltInRegistries.ITEM.get(Identifier.tryParse(id)).get().value();
+	}
+
+	public static double getMainItemDamage(LivingEntity livingEntity) {
+		return getItemDamage(livingEntity.getMainHandItem());
+	}
+
+	public static double getItemDamage(String id) {
+		Item item = getItem(id);
+		if (item == null) {
+			return 0;
+		}
+		return getItemDamage(new ItemStack(item));
+	}
+
+	public static double getItemDamage(ItemStack itemStack) {
+		Collection<AttributeModifier> atk = getAttributeModifiers(itemStack, EquipmentSlot.MAINHAND).get(Attributes.ATTACK_DAMAGE);
+		return AttributeHelper.getAttributeModifierValue(atk);
+	}
+
+	public static Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(ItemStack itemStack, EquipmentSlot pSlot) {
+		Multimap<Holder<Attribute>, AttributeModifier> multimap;
+		multimap = HashMultimap.create();
+		if (itemStack.has(DataComponents.ATTRIBUTE_MODIFIERS)) {
+			ItemAttributeModifiers data = itemStack.get(DataComponents.ATTRIBUTE_MODIFIERS);
+			if (data != null) {
+				data.modifiers().forEach(entry -> {
+					if (entry.slot().test(pSlot)) {
+						multimap.put(entry.attribute(), entry.modifier());
+					}
+				});
+			}
+		}
+		return multimap;
+	}
+
+	public static boolean hasEnchant(ItemStack itemStack, Enchantment enchantment) {
+		return itemStack.getEnchantmentLevel(Holder.direct(enchantment)) > 0;
+	}
 }

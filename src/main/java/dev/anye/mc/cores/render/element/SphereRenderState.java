@@ -1,14 +1,9 @@
 package dev.anye.mc.cores.render.element;
 
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import dev.anye.mc.cores.render.CRenderPipelines;
-import net.minecraft.client.renderer.rendertype.RenderSetup;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.neoforged.neoforge.client.pipeline.PipelineModifiers;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 
 public record SphereRenderState(PoseStack.Pose pose, float radius, int slices, int stacks, int color) {
 	public void render(VertexConsumer vertexConsumer) {

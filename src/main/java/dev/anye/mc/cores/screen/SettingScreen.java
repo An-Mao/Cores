@@ -18,55 +18,56 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SettingScreen extends Screen {
-    SimpleDropDownSelectBox colorSelectBox;
-    SimpleButton saveButton;
-    public SettingScreen( ) {
-        super(Component.translatable("screen."+ Cores.MOD_ID+".settings.title"));
-    }
+	SimpleDropDownSelectBox colorSelectBox;
+	SimpleButton saveButton;
 
-    @Override
-    protected void init() {
-        super.init();
-        int x = this.width / 2, y = this.height / 2;
-        SimpleLabel label = new SimpleLabel(64, y - 8,16,16,Component.translatable("screen."+ Cores.MOD_ID+".settings.label.select_color"),true,false,true);
-        addRenderableWidget(label);
-        saveButton = new SimpleButton(x - 32, this.height - 64, 64, 16, Component.translatable("screen."+ Cores.MOD_ID+".settings.button.save"),true,false,true,this::save);
-        addRenderableWidget(saveButton);
-        colorSelectBox = new SimpleDropDownSelectBox( label.getX()+label.getWidth()+5,label.getY(), 80, 16, ColorSchemeRegister.getSchemeComponent(ColorSchemes.getGlobal()),getRegColor())
-                .setRadius(2);
-        addRenderableWidget(colorSelectBox);
-        //addRenderableWidget(new SimpleEditBox(100,16,128,20,Component.empty()));
-        //SimpleButton test = new SimpleButton(10,10,50,24,Component.literal("Test"),SettingScreen::openTest);
-        //addRenderableWidget(test);
-    }
-    public static void openTest(){
-        Minecraft.getInstance().setScreen(new TestScreen());
-    }
+	public SettingScreen() {
+		super(Component.translatable("screen." + Cores.MOD_ID + ".settings.title"));
+	}
 
-    private void save() {
-        DT_ListBoxData d = colorSelectBox.getSelectData();
-        if (d != null) {
-            if (d.getValue() instanceof _ColorScheme colorScheme){
-                String key = ColorSchemeRegister.REGISTRY.getKey(colorScheme).toString();
-                //System.out.println("key:"+key);
-                ColorConfig.instance.getDatas().setColorScheme(key);
-                ColorConfig.instance.save();
-                ColorSchemes.setGlobal(colorScheme);
-                if (this.minecraft != null) {
-                    this.minecraft.setScreen(new SettingScreen());
-                }
-            }
-        }
-    }
+	@Override
+	protected void init() {
+		super.init();
+		int x = this.width / 2,
+				y = this.height / 2;
+		SimpleLabel label = new SimpleLabel(64, y - 8, 16, 16, Component.translatable("screen." + Cores.MOD_ID + ".settings.label.select_color"), true, false, true);
+		addRenderableWidget(label);
+		saveButton = new SimpleButton(x - 32, this.height - 64, 64, 16, Component.translatable("screen." + Cores.MOD_ID + ".settings.button.save"), true, false, true, this::save);
+		addRenderableWidget(saveButton);
+		colorSelectBox = new SimpleDropDownSelectBox(label.getX() + label.getWidth() + 5, label.getY(), 80, 16, ColorSchemeRegister.getSchemeComponent(ColorSchemes.getGlobal()), getRegColor())
+				.setRadius(2);
+		addRenderableWidget(colorSelectBox);
+		//addRenderableWidget(new SimpleEditBox(100,16,128,20,Component.empty()));
+		//SimpleButton test = new SimpleButton(10,10,50,24,Component.literal("Test"),SettingScreen::openTest);
+		//addRenderableWidget(test);
+	}
+
+	public static void openTest() {
+		Minecraft.getInstance().setScreen(new TestScreen());
+	}
+
+	private void save() {
+		DT_ListBoxData d = colorSelectBox.getSelectData();
+		if (d != null) {
+			if (d.getValue() instanceof _ColorScheme colorScheme) {
+				String key = ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().getKey(colorScheme).toString();
+				//System.out.println("key:"+key);
+				ColorConfig.instance.getDatas().setColorScheme(key);
+				ColorConfig.instance.save();
+				ColorSchemes.setGlobal(colorScheme);
+				if (this.minecraft != null) {
+					this.minecraft.setScreen(new SettingScreen());
+				}
+			}
+		}
+	}
 
 
-
-
-    public List<DT_ListBoxData> getRegColor(){
-        List<DT_ListBoxData> data = new ArrayList<>();
-        ColorSchemeRegister.REGISTRY.forEach(colorScheme -> data.add(new DT_ListBoxData(ColorSchemeRegister.getSchemeComponent(colorScheme),colorScheme)));
-        return data;
-    }
+	public List<DT_ListBoxData> getRegColor() {
+		List<DT_ListBoxData> data = new ArrayList<>();
+		ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().forEach(colorScheme -> data.add(new DT_ListBoxData(ColorSchemeRegister.getSchemeComponent(colorScheme), colorScheme)));
+		return data;
+	}
 
     /*
     @Override

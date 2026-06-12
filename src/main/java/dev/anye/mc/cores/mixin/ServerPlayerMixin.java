@@ -12,32 +12,34 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin {
-    @Unique
-    private boolean cores$notRunGiveLevel = false;
-    @Shadow
-    private int lastSentExp;
-    @Shadow public abstract void giveExperiencePoints(int pXpPoints);
+	@Unique
+	private boolean cores$notRunGiveLevel = false;
+	@Shadow
+	private int lastSentExp;
 
-    @Inject(method = "giveExperienceLevels", at = @At("HEAD"), cancellable = true)
-    private void cores$giveExperienceLevels$fix(int pLevel, CallbackInfo ci) {
-        if (MixinConfigs.EnableFixLevel ) {
-            boolean skip = false;
-            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-            for (StackTraceElement stackTraceElement : stackTrace)
-                if (stackTraceElement != null && stackTraceElement.getMethodName().equals("giveExperiencePoints")) {
-                    skip = true;
-                    break;
-                }
-            if (!skip) {
-                //cores$notRunGiveLevel = true;
-                int points;
-                if (pLevel < 0) points = -PlayerHelper.getExperienceForLevel(-pLevel);
-                else points = PlayerHelper.getExperienceForLevel(pLevel);
-                giveExperiencePoints(points);
-                lastSentExp = -1;
-                //cores$notRunGiveLevel = false;
-                ci.cancel();
-            }
-        }
-    }
+	@Shadow
+	public abstract void giveExperiencePoints(int pXpPoints);
+
+	@Inject(method = "giveExperienceLevels", at = @At("HEAD"), cancellable = true)
+	private void cores$giveExperienceLevels$fix(int pLevel, CallbackInfo ci) {
+		if (MixinConfigs.EnableFixLevel) {
+			boolean skip = false;
+			StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+			for (StackTraceElement stackTraceElement : stackTrace)
+				if (stackTraceElement != null && stackTraceElement.getMethodName().equals("giveExperiencePoints")) {
+					skip = true;
+					break;
+				}
+			if (!skip) {
+				//cores$notRunGiveLevel = true;
+				int points;
+				if (pLevel < 0) points = -PlayerHelper.getExperienceForLevel(-pLevel);
+				else points = PlayerHelper.getExperienceForLevel(pLevel);
+				giveExperiencePoints(points);
+				lastSentExp = -1;
+				//cores$notRunGiveLevel = false;
+				ci.cancel();
+			}
+		}
+	}
 }
