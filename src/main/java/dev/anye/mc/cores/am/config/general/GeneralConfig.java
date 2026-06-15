@@ -6,13 +6,20 @@ import dev.anye.core.system._File;
 import dev.anye.mc.cores.Cores;
 
 public class GeneralConfig extends _JsonConfig<GeneralConfigData> {
-	public static final String file = _File.getFilePath(Cores.CONFIG_DIR, "general.json");
+	public static final String FILE_PATH = _File.getFilePath(Cores.CONFIG_DIR, "general.json");
 
 	public GeneralConfig() {
-		super(file, """
+		super(FILE_PATH, """
 				{
-				    "showTipGui": true
+				    "showTipGui": true,
+				    "listenPort": 44444
 				}""", new TypeToken<>() {
 		});
+	}
+
+	@Override
+	public GeneralConfigData getDatas() {
+		if (this.datas == null) this.datas = new GeneralConfigData(true,44444);
+		return this.datas;
 	}
 }

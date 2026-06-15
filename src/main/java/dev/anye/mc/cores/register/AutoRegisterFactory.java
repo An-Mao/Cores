@@ -16,11 +16,11 @@ public class AutoRegisterFactory {
 	private static boolean REGISTERED = false;
 	private static final Map<Identifier, Data> reg = new HashMap<>();
 
-	public static void register(Identifier identifier, Class<?> annotation, Class<?> baseClass, Predicate<ModFileScanData.AnnotationData> customCheck, AutoRegister.InstanceAndRegister instanceAndRegister){
-		reg.put(identifier,new Data(annotation.getName(),baseClass,customCheck,instanceAndRegister));
+	public static void register(Identifier identifier, Class<?> annotation, Class<?> baseClass, Predicate<ModFileScanData.AnnotationData> customCheck, AutoRegister.InstanceAndRegister instanceAndRegister) {
+		reg.put(identifier, new Data(annotation.getName(), baseClass, customCheck, instanceAndRegister));
 	}
 
-	public static void register(){
+	public static void register() {
 		if (REGISTERED) return;
 		REGISTERED = true;
 		LOGGER.debug("register start");
@@ -49,8 +49,7 @@ public class AutoRegisterFactory {
 	}
 
 
-
-
-	public record Data(String annotation, Class<?> baseClass,Predicate<ModFileScanData.AnnotationData> customCheck, AutoRegister.InstanceAndRegister instanceAndRegister){
+	public record Data(String annotation, Class<?> baseClass, Predicate<ModFileScanData.AnnotationData> customCheck,
+	                   AutoRegister.InstanceAndRegister instanceAndRegister) {
 	}
 }

@@ -8,6 +8,7 @@
     "AttributeMixin",
     "EntityTickListMixin",
     "RangedAttributeMixin",
+    "ArgumentTypeInfosMixin",
     "ServerPlayerMixin"
   ],
   "client": [

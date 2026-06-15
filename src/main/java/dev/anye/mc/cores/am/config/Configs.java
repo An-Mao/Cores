@@ -4,13 +4,9 @@ import dev.anye.mc.cores.am.config.attribute.AttributeConfig;
 import dev.anye.mc.cores.am.config.general.GeneralConfig;
 
 public class Configs {
-	public static final GeneralConfig general;
-	public static final AttributeConfig attribute;
+	public static final GeneralConfig GENERAL = new GeneralConfig();
+	public static final AttributeConfig ATTRIBUTE = new AttributeConfig();
 
-	static {
-		general = new GeneralConfig();
-		attribute = new AttributeConfig();
-	}
 
 	private Configs() {
 	}

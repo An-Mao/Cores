@@ -1,7 +1,6 @@
 package dev.anye.mc.cores;
 
 import com.google.common.reflect.TypeToken;
-import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.mc.cores.am.color.ColorConfig;
 import dev.anye.mc.cores.am.color.ColorSchemeRegister;
 import dev.anye.mc.cores.am.color.ColorSchemes;
@@ -33,7 +32,7 @@ public class CoresClient {
 		String scheme = ColorConfig.instance.getDatas().getColorScheme();
 		Identifier colorSchemeRes = Identifier.tryParse(scheme);
 		if (colorSchemeRes != null) {
-			ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().get(colorSchemeRes).ifPresent(cs ->{
+			ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().get(colorSchemeRes).ifPresent(cs -> {
 				ColorSchemes.setGlobal(cs.value());
 			});
 		}

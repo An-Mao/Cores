@@ -1,23 +1,34 @@
 package dev.anye.mc.cores;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.logging.LogUtils;
 import dev.anye.core.system._File;
 import dev.anye.mc.cores.am.color.ColorSchemeRegister;
+import dev.anye.mc.cores.am.command.CommandList;
 import dev.anye.mc.cores.am.config.MixinConfigs;
+import dev.anye.mc.cores.am.listen.ListenArgument;
+import dev.anye.mc.cores.am.listen.ListenRegister;
 import dev.anye.mc.cores.am.register.DataRegister;
 import dev.anye.mc.cores.js.Js;
 import dev.anye.mc.cores.register.AutoRegisterFactory;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.IdentifierArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.permissions.Permissions;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
+
+import java.util.function.Predicate;
 
 @Mod(Cores.MOD_ID)
 public class Cores {
@@ -33,6 +44,7 @@ public class Cores {
 		modEventBus.addListener(this::registerRegistries);
 		ColorSchemeRegister.register(modEventBus);
 		DataRegister.register(modEventBus);
+		ListenRegister.register(modEventBus);
 
 		modEventBus.addListener(this::onRegister);
 		modEventBus.addListener(this::commonSetup);
@@ -43,12 +55,15 @@ public class Cores {
 
 	}
 
-	private void onRegister(RegisterEvent event){
+
+	private void onRegister(RegisterEvent event) {
 		AutoRegisterFactory.register();
 
 	}
 
 	private void commonSetup(FMLCommonSetupEvent event) {
+		ListenRegister.initServer();
+		ListenRegister.startServer();
         /*
         _EasyJS easyJS = _EasyJS.NotSafe();
         System.out.println(easyJS.runCode("1+1"));
@@ -58,6 +73,7 @@ public class Cores {
 
 	private void registerRegistries(NewRegistryEvent event) {
 		event.register(ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry());
+		event.register(ListenRegister.LISTEN_REGISTER.getRegistry());
 	}
 
 
@@ -75,25 +91,4 @@ public class Cores {
 
          */
 
-	@SubscribeEvent
-	public static void regCommand(RegisterCommandsEvent event) {
-		//CommandList commandList = new CommandList(event.getDispatcher());
-		//commandList.register();
-		event.getDispatcher()
-				.register(Commands.literal(Cores.MOD_ID)
-						.then(Commands.literal("mixin")
-								.then(Commands.literal("playerLevel")
-										.executes(
-												context -> {
-													if (context != null) {
-														MixinConfigs.EnableFixLevel = !MixinConfigs.EnableFixLevel;
-														context.getSource().sendSuccess(() -> Component.translatable("command.cores.mixin.player_level").append(Component.translatable(MixinConfigs.EnableFixLevel ? "command.cores.mixin.player_level.enable" : "command.cores.mixin.player_level.disable")), false);
-														return 1;
-													}
-													return 0;
-												})
-								)
-						)
-				);
-	}
 }

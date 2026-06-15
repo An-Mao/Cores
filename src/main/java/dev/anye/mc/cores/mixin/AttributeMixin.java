@@ -22,7 +22,7 @@ public class AttributeMixin {
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void cores$init$fix(String pDescriptionId, double pDefaultValue, CallbackInfo ci) {
 		if (MixinConfigs.EnableFixAttributes) {
-			AttributeData attributeData = Configs.attribute.getConfig(pDescriptionId);
+			AttributeData attributeData = Configs.ATTRIBUTE.getConfig(pDescriptionId);
 			if (attributeData != null) this.defaultValue = attributeData.getDef();
 		}
 	}
