@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.anye.mc.cores.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "refmap.cores.json",
+  "mixins": [
+    "AttributeMixin",
+    "EntityTickListMixin",
+    "RangedAttributeMixin",
+    "ArgumentTypeInfosMixin",
+    "ServerPlayerMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
