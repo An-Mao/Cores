@@ -1,35 +1,20 @@
 package dev.anye.mc.cores;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.logging.LogUtils;
 import dev.anye.core.system._File;
 import dev.anye.mc.cores.am.color.ColorSchemeRegister;
-import dev.anye.mc.cores.am.command.CommandList;
-import dev.anye.mc.cores.am.config.MixinConfigs;
-import dev.anye.mc.cores.am.listen.ListenArgument;
 import dev.anye.mc.cores.am.listen.ListenCore;
 import dev.anye.mc.cores.am.listen.ListenRegister;
 import dev.anye.mc.cores.am.register.DataRegister;
 import dev.anye.mc.cores.js.Js;
 import dev.anye.mc.cores.register.AutoRegisterFactory;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.IdentifierArgument;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
-import net.minecraft.server.permissions.Permissions;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
-
-import java.util.function.Predicate;
 
 @Mod(Cores.MOD_ID)
 public class Cores {

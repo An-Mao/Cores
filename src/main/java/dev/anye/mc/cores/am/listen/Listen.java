@@ -114,8 +114,7 @@ public abstract class Listen {
 		exchange.getResponseHeaders().set("Content-Type", contentType);
 		exchange.sendResponseHeaders(status, content.length);
 		try (OutputStream stream = exchange.getResponseBody()) {
-			stream.write(content);
-			//stream.close();
+			stream.write(content);//stream.close();
 		}
 
 	}
@@ -180,8 +179,8 @@ public abstract class Listen {
 		try {
 			Path devPath = Path.of("src", "main", "resources").resolve(resourcePath).normalize();
 			if (Files.exists(devPath)) return Files.readAllBytes(devPath);
-		} catch (InvalidPathException ignored) {
-			logger.warn(ignored.getMessage());
+		} catch (InvalidPathException e) {
+			logger.warn(e.getMessage());
 		}
 		return null;
 	}

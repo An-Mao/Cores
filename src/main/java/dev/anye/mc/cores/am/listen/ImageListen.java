@@ -10,7 +10,7 @@ import java.util.Map;
 public class ImageListen extends Listen{
 
 	protected ImageListen() {
-		super("image", 0);
+		super("image", 300);
 	}
 
 	@Override
@@ -46,6 +46,7 @@ public class ImageListen extends Listen{
 					break;
 				}
 				case "file":
+					// TODO only config?
 					sendFile(exchange, path, mime(path));
 					break;
 				case null, default: sendJson(exchange, 404, error("error type", "Unknow type"));
