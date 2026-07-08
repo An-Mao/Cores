@@ -10,7 +10,7 @@ import java.util.Map;
 public class ImageListen extends Listen{
 
 	protected ImageListen() {
-		super("image", 300);
+		super("assets/cores/html/image/","image", 300);
 	}
 
 	@Override

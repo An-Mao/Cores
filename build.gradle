@@ -32,11 +32,11 @@ repositories {
             password = System.getenv("GITHUB_TOKEN") ?: "ghp_" + System.getenv("GTT")
         }
     }
-    maven {
-        name = "AnYeLocalRepo"
-        allowInsecureProtocol = true
-        url = uri((System.getenv("LOCAL_MAVEN") ?: "https://maven.anye.dev") + "/repository/maven-public")
-    }
+    // maven {
+    //     name = "AnYeLocalRepo"
+    //     allowInsecureProtocol = true
+    //     url = uri((System.getenv("LOCAL_MAVEN") ?: "https://maven.anye.dev") + "/repository/maven-public")
+    // }
 }
 
 base {
