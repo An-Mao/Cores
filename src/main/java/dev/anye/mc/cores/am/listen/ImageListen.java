@@ -14,16 +14,23 @@ public class ImageListen extends Listen{
 	}
 
 	@Override
-	public void context(HttpExchange exchange) {
+	public void get(HttpExchange exchange) {
 		try {
-			switch (exchange.getRequestMethod()){
-				case GET -> load(exchange);
-				case null, default -> exchange.sendResponseHeaders(405, -1);
-			}
+			load(exchange);
 		} catch (IOException e) {
 			throw new _IOException(e);
 		}
 	}
+
+	@Override
+	public void other(HttpExchange exchange) {
+		try {
+			exchange.sendResponseHeaders(405, -1);
+		} catch (IOException e) {
+			throw new _IOException(e);
+		}
+	}
+
 	public void load(HttpExchange exchange) throws IOException {
 		Map<String, String> q = parseQuery(exchange.getRequestURI().getQuery());
 		if (q.containsKey("type")) {

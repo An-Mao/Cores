@@ -6,7 +6,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import com.sun.net.httpserver.HttpExchange;
-import dev.anye.core.cdt._SuffixCDT;
+
+import dev.anye.mc.cores.am.config.ListenIpConfig;
 
 import org.slf4j.Logger;
 
@@ -14,6 +15,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -25,6 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public abstract class Listen extends ListenCDT{
+	public static final ListenIpConfig IPS = new ListenIpConfig();
 	public static final Gson PRETTY_GSON = new GsonBuilder().setPrettyPrinting().create();
 
 	protected final Logger logger = LogUtils.getLogger();
@@ -78,14 +81,55 @@ public abstract class Listen extends ListenCDT{
 		this.lastActivityTime = getSystemTime();
 	}
 
+	public String getClientIp(HttpExchange exchange) {
+		InetSocketAddress remoteAddress = exchange.getRemoteAddress();
+		return remoteAddress.getAddress().getHostAddress();
+	}
+
+
+	public boolean checkIp(HttpExchange exchange){
+		String ip = getClientIp(exchange);
+		//logger.debug("user ip => {}",ip);
+		return IPS.checkIp(ip);
+	}
+
+
 	public void handle(HttpExchange exchange){
 		if (closed) return;
+		if (!checkIp(exchange)) return;
 		if (autoClose) {
 			if (!isActivity()) return;
 			lastActivityTime = getSystemTime();
 		}
-		if (!loadBaseFile(exchange)) context(exchange);
+		switch (exchange.getRequestMethod().toUpperCase()) {
+			case GET:
+				get(exchange);
+				break;
+			case POST:
+				post(exchange);
+				break;
+			default: other(exchange);
+				break;
+		}
+		context(exchange);
+		//if (!loadBaseFile(exchange)) context(exchange);
 	}
+
+
+	
+	public void context(HttpExchange exchange){}
+
+	public void get(HttpExchange exchange){
+		if (normalAccess(exchange)) loadBaseFile(exchange);
+	}
+	public void post(HttpExchange exchange){}
+	public void other(HttpExchange exchange){}
+
+
+
+
+
+
 
 	public boolean isActivity(){
 		return getSystemTime() - lastActivityTime < closeTime;
@@ -192,13 +236,11 @@ public abstract class Listen extends ListenCDT{
 
 
 	public boolean loadBaseFile(HttpExchange exchange) {
-		if (normalAccess(exchange)) {
-			String path = exchange.getRequestURI().getPath();
-			if (path.startsWith(urlPath)) {
-				path = path.substring(urlPath.length());
-				if (path.isEmpty() || !checkSuffix(path , WEB_SUFFIX)) return false;
-				return sendDefaultResource(exchange,path);
-			}
+		String path = exchange.getRequestURI().getPath();
+		if (path.startsWith(urlPath)) {
+			path = path.substring(urlPath.length());
+			if (path.isEmpty() || !checkSuffix(path , WEB_SUFFIX)) return false;
+			return sendDefaultResource(exchange,path);
 		}
 		return false;
 	}
@@ -211,22 +253,15 @@ public abstract class Listen extends ListenCDT{
 		return false;
 	}
 
+	public String getFileSuffix(String name){
+		return name.substring(name.lastIndexOf(".")).toLowerCase(Locale.ROOT);
+	}
 
 	public String mime(String path) {
-		String lower = path.toLowerCase(Locale.ROOT);
-		if (lower.endsWith(_SuffixCDT.HTML_SUFFIX)) return "text/html; charset=utf-8";
-		if (lower.endsWith(_SuffixCDT.JS_SUFFIX)) return "application/javascript; charset=utf-8";
-		if (lower.endsWith(_SuffixCDT.CSS_SUFFIX)) return "text/css; charset=utf-8";
-		if (lower.endsWith(_SuffixCDT.JSON_SUFFIX)) return "application/json; charset=utf-8";
-		if (lower.endsWith(_SuffixCDT.PNG_SUFFIX)) return "image/png";
-		if (lower.endsWith(_SuffixCDT.JPG_SUFFIX) || lower.endsWith(_SuffixCDT.JPEG_SUFFIX)) return "image/jpeg";
-		if (lower.endsWith(_SuffixCDT.GIF_SUFFIX)) return "image/gif";
-		return "application/octet-stream";
+		return getContentType(getFileSuffix(path.toLowerCase(Locale.ROOT)));
 	}
 	public boolean checkSuffix(String name,List<String> suffixes){
-		String t = name.substring(name.lastIndexOf(".")).toLowerCase(Locale.ROOT);
-		return suffixes.contains(t);
+		return suffixes.contains(getFileSuffix(name));
 	}
 
-	public abstract void context(HttpExchange exchange);
 }
