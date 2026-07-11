@@ -49,7 +49,7 @@ public class ColorSchemeRegister {
 	public static void regFromConfig() {
 		_File.getFiles(ColorSchemeIO.filePath, ".json").forEach(path -> {
 			String k = path.getFileName().toString();
-			ColorSchemeIO.Data colorD = new ColorSchemeIO(k).getDatas();
+			ColorSchemeIO.Data colorD = new ColorSchemeIO(k).getData();
 			k = k.substring(0, k.length() - 5);
 			if (colorD != null && !COLOR_SCHEME_REGISTER.getRegistry().containsKey(Identifier.tryBuild(Cores.MOD_ID, k)))
 				reg(k, () -> new ColorSchemeConfigLoad(colorD));

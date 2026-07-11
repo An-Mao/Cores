@@ -38,6 +38,6 @@ public class AttributeConfig extends _JsonConfig<Map<String, AttributeData>> {
 	}
 
 	public AttributeData getConfig(String key) {
-		return getDatas().get(key);
+		return getData().get(key);
 	}
 }

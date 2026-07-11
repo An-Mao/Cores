@@ -20,12 +20,12 @@ public class MixinConfig extends _JsonConfig<HashMap<String, Boolean>> {
 	}
 
 	@Override
-	public HashMap<String, Boolean> getDatas() {
-		if (datas == null) datas = new HashMap<>();
-		return super.getDatas();
+	public HashMap<String, Boolean> getData() {
+		if (data == null) data = new HashMap<>();
+		return super.getData();
 	}
 
 	public boolean isEnable(String key) {
-		return getDatas().getOrDefault(key, false);
+		return getData().getOrDefault(key, false);
 	}
 }

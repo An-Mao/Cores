@@ -22,15 +22,15 @@ public class ListenIpConfig extends _JsonConfig<ListenIpConfig.Data>{
 	}
 
 	@Override
-	public Data getDatas() {
-		if (datas == null) {
-			this.datas = new Data(1, List.of("127.*.*.*"));
+	public Data getData() {
+		if (data == null) {
+			this.data = new Data(1, List.of("127.*.*.*"));
 		}
-		return super.getDatas();
+		return super.getData();
 	}
 
 	public boolean checkIp(String tip){
-		return getDatas().checkIp(tip);
+		return getData().checkIp(tip);
 	}
 
 	

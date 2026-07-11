@@ -17,8 +17,8 @@ public class ListenCore{
 	private ListenCore(){}
 	public static HttpServer createServer(){
 		try {
-			LOGGER.debug("listen port:{}", Configs.GENERAL.getDatas().listenPort());
-			return HttpServer.create(new InetSocketAddress(Configs.GENERAL.getDatas().listenPort()), 0);
+			LOGGER.debug("listen port:{}", Configs.GENERAL.getData().listenPort());
+			return HttpServer.create(new InetSocketAddress(Configs.GENERAL.getData().listenPort()), 0);
 		} catch (IOException e) {
 			throw new _IOException(e);
 		}
