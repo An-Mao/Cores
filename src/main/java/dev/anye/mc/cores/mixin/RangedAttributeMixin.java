@@ -24,13 +24,15 @@ public class RangedAttributeMixin {
 	private double maxValue;
 
 	@Inject(method = "<init>", at = @At("RETURN"))
-	private void cores$init$modifyMaxHealth(String pDescriptionId, double pDefaultValue, double pMin, double pMax, CallbackInfo ci) {
+	private void cores$init$modifyMaxHealth(String descriptionId, double defaultValue, double minValue, double maxValue, CallbackInfo ci) {
 		if (MixinConfigs.EnableFixAttributes) {
-			AttributeData attributeData = Configs.ATTRIBUTE.getConfig(pDescriptionId);
-			if (attributeData != null) {
-				this.minValue = attributeData.getMin();
-				this.maxValue = attributeData.getMax();
-			}
+			Configs.ATTRIBUTE.ifPresent(map -> {
+				AttributeData attributeData = map.getOrDefault(descriptionId,null);
+				if (attributeData != null) {
+					this.minValue = attributeData.getMin();
+					this.maxValue = attributeData.getMax();
+				}
+			});
 		}
 	}
 }

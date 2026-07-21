@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.sun.net.httpserver.HttpServer;
 import dev.anye.core.exception._IOException;
 import dev.anye.mc.cores.am.config.Configs;
+import dev.anye.mc.cores.am.config.general.GeneralConfigData;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 
@@ -17,14 +18,17 @@ public class ListenCore{
 	private ListenCore(){}
 	public static HttpServer createServer(){
 		try {
-			LOGGER.debug("listen port:{}", Configs.GENERAL.getData().listenPort());
-			return HttpServer.create(new InetSocketAddress(Configs.GENERAL.getData().listenPort()), 0);
+			int port = Configs.GENERAL.map(GeneralConfigData::listenPort).orElse(0);
+			if (port == 0) return null;
+			LOGGER.debug("listen port:{}", port);
+			return HttpServer.create(new InetSocketAddress(port), 0);
 		} catch (IOException e) {
 			throw new _IOException(e);
 		}
 	}
 
 	public static void initServer(){
+		if (server == null) return;
 		LOGGER.debug("register listen start");
 		ListenRegister.LISTEN_REGISTER.getRegistry().forEach(listen -> server.createContext(listen.urlPath(), listen::handle));
 		LOGGER.debug("register listen done");
@@ -57,9 +61,11 @@ public class ListenCore{
 	}
 
 	public static void startServer(){
+		if (server == null) return;
 		server.start();
 	}
 	public static void stopServer(){
+		if (server == null) return;
 		server.stop(0);
 	}
 }

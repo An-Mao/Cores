@@ -1,39 +1,24 @@
 package dev.anye.mc.cores.am.config;
 
-import java.util.List;
-
 import com.google.gson.reflect.TypeToken;
-
 import dev.anye.core.json._JsonConfig;
 import dev.anye.core.system._File;
 import dev.anye.mc.cores.Cores;
 
+import java.util.List;
+
 public class ListenIpConfig extends _JsonConfig<ListenIpConfig.Data>{
 	public static final String FILE = _File.getFilePath(Cores.CONFIG_DIR, "listenIp.json");
-	public ListenIpConfig() {
-		super(FILE, """
-                {
-                    "type":1,
-                    "address":[
-                        "127.*.*.*"
-                    ]
-                }
-                """, new TypeToken<>(){});
-	}
 
-	@Override
-	public Data getData() {
-		if (data == null) {
-			this.data = new Data(1, List.of("127.*.*.*"));
-		}
-		return super.getData();
+
+	public ListenIpConfig() {
+		super(FILE,new Data(1,List.of("127.*.*.*")), new TypeToken<>(){});
 	}
 
 	public boolean checkIp(String tip){
-		return getData().checkIp(tip);
+		return map(data1 -> data1.checkIp(tip)).orElse(false);
 	}
 
-	
 
 	public record Data(int type,List<String> address) {
 		public boolean checkIp(String tip){

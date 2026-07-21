@@ -9,17 +9,7 @@ public class GeneralConfig extends _JsonConfig<GeneralConfigData> {
 	public static final String FILE_PATH = _File.getFilePath(Cores.CONFIG_DIR, "general.json");
 
 	public GeneralConfig() {
-		super(FILE_PATH, """
-				{
-				    "showTipGui": true,
-				    "listenPort": 44444
-				}""", new TypeToken<>() {
+		super(FILE_PATH, new GeneralConfigData(true,44444), new TypeToken<>() {
 		});
-	}
-
-	@Override
-	public GeneralConfigData getData() {
-		if (this.data == null) this.data = new GeneralConfigData(true,44444);
-		return this.data;
 	}
 }

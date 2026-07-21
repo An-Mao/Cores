@@ -6,26 +6,20 @@ import dev.anye.core.system._File;
 import dev.anye.mc.cores.Cores;
 
 import java.util.HashMap;
+import java.util.Map;
 
-public class MixinConfig extends _JsonConfig<HashMap<String, Boolean>> {
-	public static final String file = _File.getFilePath(Cores.CONFIG_DIR, "mixins.json");
-
-	public MixinConfig() {
-		super(file, """
-				{
-				  "Attributes": true,
-				  "PlayerLevel": true
-				}""", new TypeToken<>() {
-		});
+public class MixinConfig extends _JsonConfig<Map<String, Boolean>> {
+	public static final String FILE_PATH = _File.getFilePath(Cores.CONFIG_DIR, "mixins.json");
+	protected static final Map<String,Boolean> DEFAULT = new HashMap<>();
+	static {
+		DEFAULT.put("Attributes",true);
+		DEFAULT.put("PlayerLevel",true);
 	}
-
-	@Override
-	public HashMap<String, Boolean> getData() {
-		if (data == null) data = new HashMap<>();
-		return super.getData();
+	public MixinConfig() {
+		super(FILE_PATH, DEFAULT, new TypeToken<>() {});
 	}
 
 	public boolean isEnable(String key) {
-		return getData().getOrDefault(key, false);
+		return map(map -> map.getOrDefault(key,false)).orElse(false);
 	}
 }

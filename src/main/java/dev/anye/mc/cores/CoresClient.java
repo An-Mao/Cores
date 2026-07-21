@@ -58,19 +58,6 @@ public class CoresClient {
 		if (event.getRenderState().getRenderData(RenderStateEntityKey) instanceof LivingEntity livingEntity) {
 			CoresRegs.ENTITY_RENDER_REG.forEach((s, iEntityRender) -> iEntityRender.render(livingEntity,
 					event.getRenderState(), event.getRenderer(), event.getSubmitNodeCollector(), event.getPoseStack()));
-            /*
-            PoseStack poseStack = event.getPoseStack();
-            poseStack.pushPose();
-            poseStack.translate(0, livingEntity.getBbHeight() / 2.0F, 0);
-            float radius = Math.max(livingEntity.getBbWidth(), livingEntity.getBbHeight())  * 0.7F;
-            int   color  = 0x5500FFFF;
-            event.getSubmitNodeCollector().submitCustomGeometry(poseStack, CRenderTypes.SPHERE, (pose, v) -> {
-                new SphereRenderState(pose,  radius, 32, 16, color).render(v);
-            });
-
-            poseStack.popPose();
-
-             */
 		}
 	}
 

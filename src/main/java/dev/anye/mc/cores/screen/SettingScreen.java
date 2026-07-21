@@ -13,6 +13,7 @@ import dev.anye.mc.cores.screen.widget.simple.SimpleLabel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +51,10 @@ public class SettingScreen extends Screen {
 		DT_ListBoxData d = colorSelectBox.getSelectData();
 		if (d != null) {
 			if (d.getValue() instanceof _ColorScheme colorScheme) {
-				String key = ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().getKey(colorScheme).toString();
-				//System.out.println("key:"+key);
-				ColorConfig.instance.getData().setColorScheme(key);
+				Identifier identifier = ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().getKey(colorScheme);
+				if (identifier == null) return;
+				String key = identifier.toString();
+				ColorConfig.instance.ifPresent(colorConfigData -> colorConfigData.setColorScheme(key));
 				ColorConfig.instance.save();
 				ColorSchemes.setGlobal(colorScheme);
 				this.minecraft.setScreenAndShow(new SettingScreen());

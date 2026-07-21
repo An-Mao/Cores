@@ -20,10 +20,12 @@ public class AttributeMixin {
 	private double defaultValue;
 
 	@Inject(method = "<init>", at = @At("RETURN"))
-	private void cores$init$fix(String pDescriptionId, double pDefaultValue, CallbackInfo ci) {
+	private void cores$init$fix(String descriptionId, double defaultValue, CallbackInfo ci) {
 		if (MixinConfigs.EnableFixAttributes) {
-			AttributeData attributeData = Configs.ATTRIBUTE.getConfig(pDescriptionId);
-			if (attributeData != null) this.defaultValue = attributeData.getDef();
+			Configs.ATTRIBUTE.ifPresent(map -> {
+				AttributeData attributeData = map.getOrDefault(descriptionId,null);
+				if (attributeData != null) this.defaultValue = attributeData.getDef();
+			});
 		}
 	}
 }
