@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import com.sun.net.httpserver.HttpExchange;
 
-import dev.anye.mc.cores.am.config.ListenIpConfig;
+import dev.anye.mc.cores.am.config.ListenConfig;
 
 import org.slf4j.Logger;
 
@@ -27,7 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public abstract class Listen extends ListenCDT{
-	public static final ListenIpConfig IPS = new ListenIpConfig();
+	public static final ListenConfig LISTEN_CONFIG = new ListenConfig();
 	public static final Gson PRETTY_GSON = new GsonBuilder().setPrettyPrinting().create();
 
 	protected final Logger logger = LogUtils.getLogger();
@@ -90,7 +90,7 @@ public abstract class Listen extends ListenCDT{
 	public boolean checkIp(HttpExchange exchange){
 		String ip = getClientIp(exchange);
 		//logger.debug("user ip => {}",ip);
-		return IPS.checkIp(ip);
+		return LISTEN_CONFIG.checkIp(ip);
 	}
 
 
@@ -172,20 +172,24 @@ public abstract class Listen extends ListenCDT{
 		send(exchange, status, PRETTY_GSON.toJson(json), "application/json; charset=utf-8");
 	}
 	public void sendFile(HttpExchange exchange, String filePath, String contentType) throws IOException {
-		byte[] bytes = readFile(filePath);
-		if (bytes == null) {
-			sendJson(exchange, 404, error("not_found", "Missing resource: " + filePath));
-			return;
-		}
-		send(exchange, 200, bytes, contentType);
+		if (LISTEN_CONFIG.checkPath(filePath)) {
+			byte[] bytes = readFile(filePath);
+			if (bytes == null) {
+				sendJson(exchange, 404, error("not_found", "Missing resource: " + filePath));
+				return;
+			}
+			send(exchange, 200, bytes, contentType);
+		}else sendJson(exchange,401, error("Access not allowed","Path disabled"));
 	}
 	public void sendResource(HttpExchange exchange, String resourcePath, String contentType) throws IOException {
-		byte[] bytes = readAssetsResource(resourcePath);
-		if (bytes == null) {
-			sendJson(exchange, 404, error("not_found", "Missing resource: " + resourcePath));
-			return;
-		}
-		send(exchange, 200, bytes, contentType);
+		if (LISTEN_CONFIG.checkPath(resourcePath)){
+			byte[] bytes = readAssetsResource(resourcePath);
+			if (bytes == null) {
+				sendJson(exchange, 404, error("not_found", "Missing resource: " + resourcePath));
+				return;
+			}
+			send(exchange, 200, bytes, contentType);
+		}else sendJson(exchange,401, error("Access not allowed","Path disabled"));
 	}
 	public boolean sendDefaultResource(HttpExchange exchange,String path){
 		try {

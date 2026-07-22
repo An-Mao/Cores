@@ -1,6 +1,7 @@
 package dev.anye.mc.cores.am.color;
 
 import dev.anye.core.color.scheme._ColorScheme;
+import dev.anye.core.exception._TargetException;
 import dev.anye.core.system._File;
 import dev.anye.mc.cores.Cores;
 import dev.anye.mc.cores.am.color.scheme.*;
@@ -47,12 +48,13 @@ public class ColorSchemeRegister {
 	}
 
 	public static void regFromConfig() {
-		_File.getFiles(ColorSchemeIO.filePath, ".json").forEach(path -> {
+		_File.getFiles(ColorSchemeIO.FILE_PATH, ".json").forEach(path -> {
 			String k = path.getFileName().toString();
-			ColorSchemeIO.Data colorD = new ColorSchemeIO(k).getData();
-			k = k.substring(0, k.length() - 5);
-			if (colorD != null && !COLOR_SCHEME_REGISTER.getRegistry().containsKey(Identifier.tryBuild(Cores.MOD_ID, k)))
-				reg(k, () -> new ColorSchemeConfigLoad(colorD));
+			new ColorSchemeIO(k).ifPresent(csi -> {
+				String key = k.substring(0, k.length() - 5);
+				if (csi != null && !COLOR_SCHEME_REGISTER.getRegistry().containsKey(Identifier.tryBuild(Cores.MOD_ID, key)))
+					reg(key, () -> new ColorSchemeConfigLoad(csi));
+			});
 		});
 	}
 
@@ -69,6 +71,10 @@ public class ColorSchemeRegister {
 	}
 
 	public static String getSchemeKey(_ColorScheme colorScheme) {
-		return "color_scheme." + COLOR_SCHEME_REGISTER.getRegistry().getKey(colorScheme).toLanguageKey();
+		Identifier key = COLOR_SCHEME_REGISTER.getRegistry().getKey(colorScheme);
+		if (key != null) {
+			return "color_scheme." + key.toLanguageKey();
+		}
+		throw new _TargetException("key is null");
 	}
 }

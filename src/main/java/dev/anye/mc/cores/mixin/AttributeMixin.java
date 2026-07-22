@@ -24,7 +24,7 @@ public class AttributeMixin {
 		if (MixinConfigs.EnableFixAttributes) {
 			Configs.ATTRIBUTE.ifPresent(map -> {
 				AttributeData attributeData = map.getOrDefault(descriptionId,null);
-				if (attributeData != null) this.defaultValue = attributeData.getDef();
+				if (attributeData != null) this.defaultValue = attributeData.def();
 			});
 		}
 	}

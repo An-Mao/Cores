@@ -53,7 +53,6 @@ public class ImageListen extends Listen{
 					break;
 				}
 				case "file":
-					// TODO only config?
 					sendFile(exchange, path, mime(path));
 					break;
 				case null, default: sendJson(exchange, 404, error("error type", "Unknow type"));

@@ -3,8 +3,7 @@ package dev.anye.mc.cores.am.listen;
 import com.mojang.logging.LogUtils;
 import com.sun.net.httpserver.HttpServer;
 import dev.anye.core.exception._IOException;
-import dev.anye.mc.cores.am.config.Configs;
-import dev.anye.mc.cores.am.config.general.GeneralConfigData;
+import dev.anye.mc.cores.am.config.ListenConfig;
 import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 
@@ -18,7 +17,7 @@ public class ListenCore{
 	private ListenCore(){}
 	public static HttpServer createServer(){
 		try {
-			int port = Configs.GENERAL.map(GeneralConfigData::listenPort).orElse(0);
+			int port = Listen.LISTEN_CONFIG.map(ListenConfig.Data::listenPort).orElse(0);
 			if (port == 0) return null;
 			LOGGER.debug("listen port:{}", port);
 			return HttpServer.create(new InetSocketAddress(port), 0);

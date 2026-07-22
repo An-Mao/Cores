@@ -29,8 +29,8 @@ public class RangedAttributeMixin {
 			Configs.ATTRIBUTE.ifPresent(map -> {
 				AttributeData attributeData = map.getOrDefault(descriptionId,null);
 				if (attributeData != null) {
-					this.minValue = attributeData.getMin();
-					this.maxValue = attributeData.getMax();
+					this.minValue = attributeData.min();
+					this.maxValue = attributeData.max();
 				}
 			});
 		}

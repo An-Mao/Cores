@@ -27,17 +27,18 @@ import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEve
 @EventBusSubscriber(modid = Cores.MOD_ID, value = Dist.CLIENT)
 public class CoresClient {
 	public CoresClient(ModContainer container) {
+		
 	}
 
 	@SubscribeEvent
 	public static void onClientSetup(FMLClientSetupEvent event) {
-		String scheme = ColorConfig.instance.getData().getColorScheme();
-		Identifier colorSchemeRes = Identifier.tryParse(scheme);
-		if (colorSchemeRes != null) {
-			ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().get(colorSchemeRes).ifPresent(cs -> {
-				ColorSchemes.setGlobal(cs.value());
-			});
-		}
+		ColorConfig.instance.ifPresent(c -> {
+			String scheme = c.getColorScheme();
+			Identifier colorSchemeRes = Identifier.tryParse(scheme);
+			if (colorSchemeRes != null) {
+				ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().get(colorSchemeRes).ifPresent(cs -> ColorSchemes.setGlobal(cs.value()));
+			}
+		});
 	}
 
 	@SubscribeEvent
