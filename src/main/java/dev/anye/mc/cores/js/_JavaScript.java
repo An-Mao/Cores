@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
+@Deprecated(since = "2.0.5")
 public abstract class _JavaScript<T extends _JavaScript<T>> implements _IJS {
 	private final boolean cache;
 	private final HashMap<String, Reader> fileTemp = new HashMap<>();

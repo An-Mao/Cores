@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Map;
 
+@Deprecated(since = "2.0.5")
 public class _GraalJS extends _JavaScript<_GraalJS> {
 	private final Context context;
 	private final Value bindings;

@@ -8,6 +8,7 @@ import javax.script.ScriptException;
 import java.io.Reader;
 import java.util.Map;
 
+@Deprecated(since = "2.0.5")
 public class _NashornJS extends _JavaScript<_NashornJS> {
 	private final ScriptEngineFactory sef;
 	private final ScriptEngine engine;
