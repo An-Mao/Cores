@@ -1,8 +1,8 @@
 package dev.anye.mc.cores.amlib.color;
 
-import dev.anye.mc.cores.amlib.color.scheme.*;
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.mc.cores.Cores;
+import dev.anye.mc.cores.amlib.color.scheme.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;

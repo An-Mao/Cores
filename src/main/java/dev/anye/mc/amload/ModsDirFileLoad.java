@@ -1,7 +1,7 @@
 package dev.anye.mc.amload;
 
-import dev.anye.mc.cores.Cores;
 import com.mojang.logging.LogUtils;
+import dev.anye.mc.cores.Cores;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.loading.LogMarkers;
 import net.minecraftforge.fml.loading.ModDirTransformerDiscoverer;

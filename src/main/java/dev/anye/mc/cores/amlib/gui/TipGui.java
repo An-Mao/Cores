@@ -1,8 +1,8 @@
 package dev.anye.mc.cores.amlib.gui;
 
+import dev.anye.core.color._ColorCDT;
 import dev.anye.mc.cores.Cores;
 import dev.anye.mc.cores.amlib.config.Configs;
-import dev.anye.core.color._ColorCDT;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -15,7 +15,7 @@ public class TipGui {
     public static final String id = "tip";
     private static final ResourceLocation texture = new ResourceLocation(Cores.MOD_ID,"textures/gui/tip");
     private static final HashMap<String,Long> msg = new HashMap<>();
-    private static boolean show = Configs.general.getDatas().isShowTipGui();
+    private static boolean show = Configs.GENERAL.getData().isShowTipGui();
     private static final int imageH = 24;
     private static int x;
     private static int y;

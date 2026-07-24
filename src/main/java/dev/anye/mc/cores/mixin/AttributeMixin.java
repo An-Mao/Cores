@@ -18,11 +18,15 @@ public class AttributeMixin {
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void cores$init$fix(String pDescriptionId, double pDefaultValue, CallbackInfo ci) {
-        if (Configs.general.getDatas().isMixinAttributes()){
-            AttributeData attributeData = Configs.attribute.getConfig(pDescriptionId);
-            if (attributeData != null) {
-                this.defaultValue = attributeData.getDef();
-            }
-        }
+		Configs.GENERAL.ifPresent(generalConfigData -> {
+			if (generalConfigData.isMixinAttributes()){
+				Configs.ATTRIBUTE.ifPresent(stringAttributeDataMap -> {
+					AttributeData attributeData = stringAttributeDataMap.getOrDefault(pDescriptionId,null);
+					if (attributeData != null) {
+						this.defaultValue = attributeData.def();
+					}
+				});
+			}
+		});
     }
 }

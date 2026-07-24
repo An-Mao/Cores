@@ -33,15 +33,15 @@ public class EntityTickListMixin {
 
             try {
                 for(Entity entity : this.active.values()) {
-                    if (Configs.theWorld.getDatas().isEnable()) {
+                    if (Configs.THE_WORLD.getData().isEnable()) {
                         if (TheWorld.GetTheWorldState(entity)) {
                             int time = TheWorld.GetTheWorldTime(entity);
-                            if (Configs.theWorld.getDatas().getType() == 1) {
-                                if (EntityHelper.getLevelTime(entity) - time < Configs.theWorld.getDatas().getStopTime()) {
+                            if (Configs.THE_WORLD.getData().getType() == 1) {
+                                if (EntityHelper.getLevelTime(entity) - time < Configs.THE_WORLD.getData().getStopTime()) {
                                     continue;
                                 }
-                            } else if (Configs.theWorld.getDatas().getType() == 2) {
-                                if (time < Configs.theWorld.getDatas().getStopTime()) {
+                            } else if (Configs.THE_WORLD.getData().getType() == 2) {
+                                if (time < Configs.THE_WORLD.getData().getStopTime()) {
                                     TheWorld.SetTheWorldTime(entity,time+1);
                                     continue;
                                 }

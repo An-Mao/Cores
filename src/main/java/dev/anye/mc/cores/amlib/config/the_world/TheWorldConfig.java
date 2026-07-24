@@ -1,17 +1,13 @@
 package dev.anye.mc.cores.amlib.config.the_world;
 
-import dev.anye.core.json._JsonConfig;
-import dev.anye.mc.cores.CDT;
 import com.google.gson.reflect.TypeToken;
+import dev.anye.core.json._JsonConfig;
+import dev.anye.core.system._File;
+import dev.anye.mc.cores.Cores;
 
 public class TheWorldConfig extends _JsonConfig<TheWorldConfigData> {
+	public static final String FILE_PATH = _File.getFilePath(Cores.CONFIG_DIR, "TheWorld.json");
     public TheWorldConfig() {
-        super(CDT.ConfigDir +"TheWorld.json", """
-                {
-                  "enable": true,
-                  "type": 1,
-                  "stopTime": 600
-                }""", new TypeToken<>() {
-        });
+        super(FILE_PATH, TheWorldConfigData.DEFAULT, new TypeToken<>() {});
     }
 }

@@ -1,31 +1,17 @@
 package dev.anye.mc.cores.amlib.config.attribute;
 
-public class AttributeData {
-    private double min;
-    private double def;
-    private double max;
+import java.util.HashMap;
+import java.util.Map;
 
-    public double getMin() {
-        return min;
-    }
+public record AttributeData (double def, double min, double max) {
+	public static final Map<String, AttributeData> DEFAULT = Default();
 
-    public void setMin(double min) {
-        this.min = min;
-    }
-
-    public double getDef() {
-        return def;
-    }
-
-    public void setDef(double def) {
-        this.def = def;
-    }
-
-    public double getMax() {
-        return max;
-    }
-
-    public void setMax(double max) {
-        this.max = max;
-    }
+	private static Map<String, AttributeData> Default (){
+		Map<String, AttributeData> map = new HashMap<>();
+		map.put("attribute.name.generic.max_health",new AttributeData(20d,1d,999999999d));
+		map.put("attribute.name.generic.attack_damage",new AttributeData(2d,0d,999999999d));
+		map.put("attribute.name.generic.armor",new AttributeData(0d,0d,999999999d));
+		map.put("attribute.name.generic.armor_toughness",new AttributeData(0d,0d,999999999d));
+		return map;
+	}
 }

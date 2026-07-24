@@ -1,17 +1,14 @@
 package dev.anye.mc.cores.amlib.config.color;
 
-import dev.anye.core.json._JsonConfig;
-import dev.anye.mc.cores.CDT;
 import com.google.gson.reflect.TypeToken;
+import dev.anye.core.json._JsonConfig;
+import dev.anye.core.system._File;
+import dev.anye.mc.cores.Cores;
 
 public class ColorConfig extends _JsonConfig<ColorConfigData> {
-    public static String filePath = CDT.ConfigDir +"color.json";
-    public static ColorConfig instance = new ColorConfig();
+	public static final String FILE = _File.getFilePath(Cores.CONFIG_DIR, "color.json");
+    public static final ColorConfig INSTANCE = new ColorConfig();
     public ColorConfig() {
-        super(filePath, """
-                {
-                  "colorScheme": "cores:default"
-                }
-                """, new TypeToken<>() {});
+        super(FILE, ColorConfigData.DEFAULT, new TypeToken<>() {});
     }
 }

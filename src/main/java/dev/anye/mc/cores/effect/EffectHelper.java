@@ -1,10 +1,10 @@
 package dev.anye.mc.cores.effect;
 
+import dev.anye.core.math._Math;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
-import dev.anye.core.math._Math;
 
 import java.util.ArrayList;
 import java.util.List;

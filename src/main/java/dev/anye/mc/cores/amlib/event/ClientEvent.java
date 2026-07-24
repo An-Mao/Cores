@@ -18,7 +18,7 @@ public class ClientEvent {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event)
     {
-        String scheme = ColorConfig.instance.getDatas().getColorScheme();
+        String scheme = ColorConfig.INSTANCE.getData().getColorScheme();
         ResourceLocation colorSchemeRes = ResourceLocation.tryParse(scheme);
         _ColorScheme colorScheme = ColorSchemeRegister.REGISTRY.get().getValue(colorSchemeRes);
         ColorSchemes.setGlobal(colorScheme);

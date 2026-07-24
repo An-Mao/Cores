@@ -1,6 +1,7 @@
 package dev.anye.mc.cores.amlib.config.the_world;
 
 public class TheWorldConfigData {
+	public static final TheWorldConfigData DEFAULT = new TheWorldConfigData(true,1,600);
     private boolean enable;
     private int type;
     private int stopTime;

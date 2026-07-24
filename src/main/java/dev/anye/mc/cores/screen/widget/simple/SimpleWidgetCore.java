@@ -1,11 +1,11 @@
 package dev.anye.mc.cores.screen.widget.simple;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.core.math._Math;
 import dev.anye.mc.cores.render.Draw;
 import dev.anye.mc.cores.screen.widget.RenderWidgetCore;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;

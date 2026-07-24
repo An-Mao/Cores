@@ -1,12 +1,13 @@
 package dev.anye.mc.cores.time;
 
-import dev.anye.mc.cores.CDT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 public class TimeHelper {
+	public static final int MinecraftDayMinTick = 0;
+	public static final int MinecraftDayMaxTick = 24000;
     public static int TickToDay(int gameTick){
-        return gameTick / CDT.MinecraftDayMaxTick;
+        return gameTick / MinecraftDayMaxTick;
     }
 
     public static int GetDayTime(int time){

@@ -1,10 +1,10 @@
 package dev.anye.mc.cores.screen.widget;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import dev.anye.core.debug._DeBug;
 import dev.anye.core.math._Math;
 import dev.anye.mc.cores.render.Draw;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
