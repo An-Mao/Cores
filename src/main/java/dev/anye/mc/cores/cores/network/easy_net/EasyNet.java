@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.amlib.network.easy_net;
+package dev.anye.mc.cores.cores.network.easy_net;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.network.NetworkEvent;

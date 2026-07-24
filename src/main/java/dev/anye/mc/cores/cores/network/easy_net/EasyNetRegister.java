@@ -1,7 +1,7 @@
-package dev.anye.mc.cores.amlib.network.easy_net;
+package dev.anye.mc.cores.cores.network.easy_net;
 
 import dev.anye.mc.cores.Cores;
-import dev.anye.mc.cores.amlib.network.tip$gui.TipGuiNetSTC;
+import dev.anye.mc.cores.cores.network.tip$gui.TipGuiNetSTC;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;

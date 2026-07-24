@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.amlib.flash;
+package dev.anye.mc.cores.cores.flash;
 
 import dev.anye.mc.cores.Cores;
 import dev.anye.mc.cores.entity.EntityHelper;

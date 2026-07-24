@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.amlib.color.scheme;
+package dev.anye.mc.cores.cores.color.scheme;
 
 import dev.anye.core.color.scheme._ColorScheme;
 

@@ -1,7 +1,7 @@
-package dev.anye.mc.cores.amlib.event;
+package dev.anye.mc.cores.cores.event;
 
 import dev.anye.mc.cores.Cores;
-import dev.anye.mc.cores.amlib.util.KeyBinding;
+import dev.anye.mc.cores.cores.util.KeyBinding;
 import dev.anye.mc.cores.screen.SettingScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;

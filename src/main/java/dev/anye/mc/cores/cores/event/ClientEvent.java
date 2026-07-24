@@ -1,11 +1,11 @@
-package dev.anye.mc.cores.amlib.event;
+package dev.anye.mc.cores.cores.event;
 
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.mc.cores.Cores;
-import dev.anye.mc.cores.amlib.color.ColorSchemeRegister;
-import dev.anye.mc.cores.amlib.color.ColorSchemes;
-import dev.anye.mc.cores.amlib.config.color.ColorConfig;
-import dev.anye.mc.cores.amlib.util.KeyBinding;
+import dev.anye.mc.cores.cores.color.ColorSchemeRegister;
+import dev.anye.mc.cores.cores.color.ColorSchemes;
+import dev.anye.mc.cores.cores.config.color.ColorConfig;
+import dev.anye.mc.cores.cores.util.KeyBinding;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -18,10 +18,12 @@ public class ClientEvent {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event)
     {
-        String scheme = ColorConfig.INSTANCE.getData().getColorScheme();
-        ResourceLocation colorSchemeRes = ResourceLocation.tryParse(scheme);
-        _ColorScheme colorScheme = ColorSchemeRegister.REGISTRY.get().getValue(colorSchemeRes);
-        ColorSchemes.setGlobal(colorScheme);
+		ColorConfig.INSTANCE.ifPresent(colorConfigData -> {
+			String scheme = colorConfigData.getColorScheme();
+			ResourceLocation colorSchemeRes = ResourceLocation.tryParse(scheme);
+			_ColorScheme colorScheme = ColorSchemeRegister.REGISTRY.get().getValue(colorSchemeRes);
+			ColorSchemes.setGlobal(colorScheme);
+		});
     }
 
     @SubscribeEvent

@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.amlib.event;
+package dev.anye.mc.cores.cores.event;
 
 import dev.anye.mc.cores.Cores;
 import net.minecraft.server.level.ServerPlayer;

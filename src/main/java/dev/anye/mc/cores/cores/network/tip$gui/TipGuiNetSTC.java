@@ -1,7 +1,7 @@
-package dev.anye.mc.cores.amlib.network.tip$gui;
+package dev.anye.mc.cores.cores.network.tip$gui;
 
-import dev.anye.mc.cores.amlib.gui.TipGui;
-import dev.anye.mc.cores.amlib.network.easy_net.EasyNet;
+import dev.anye.mc.cores.cores.gui.TipGui;
+import dev.anye.mc.cores.cores.network.easy_net.EasyNet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.network.NetworkEvent;
 

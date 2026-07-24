@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.amlib.config.general;
+package dev.anye.mc.cores.cores.config.general;
 
 import com.google.gson.reflect.TypeToken;
 import dev.anye.core.json._JsonConfig;

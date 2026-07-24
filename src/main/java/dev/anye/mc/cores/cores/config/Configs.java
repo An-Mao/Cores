@@ -1,8 +1,8 @@
-package dev.anye.mc.cores.amlib.config;
+package dev.anye.mc.cores.cores.config;
 
-import dev.anye.mc.cores.amlib.config.attribute.AttributeConfig;
-import dev.anye.mc.cores.amlib.config.general.GeneralConfig;
-import dev.anye.mc.cores.amlib.config.the_world.TheWorldConfig;
+import dev.anye.mc.cores.cores.config.attribute.AttributeConfig;
+import dev.anye.mc.cores.cores.config.general.GeneralConfig;
+import dev.anye.mc.cores.cores.config.the_world.TheWorldConfig;
 
 public class Configs {
     public static final GeneralConfig GENERAL;

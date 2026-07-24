@@ -1,7 +1,7 @@
 package dev.anye.mc.cores.mixin;
 
-import dev.anye.mc.cores.amlib.config.Configs;
-import dev.anye.mc.cores.amlib.config.attribute.AttributeData;
+import dev.anye.mc.cores.cores.config.Configs;
+import dev.anye.mc.cores.cores.config.attribute.AttributeData;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

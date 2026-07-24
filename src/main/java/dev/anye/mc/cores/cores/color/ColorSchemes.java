@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.amlib.color;
+package dev.anye.mc.cores.cores.color;
 
 import dev.anye.core.color.scheme._ColorScheme;
 import net.minecraftforge.registries.RegistryObject;

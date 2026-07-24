@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.amlib.config.attribute;
+package dev.anye.mc.cores.cores.config.attribute;
 
 import java.util.HashMap;
 import java.util.Map;

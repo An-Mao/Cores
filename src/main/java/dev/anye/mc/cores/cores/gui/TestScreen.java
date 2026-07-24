@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.amlib.gui;
+package dev.anye.mc.cores.cores.gui;
 
 import dev.anye.mc.cores.screen.widget.CircularWidget;
 import dev.anye.mc.cores.screen.widget.DT_ListBoxData;

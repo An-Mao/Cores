@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.amlib.config.general;
+package dev.anye.mc.cores.cores.config.general;
 
 public class GeneralConfigData {
 	public static final GeneralConfigData DEFAULT = new GeneralConfigData(true,false);

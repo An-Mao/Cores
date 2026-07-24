@@ -1,8 +1,8 @@
-package dev.anye.mc.cores.amlib.gui;
+package dev.anye.mc.cores.cores.gui;
 
 import dev.anye.core.color._ColorCDT;
 import dev.anye.mc.cores.Cores;
-import dev.anye.mc.cores.amlib.config.Configs;
+import dev.anye.mc.cores.cores.config.Configs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;

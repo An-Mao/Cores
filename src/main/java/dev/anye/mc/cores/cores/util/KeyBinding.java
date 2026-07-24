@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.amlib.util;
+package dev.anye.mc.cores.cores.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;

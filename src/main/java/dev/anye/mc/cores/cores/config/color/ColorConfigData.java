@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.amlib.config.color;
+package dev.anye.mc.cores.cores.config.color;
 
 import dev.anye.mc.cores.Cores;
 

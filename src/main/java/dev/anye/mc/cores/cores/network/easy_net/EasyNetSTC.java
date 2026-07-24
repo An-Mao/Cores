@@ -1,6 +1,6 @@
-package dev.anye.mc.cores.amlib.network.easy_net;
+package dev.anye.mc.cores.cores.network.easy_net;
 
-import dev.anye.mc.cores.amlib.network.Net;
+import dev.anye.mc.cores.cores.network.Net;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

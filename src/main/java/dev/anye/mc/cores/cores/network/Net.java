@@ -1,8 +1,8 @@
-package dev.anye.mc.cores.amlib.network;
+package dev.anye.mc.cores.cores.network;
 
 import dev.anye.mc.cores.Cores;
-import dev.anye.mc.cores.amlib.network.easy_net.EasyNetCTS;
-import dev.anye.mc.cores.amlib.network.easy_net.EasyNetSTC;
+import dev.anye.mc.cores.cores.network.easy_net.EasyNetCTS;
+import dev.anye.mc.cores.cores.network.easy_net.EasyNetSTC;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;

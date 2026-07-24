@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.amlib.config.color;
+package dev.anye.mc.cores.cores.config.color;
 
 import com.google.gson.reflect.TypeToken;
 import dev.anye.core.json._JsonConfig;

@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.amlib.test;
+package dev.anye.mc.cores.cores.test;
 
 import dev.anye.mc.cores.Cores;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;

@@ -2,7 +2,7 @@ package dev.anye.mc.cores.screen.widget;
 
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.core.math._Math;
-import dev.anye.mc.cores.amlib.color.ColorSchemes;
+import dev.anye.mc.cores.cores.color.ColorSchemes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
