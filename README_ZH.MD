@@ -7,21 +7,28 @@
 为我的世界Mod开发的代码库Mod，内置了许多经常使用的重复性的代码，并提供一些实用的功能。  
 普通玩家可以通过【[CurseForge](https://www.curseforge.com/minecraft/mc-mods/cores)】或【[Modrinth](https://modrinth.com/mod/cores)】下载成品    
 
-## 普通向功能
+## 普通功能
  - 属性修复：修改属性的默认值、最大值、最小值。可通过配置文件调整。
  - 经验修复：修改扣除经验等级时，扣除从0至所扣等级的点数，而不是（已有等级-扣除等级）
-上述功能均可通过配置文件关闭
-## 代码向功能
+上述功能均可通过配置文件关闭。
+ - 网络监听：当Mod注册一个路径之后可以通过本地端口进行访问。
+ - - 出于安全考虑，此功能默认禁用，可以通过更改配置来启用。
+ - - 通过命令启用的，下次启动时依旧会禁用。
+ - - 一段时间不活动，会自动关闭，如果不想超时关闭，将timeout设置为-1。
+ - - 默认仅允许本地访问（127.0.0.1）。
+ - - 默认仅允许读取加载的资源文件。
+
+## 代码功能
  - 配色方案：在使用本Mod的Screen或部分渲染相关的代码时，可以通过更改配色方案来更改配色（如图所示）。
 按Home键打开配置界面
-![Home界面](https://github.com/An-Mao/Cores/blob/main/image/home_screen.png)
+![Home界面](https://github.com/An-Mao/Cores/blob/main/image/home_screen.png?raw=true)
 选择配色方案
-![配色方案选择](https://github.com/An-Mao/Cores/blob/main/image/home_screen_select_color_scheme.png)
+![配色方案选择](https://github.com/An-Mao/Cores/blob/main/image/home_screen_select_color_scheme.png?raw=true)
 保存后查看效果
-![Amber](https://github.com/An-Mao/Cores/blob/main/image/home_screen_change_amber.png)
-![Sunset](https://github.com/An-Mao/Cores/blob/main/image/home_screen_change_sunset.png)
-![Teal](https://github.com/An-Mao/Cores/blob/main/image/home_screen_change_teal.png)
-![Twilight](https://github.com/An-Mao/Cores/blob/main/image/home_screen_change_twilight.png)
+![Amber](https://github.com/An-Mao/Cores/blob/main/image/home_screen_change_amber.png?raw=true)
+![Sunset](https://github.com/An-Mao/Cores/blob/main/image/home_screen_change_sunset.png?raw=true)
+![Teal](https://github.com/An-Mao/Cores/blob/main/image/home_screen_change_teal.png?raw=true)
+![Twilight](https://github.com/An-Mao/Cores/blob/main/image/home_screen_change_twilight.png?raw=true)
  - 网络监听：监听端口（4444），当玩家访问时返回注册的内容。
 ```java
 package dev.anye.mc.cores.am.listen;
