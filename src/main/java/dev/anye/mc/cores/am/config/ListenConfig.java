@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ListenConfig extends _JsonConfig<ListenConfig.Data>{
 	public static final String FILE = _File.getFilePath(Cores.CONFIG_DIR, "listen.json");
+	public static final ListenConfig LISTEN_CONFIG = new ListenConfig();
 
 
 	public ListenConfig() {
@@ -23,8 +24,10 @@ public class ListenConfig extends _JsonConfig<ListenConfig.Data>{
 	}
 
 
-	public record Data(int listenPort ,int ipType, List<String> address,int pathType,List<String> path) {
+	public record Data(boolean enable,int timeout,int listenPort ,int ipType, List<String> address,int pathType,List<String> path) {
 		public static final Data DEFAULT = new Data(
+				false,
+				300,
 				4444,
 				1,
 				List.of("127.*.*.*"),

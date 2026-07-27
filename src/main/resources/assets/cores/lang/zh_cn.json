@@ -5,6 +5,10 @@
   "command.cores.mixin.player_level": "玩家等级Mixin:",
   "command.cores.mixin.player_level.enable": "§1启用",
   "command.cores.mixin.player_level.disable": "§4禁用",
+  "command.cores.listen.is_run": "§4正在运行中",
+  "command.cores.listen.not_run": "§4没有运行",
+  "command.cores.listen.has_run": "网络监听已启动",
+  "command.cores.listen.has_close": "网络监听已关闭",
 
   "color_scheme.cores.default": "默认",
   "color_scheme.cores.cold_gray": "冷灰色",

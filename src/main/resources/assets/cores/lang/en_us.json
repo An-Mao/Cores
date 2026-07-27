@@ -5,6 +5,10 @@
   "command.cores.mixin.player_level": "Player Lvl Mixin:",
   "command.cores.mixin.player_level.enable": "§1Enable",
   "command.cores.mixin.player_level.disable": "§4Disable",
+  "command.cores.listen.is_run": "The server is running",
+  "command.cores.listen.not_run": "The server not run",
+  "command.cores.listen.has_run": "server has running",
+  "command.cores.listen.has_close": "server has close",
 
 
   "color_scheme.cores.default": "Default",

@@ -27,7 +27,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public abstract class Listen extends ListenCDT{
-	public static final ListenConfig LISTEN_CONFIG = new ListenConfig();
 	public static final Gson PRETTY_GSON = new GsonBuilder().setPrettyPrinting().create();
 
 	protected final Logger logger = LogUtils.getLogger();
@@ -90,7 +89,7 @@ public abstract class Listen extends ListenCDT{
 	public boolean checkIp(HttpExchange exchange){
 		String ip = getClientIp(exchange);
 		//logger.debug("user ip => {}",ip);
-		return LISTEN_CONFIG.checkIp(ip);
+		return ListenConfig.LISTEN_CONFIG.checkIp(ip);
 	}
 
 
@@ -100,6 +99,7 @@ public abstract class Listen extends ListenCDT{
 		if (autoClose) {
 			if (!isActivity()) return;
 			lastActivityTime = getSystemTime();
+			ListenCore.setTimeout(lastActivityTime);
 		}
 		switch (exchange.getRequestMethod().toUpperCase()) {
 			case GET:
@@ -172,7 +172,7 @@ public abstract class Listen extends ListenCDT{
 		send(exchange, status, PRETTY_GSON.toJson(json), "application/json; charset=utf-8");
 	}
 	public void sendFile(HttpExchange exchange, String filePath, String contentType) throws IOException {
-		if (LISTEN_CONFIG.checkPath(filePath)) {
+		if (ListenConfig.LISTEN_CONFIG.checkPath(filePath)) {
 			byte[] bytes = readFile(filePath);
 			if (bytes == null) {
 				sendJson(exchange, 404, error("not_found", "Missing resource: " + filePath));
@@ -182,7 +182,7 @@ public abstract class Listen extends ListenCDT{
 		}else sendJson(exchange,401, error("Access not allowed","Path disabled"));
 	}
 	public void sendResource(HttpExchange exchange, String resourcePath, String contentType) throws IOException {
-		if (LISTEN_CONFIG.checkPath(resourcePath)){
+		if (ListenConfig.LISTEN_CONFIG.checkPath(resourcePath)){
 			byte[] bytes = readAssetsResource(resourcePath);
 			if (bytes == null) {
 				sendJson(exchange, 404, error("not_found", "Missing resource: " + resourcePath));

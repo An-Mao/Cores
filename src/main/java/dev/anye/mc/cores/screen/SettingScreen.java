@@ -49,16 +49,15 @@ public class SettingScreen extends Screen {
 
 	private void save() {
 		DT_ListBoxData d = colorSelectBox.getSelectData();
-		if (d != null) {
-			if (d.getValue() instanceof _ColorScheme colorScheme) {
-				Identifier identifier = ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().getKey(colorScheme);
-				if (identifier == null) return;
-				String key = identifier.toString();
-				ColorConfig.instance.ifPresent(colorConfigData -> colorConfigData.setColorScheme(key));
-				ColorConfig.instance.save();
-				ColorSchemes.setGlobal(colorScheme);
-				this.minecraft.setScreenAndShow(new SettingScreen());
-			}
+		if (d != null && d.getValue() instanceof _ColorScheme colorScheme) {
+			Identifier identifier = ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().getKey(colorScheme);
+			if (identifier == null) return;
+			String key = identifier.toString();
+			ColorConfig.instance.ifPresent(colorConfigData -> colorConfigData.setColorScheme(key));
+			ColorConfig.instance.save();
+			ColorSchemes.setGlobal(colorScheme);
+			this.minecraft.setScreenAndShow(new SettingScreen());
+
 		}
 	}
 

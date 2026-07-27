@@ -8,6 +8,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.slf4j.Logger;
 
 @EventBusSubscriber(modid = Cores.MOD_ID)
@@ -26,5 +27,10 @@ public class Events {
 	public static void onServerStopping(ServerStoppingEvent event) {
 		//?
 		ListenCore.stopServer();
+	}
+
+	@SubscribeEvent
+	public static void onServerTick(ServerTickEvent.Post event){
+		ListenCore.timeout();
 	}
 }

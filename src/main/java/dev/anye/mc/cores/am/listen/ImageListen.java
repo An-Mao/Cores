@@ -2,8 +2,10 @@ package dev.anye.mc.cores.am.listen;
 
 import com.sun.net.httpserver.HttpExchange;
 import dev.anye.core.exception._IOException;
+import dev.anye.core.system._File;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.Map;
 
@@ -53,7 +55,8 @@ public class ImageListen extends Listen{
 					break;
 				}
 				case "file":
-					sendFile(exchange, path, mime(path));
+					//Lock the file path to the current game directory.
+					sendFile(exchange, _File.getFilePath(_File.getFileFullPathWithRun(),path), mime(path));
 					break;
 				case null, default: sendJson(exchange, 404, error("error type", "Unknow type"));
 			}

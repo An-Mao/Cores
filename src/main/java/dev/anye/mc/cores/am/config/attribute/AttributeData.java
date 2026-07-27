@@ -14,6 +14,4 @@ public record AttributeData (double def, double min, double max) {
 		map.put("attribute.name.generic.armor_toughness",new AttributeData(0d,0d,999999999d));
 		return map;
 	}
-
-
 }
