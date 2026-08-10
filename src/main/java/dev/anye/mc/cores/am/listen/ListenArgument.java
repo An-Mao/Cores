@@ -14,12 +14,13 @@ public class ListenArgument extends IdentifierArgument {
 	public static ListenArgument listen() {
 		return new ListenArgument();
 	}
+
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
 		ListenRegister.LISTEN_REGISTER.getRegistry().asHolderIdMap().forEach(listenHolder -> {
 			Identifier k = listenHolder.getKey().identifier();
-			builder.suggest(k.toString(), Component.translatable("listen."+k.toLanguageKey()));
-		} );
+			builder.suggest(k.toString(), Component.translatable("listen." + k.toLanguageKey()));
+		});
 		return builder.buildFuture();
 	}
 }

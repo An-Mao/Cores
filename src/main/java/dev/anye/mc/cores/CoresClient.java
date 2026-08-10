@@ -27,7 +27,7 @@ import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEve
 @EventBusSubscriber(modid = Cores.MOD_ID, value = Dist.CLIENT)
 public class CoresClient {
 	public CoresClient(ModContainer container) {
-		
+
 	}
 
 	@SubscribeEvent

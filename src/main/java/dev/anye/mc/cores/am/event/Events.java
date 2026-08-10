@@ -15,7 +15,8 @@ import org.slf4j.Logger;
 public class Events {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	private Events(){}
+	private Events() {
+	}
 
 	@SubscribeEvent
 	public static void regCommand(RegisterCommandsEvent event) {
@@ -30,7 +31,7 @@ public class Events {
 	}
 
 	@SubscribeEvent
-	public static void onServerTick(ServerTickEvent.Post event){
+	public static void onServerTick(ServerTickEvent.Post event) {
 		ListenCore.timeout();
 	}
 }

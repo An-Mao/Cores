@@ -1,17 +1,21 @@
 package dev.anye.mc.cores.register;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegistryBuilder;
+import org.slf4j.Logger;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class Register<T> {
+	private static final Logger LOGGER = LogUtils.getLogger();
 	private final Identifier key;
 	private final ResourceKey<? extends Registry<T>> resourceKey;
 	private final Registry<T> registry;
@@ -54,6 +58,29 @@ public class Register<T> {
 		this.resourceKey = registry.key();
 		this.registry = registry;
 		this.deferredRegister = DeferredRegister.create(registry, modid);
+	}
+
+	@Deprecated(since = "2.0.5")
+	@SuppressWarnings("unchecked")
+	public Register(ResourceKey<? extends Registry<T>> resourceKey, String modid) {
+		this.key = resourceKey.identifier();
+		this.resourceKey = resourceKey;
+		Registry<T> r;
+		/*
+		if (BuiltInRegistries.REGISTRY.containsKey(this.key)){
+			this.registry = (Registry<T>) BuiltInRegistries.REGISTRY.getValue(this.key);
+		}
+
+		 */
+		try {
+			r = (Registry<T>) BuiltInRegistries.REGISTRY.getValue(this.key);
+			;
+		} catch (RuntimeException _) {
+			r = null;
+		}
+		if (r != null) this.registry = r;
+		else this.registry = new RegistryBuilder<>(resourceKey).create();
+		this.deferredRegister = DeferredRegister.create(this.registry, modid);
 	}
 
 	public Identifier getRegisterKey() {

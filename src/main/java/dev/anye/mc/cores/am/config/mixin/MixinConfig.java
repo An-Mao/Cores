@@ -10,16 +10,19 @@ import java.util.Map;
 
 public class MixinConfig extends _JsonConfig<Map<String, Boolean>> {
 	public static final String FILE_PATH = _File.getFilePath(Cores.CONFIG_DIR, "mixins.json");
-	protected static final Map<String,Boolean> DEFAULT = new HashMap<>();
+	protected static final Map<String, Boolean> DEFAULT = new HashMap<>();
+
 	static {
-		DEFAULT.put("Attributes",true);
-		DEFAULT.put("PlayerLevel",true);
+		DEFAULT.put("Attributes", true);
+		DEFAULT.put("PlayerLevel", true);
 	}
+
 	public MixinConfig() {
-		super(FILE_PATH, DEFAULT, new TypeToken<>() {});
+		super(FILE_PATH, DEFAULT, new TypeToken<>() {
+		});
 	}
 
 	public boolean isEnable(String key) {
-		return map(map -> map.getOrDefault(key,false)).orElse(false);
+		return map(map -> map.getOrDefault(key, false)).orElse(false);
 	}
 }

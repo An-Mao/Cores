@@ -23,7 +23,7 @@ public class AttributeMixin {
 	private void cores$init$fix(String descriptionId, double defaultValue, CallbackInfo ci) {
 		if (MixinConfigs.EnableFixAttributes) {
 			Configs.ATTRIBUTE.ifPresent(map -> {
-				AttributeData attributeData = map.getOrDefault(descriptionId,null);
+				AttributeData attributeData = map.getOrDefault(descriptionId, null);
 				if (attributeData != null) this.defaultValue = attributeData.def();
 			});
 		}

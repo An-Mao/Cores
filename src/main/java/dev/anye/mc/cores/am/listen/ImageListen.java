@@ -5,14 +5,13 @@ import dev.anye.core.exception._IOException;
 import dev.anye.core.system._File;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.Map;
 
-public class ImageListen extends Listen{
+public class ImageListen extends Listen {
 
 	protected ImageListen() {
-		super("assets/cores/html/image/","image", 300);
+		super("assets/cores/html/image/", "image", 300);
 	}
 
 	@Override
@@ -43,8 +42,8 @@ public class ImageListen extends Listen{
 				sendJson(exchange, 404, error("error path", "Unsupported image type"));
 				return;
 			}
-			switch (q.get("type")){
-				case "assets" : {
+			switch (q.get("type")) {
+				case "assets": {
 					String ns = "minecraft";
 					if (path.contains(":")) {
 						String[] ps = path.split(":");
@@ -56,11 +55,12 @@ public class ImageListen extends Listen{
 				}
 				case "file":
 					//Lock the file path to the current game directory.
-					sendFile(exchange, _File.getFilePath(_File.getFileFullPathWithRun(),path), mime(path));
+					sendFile(exchange, _File.getFileFullPathWithRun(path), mime(path));
 					break;
-				case null, default: sendJson(exchange, 404, error("error type", "Unknow type"));
+				case null, default:
+					sendJson(exchange, 404, error("error type", "Unknow type"));
 			}
-		}else {
+		} else {
 			sendJson(exchange, 404, error("error type", "Missing type"));
 		}
 	}

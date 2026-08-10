@@ -21,14 +21,14 @@ public class ColorSchemeIO extends _JsonConfig<ColorSchemeIO.Data> {
 
 
 	public record Data(Color border, Color text, Color background,
-					   Color elementBorder, Color elementText, Color elementBackground) {
+	                   Color elementBorder, Color elementText, Color elementBackground) {
 		public static final Data DEFAULT = new Data(
-				new Color(0xFF000000,0xFF000000,0xFF000000),
-				new Color(0xFFFFFFFF,0xFF0000FF,0xFF000000),
-				new Color(0xFF000000,0xFF000000,0xFF000000),
-				new Color(0xFF000000,0xFF000000,0xFF000000),
-				new Color(0xFFFFFFFF,0xFF0000FF,0xFF000000),
-				new Color(0xFF000000,0xFF000000,0xFF000000)
+				new Color(0xFF000000, 0xFF000000, 0xFF000000),
+				new Color(0xFFFFFFFF, 0xFF0000FF, 0xFF000000),
+				new Color(0xFF000000, 0xFF000000, 0xFF000000),
+				new Color(0xFF000000, 0xFF000000, 0xFF000000),
+				new Color(0xFFFFFFFF, 0xFF0000FF, 0xFF000000),
+				new Color(0xFF000000, 0xFF000000, 0xFF000000)
 		);
 
 	}

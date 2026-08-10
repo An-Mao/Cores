@@ -8,17 +8,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-public class ExampleListen extends Listen{
+public class ExampleListen extends Listen {
 	protected ExampleListen() {
-		super("example",120);
+		super("example", 120);
 	}
 
 	@Override
 	public void context(HttpExchange exchange) {
 		try {
 			logger.debug("example listen");
-			switch (exchange.getRequestMethod()){
-				case POST,GET -> test(exchange);
+			switch (exchange.getRequestMethod()) {
+				case POST, GET -> test(exchange);
 				case null, default -> exchange.sendResponseHeaders(405, -1);
 			}
 		} catch (IOException e) {
@@ -27,7 +27,7 @@ public class ExampleListen extends Listen{
 	}
 
 
-	private void test(HttpExchange exchange){
+	private void test(HttpExchange exchange) {
 		try {
 			InputStream inputStream = exchange.getRequestBody();
 			String json = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);

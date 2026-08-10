@@ -5,10 +5,11 @@ import dev.anye.mc.cores.Cores;
 public class ColorConfigData {
 	private String colorScheme;
 
-	public ColorConfigData(){
+	public ColorConfigData() {
 		this(Cores.MOD_ID + ":default");
 	}
-	public ColorConfigData(String colorScheme){
+
+	public ColorConfigData(String colorScheme) {
 		this.colorScheme = colorScheme;
 	}
 

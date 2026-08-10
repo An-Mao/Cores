@@ -10,6 +10,7 @@ public class ColorConfig extends _JsonConfig<ColorConfigData> {
 	public static ColorConfig instance = new ColorConfig();
 
 	public ColorConfig() {
-		super(FILE, new ColorConfigData(), new TypeToken<>() {});
+		super(FILE, new ColorConfigData(), new TypeToken<>() {
+		});
 	}
 }

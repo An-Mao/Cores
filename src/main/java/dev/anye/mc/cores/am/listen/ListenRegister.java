@@ -8,16 +8,18 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import org.slf4j.Logger;
 
 public class ListenRegister {
-	private ListenRegister() {}
+	private ListenRegister() {
+	}
+
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	public static final Register<Listen> LISTEN_REGISTER = new Register<>(Cores.MOD_ID, "listen", builder -> builder.sync(false));
 
-	public static final DeferredHolder<Listen,ImageListen> IMAGE_LISTEN = LISTEN_REGISTER.register("image", ImageListen::new);
+	public static final DeferredHolder<Listen, ImageListen> IMAGE_LISTEN = LISTEN_REGISTER.register("image", ImageListen::new);
 	//public static final DeferredHolder<Listen,ExampleListen> EXAMPLE_LISTEN = LISTEN_REGISTER.register("example", ExampleListen::new);
 
 
-	public static void register(IEventBus eventBus){
+	public static void register(IEventBus eventBus) {
 		LISTEN_REGISTER.register(eventBus);
 	}
 }

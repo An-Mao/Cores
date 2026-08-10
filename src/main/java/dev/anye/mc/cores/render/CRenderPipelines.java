@@ -10,13 +10,14 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.BindGroupLayouts;
 
 public class CRenderPipelines {
-	private CRenderPipelines() {}
+	private CRenderPipelines() {
+	}
 
 	public static final RenderPipeline.Snippet SPHERE_SNIPPET = RenderPipeline.builder()
 			.withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
 			//.withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
 			//.withUniform("Projection", UniformType.UNIFORM_BUFFER)
-			.withVertexBinding(0,DefaultVertexFormat.POSITION_COLOR)
+			.withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR)
 			//.withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.TRIANGLES)
 			.withCull(false)
 			.withPrimitiveTopology(PrimitiveTopology.TRIANGLES)

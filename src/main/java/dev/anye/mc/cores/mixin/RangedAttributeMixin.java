@@ -27,7 +27,7 @@ public class RangedAttributeMixin {
 	private void cores$init$modifyMaxHealth(String descriptionId, double defaultValue, double minValue, double maxValue, CallbackInfo ci) {
 		if (MixinConfigs.EnableFixAttributes) {
 			Configs.ATTRIBUTE.ifPresent(map -> {
-				AttributeData attributeData = map.getOrDefault(descriptionId,null);
+				AttributeData attributeData = map.getOrDefault(descriptionId, null);
 				if (attributeData != null) {
 					this.minValue = attributeData.min();
 					this.maxValue = attributeData.max();

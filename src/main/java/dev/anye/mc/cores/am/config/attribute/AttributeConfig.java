@@ -11,6 +11,7 @@ public class AttributeConfig extends _JsonConfig<Map<String, AttributeData>> {
 	public static final String FILE_PATH = _File.getFilePath(Cores.CONFIG_DIR, "attribute-config.json");
 
 	public AttributeConfig() {
-		super(FILE_PATH, AttributeData.DEFAULT, new TypeToken<>() {});
+		super(FILE_PATH, AttributeData.DEFAULT, new TypeToken<>() {
+		});
 	}
 }
