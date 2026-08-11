@@ -114,8 +114,8 @@ tasks.withType(ProcessResources).configureEach {
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
-			artifactId = mod_id
-			from components.java
+            artifactId = mod_id
+            from components.java
         }
     }
     repositories {
@@ -128,7 +128,7 @@ publishing {
                 password = "ghp_" + System.getenv("GTT")
             }
         }
-        maven {
+        /*maven {
             name = "LocalRepo"
             allowInsecureProtocol = true
             url = uri(System.getenv("LOCAL_MAVEN") + "/repository/maven-releases")
@@ -136,7 +136,7 @@ publishing {
                 username = "am"
                 password = System.getenv("N_P")
             }
-        }
+        }*/
     }
 }
 
