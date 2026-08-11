@@ -24,9 +24,8 @@ public class Register<T> {
 	/**
 	 * Usually used to create a new registry, as opposed to using an existing one
 	 * 通常用于创建新的注册表，区别于使用已存在的
-	 *
 	 * @param key         Registry key.注册表的键
-	 * @param resourceKey
+	 * @param resourceKey resourceKey
 	 * @param consumer    For custom registration build.用于自定义注册构建
 	 */
 	public Register(Identifier key, ResourceKey<Registry<T>> resourceKey, Consumer<RegistryBuilder<T>> consumer) {
@@ -49,9 +48,8 @@ public class Register<T> {
 	/**
 	 * Use an existing registry to register
 	 * 使用已存在的注册表进行注册
-	 *
-	 * @param registry
-	 * @param modid
+	 * @param registry registry
+	 * @param modid modid
 	 */
 	public Register(Registry<T> registry, String modid) {
 		this.key = registry.key().identifier();
@@ -66,15 +64,8 @@ public class Register<T> {
 		this.key = resourceKey.identifier();
 		this.resourceKey = resourceKey;
 		Registry<T> r;
-		/*
-		if (BuiltInRegistries.REGISTRY.containsKey(this.key)){
-			this.registry = (Registry<T>) BuiltInRegistries.REGISTRY.getValue(this.key);
-		}
-
-		 */
 		try {
 			r = (Registry<T>) BuiltInRegistries.REGISTRY.getValue(this.key);
-			;
 		} catch (RuntimeException _) {
 			r = null;
 		}
@@ -83,26 +74,44 @@ public class Register<T> {
 		this.deferredRegister = DeferredRegister.create(this.registry, modid);
 	}
 
-	public Identifier getRegisterKey() {
+
+	public Identifier registerKey() {
 		return key;
 	}
 
-	public ResourceKey<? extends Registry<T>> getResourceKey() {
+	@Deprecated(since = "2.0.5")
+	public Identifier getRegisterKey() {
+		return registerKey();
+	}
+
+	public ResourceKey<? extends Registry<T>> resourceKey() {
 		return resourceKey;
 	}
 
-	public Registry<T> getRegistry() {
-		return registry;
+	@Deprecated(since = "2.0.5")
+	public ResourceKey<? extends Registry<T>> getResourceKey() {
+		return resourceKey();
 	}
 
-	public DeferredRegister<T> getDeferredRegister() {
+	public Registry<T> registry() {
+		return registry;
+	}
+	@Deprecated(since = "2.0.5")
+	public Registry<T> getRegistry() {
+		return registry();
+	}
+	public DeferredRegister<T> deferredRegister() {
 		return deferredRegister;
 	}
+	@Deprecated(since = "2.0.5")
+	public DeferredRegister<T> getDeferredRegister() {
+		return deferredRegister();
+	}
+
 
 	public void register(IEventBus eventBus) {
 		deferredRegister.register(eventBus);
 	}
-
 	public <I extends T> DeferredHolder<T, I> register(String name, Supplier<? extends I> sup) {
 		return deferredRegister.register(name, sup);
 	}
@@ -110,8 +119,12 @@ public class Register<T> {
 	public <I extends T> Identifier getMemberKey(I member) {
 		return registry.getKey(member);
 	}
-
 	public T getMemberValue(Identifier member) {
 		return registry.getValue(member);
+	}
+
+
+	public void foreach(Consumer<? super T> action){
+		registry.forEach(action);
 	}
 }
