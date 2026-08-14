@@ -123,7 +123,11 @@ public class Register<T> {
 		return registry.getValue(member);
 	}
 
-
+	/**
+	 * Pay attention to the timing of use; if used too early, nothing will appear in the registry.
+	 * 注意使用时机，过早的使用，注册表中不会有任何东西。
+	 * @param action action
+	 */
 	public void foreach(Consumer<? super T> action){
 		registry.forEach(action);
 	}
