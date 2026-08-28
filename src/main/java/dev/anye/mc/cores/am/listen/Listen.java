@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 public abstract class Listen {
 	public static final String POST = "POST";
 	public static final String GET = "GET";
-	protected final Logger LOGGER = LogUtils.getLogger();
+	protected final Logger logger = LogUtils.getLogger();
 	protected Gson gson = new Gson();
 	protected final String urlPath;
 
@@ -18,14 +18,14 @@ public abstract class Listen {
 	protected boolean closed = false;
 	protected long lastActivityTime;
 
-	protected Listen(String urlPath,boolean autoClose,long closeTime){
+	protected Listen(String urlPath,long closeTime){
 		this.urlPath = urlPath;
-		this.autoClose = autoClose;
+		this.autoClose = closeTime > 0;
 		this.closeTime = closeTime;
 		activate();
 	}
 	protected Listen(String urlPath){
-		this(urlPath,true,600);
+		this(urlPath,600);
 	}
 
 	public String urlPath(){

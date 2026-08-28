@@ -29,7 +29,7 @@ public class CoresClient {
 
 	@SubscribeEvent
 	public static void onClientSetup(FMLClientSetupEvent event) {
-		String scheme = ColorConfig.instance.getDatas().getColorScheme();
+		String scheme = ColorConfig.instance.getData().getColorScheme();
 		Identifier colorSchemeRes = Identifier.tryParse(scheme);
 		if (colorSchemeRes != null) {
 			ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().get(colorSchemeRes).ifPresent(cs -> {

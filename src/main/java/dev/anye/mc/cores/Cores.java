@@ -7,6 +7,7 @@ import dev.anye.mc.cores.am.color.ColorSchemeRegister;
 import dev.anye.mc.cores.am.command.CommandList;
 import dev.anye.mc.cores.am.config.MixinConfigs;
 import dev.anye.mc.cores.am.listen.ListenArgument;
+import dev.anye.mc.cores.am.listen.ListenCore;
 import dev.anye.mc.cores.am.listen.ListenRegister;
 import dev.anye.mc.cores.am.register.DataRegister;
 import dev.anye.mc.cores.js.Js;
@@ -62,8 +63,8 @@ public class Cores {
 	}
 
 	private void commonSetup(FMLCommonSetupEvent event) {
-		ListenRegister.initServer();
-		ListenRegister.startServer();
+		ListenCore.initServer();
+		ListenCore.startServer();
         /*
         _EasyJS easyJS = _EasyJS.NotSafe();
         System.out.println(easyJS.runCode("1+1"));

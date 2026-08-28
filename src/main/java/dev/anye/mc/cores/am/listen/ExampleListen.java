@@ -10,13 +10,13 @@ import java.nio.charset.StandardCharsets;
 
 public class ExampleListen extends Listen{
 	protected ExampleListen() {
-		super("example");
+		super("example",120);
 	}
 
 	@Override
 	public void context(HttpExchange exchange) {
 		try {
-			LOGGER.debug("example listen");
+			logger.debug("example listen");
 			switch (exchange.getRequestMethod()){
 				case POST,GET -> test(exchange);
 				case null, default -> exchange.sendResponseHeaders(405, -1);
@@ -31,7 +31,7 @@ public class ExampleListen extends Listen{
 		try {
 			InputStream inputStream = exchange.getRequestBody();
 			String json = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-			LOGGER.debug("json => {}", json);
+			logger.debug("json => {}", json);
 			StringBuilder response = new StringBuilder();
 			response.append("success");
 			exchange.sendResponseHeaders(200, response.toString().getBytes().length);

@@ -52,7 +52,7 @@ public class SettingScreen extends Screen {
 			if (d.getValue() instanceof _ColorScheme colorScheme) {
 				String key = ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().getKey(colorScheme).toString();
 				//System.out.println("key:"+key);
-				ColorConfig.instance.getDatas().setColorScheme(key);
+				ColorConfig.instance.getData().setColorScheme(key);
 				ColorConfig.instance.save();
 				ColorSchemes.setGlobal(colorScheme);
 				if (this.minecraft != null) {

@@ -16,10 +16,4 @@ public class GeneralConfig extends _JsonConfig<GeneralConfigData> {
 				}""", new TypeToken<>() {
 		});
 	}
-
-	@Override
-	public GeneralConfigData getDatas() {
-		if (this.datas == null) this.datas = new GeneralConfigData(true,44444);
-		return this.datas;
-	}
 }

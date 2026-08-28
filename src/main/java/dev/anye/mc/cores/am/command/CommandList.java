@@ -5,7 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import dev.anye.mc.cores.Cores;
 import dev.anye.mc.cores.am.config.MixinConfigs;
 import dev.anye.mc.cores.am.listen.ListenArgument;
-import dev.anye.mc.cores.am.listen.ListenRegister;
+import dev.anye.mc.cores.am.listen.ListenCore;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -13,6 +13,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.permissions.Permissions;
 
 public class CommandList {
+	private CommandList(){}
 	public static void register(CommandDispatcher<CommandSourceStack> commandDispatcher){
 		commandDispatcher.register(Commands.literal(Cores.MOD_ID)
 				.then(Commands.literal("mixin")
@@ -43,7 +44,7 @@ public class CommandList {
 		if (context != null) {
 			context.getSource().sendSuccess(() -> {
 				Identifier key = ListenArgument.getId(context, "handle");
-				return Component.translatable("listen."+key.toLanguageKey()).append(":").append(String.valueOf(ListenRegister.isActivity(key)));
+				return Component.translatable("listen."+key.toLanguageKey()).append(":").append(String.valueOf(ListenCore.isActivity(key)));
 			}, false);
 			return 1;
 		}
@@ -53,7 +54,7 @@ public class CommandList {
 		if (context != null) {
 			context.getSource().sendSuccess(() -> {
 				Identifier key = ListenArgument.getId(context, "handle");
-				return Component.translatable("listen."+key.toLanguageKey()).append(":").append(String.valueOf(ListenRegister.activate(key)));
+				return Component.translatable("listen."+key.toLanguageKey()).append(":").append(String.valueOf(ListenCore.activate(key)));
 			}, false);
 			return 1;
 		}
@@ -63,7 +64,7 @@ public class CommandList {
 		if (context != null) {
 			context.getSource().sendSuccess(() -> {
 				Identifier key = ListenArgument.getId(context, "handle");
-				return Component.translatable("listen."+key.toLanguageKey()).append(":").append(String.valueOf(ListenRegister.close(key)));
+				return Component.translatable("listen."+key.toLanguageKey()).append(":").append(String.valueOf(ListenCore.close(key)));
 			}, false);
 			return 1;
 		}

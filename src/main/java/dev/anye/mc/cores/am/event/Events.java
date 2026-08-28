@@ -3,6 +3,7 @@ package dev.anye.mc.cores.am.event;
 import com.mojang.logging.LogUtils;
 import dev.anye.mc.cores.Cores;
 import dev.anye.mc.cores.am.command.CommandList;
+import dev.anye.mc.cores.am.listen.ListenCore;
 import dev.anye.mc.cores.am.listen.ListenRegister;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -25,6 +26,6 @@ public class Events {
 	@SubscribeEvent
 	public static void onServerStopping(ServerStoppingEvent event) {
 		//?
-		ListenRegister.stopServer();
+		ListenCore.stopServer();
 	}
 }
