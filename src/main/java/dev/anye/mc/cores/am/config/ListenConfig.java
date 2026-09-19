@@ -1,13 +1,13 @@
 package dev.anye.mc.cores.am.config;
 
 import com.google.gson.reflect.TypeToken;
-import dev.anye.core.json._JsonConfig;
+import dev.anye.core.json._JsonConfigR;
 import dev.anye.core.system._File;
 import dev.anye.mc.cores.Cores;
 
 import java.util.List;
 
-public class ListenConfig extends _JsonConfig<ListenConfig.Data> {
+public class ListenConfig extends _JsonConfigR<ListenConfig.Data> {
 	public static final String FILE = _File.getFilePath(Cores.CONFIG_DIR, "listen.json");
 	public static final ListenConfig LISTEN_CONFIG = new ListenConfig();
 
@@ -18,11 +18,11 @@ public class ListenConfig extends _JsonConfig<ListenConfig.Data> {
 	}
 
 	public boolean checkIp(String tip) {
-		return map(data1 -> data1.checkIp(tip)).orElse(false);
+		return fetch(data1 -> data1.checkIp(tip),false);
 	}
 
 	public boolean checkPath(String path) {
-		return map(data1 -> data1.checkPath(path)).orElse(false);
+		return fetch(data1 -> data1.checkPath(path),false);
 	}
 
 

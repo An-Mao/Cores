@@ -10,10 +10,9 @@ public class MixinConfigs {
 	static {
 		init();
 	}
-
 	public static void init() {
-		EnableFixLevel = I.isEnable("PlayerLevel");
-		EnableFixAttributes = I.isEnable("Attributes");
+		EnableFixLevel = I.data().PlayerLevel();
+		EnableFixAttributes = I.data().Attributes();
 
 	}
 }

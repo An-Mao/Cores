@@ -29,7 +29,7 @@ public class ListenCore {
 
 	private static HttpServer cs() {
 		try {
-			int port = ListenConfig.LISTEN_CONFIG.map(ListenConfig.Data::listenPort).orElse(0);
+			int port = ListenConfig.LISTEN_CONFIG.fetch(ListenConfig.Data::listenPort,0);
 			if (port == 0) return null;
 			LOGGER.debug("listen port:{}", port);
 			timeout = System.currentTimeMillis() / 1000L;
@@ -40,7 +40,7 @@ public class ListenCore {
 	}
 
 	public static void timeout() {
-		int t = ListenConfig.LISTEN_CONFIG.map(ListenConfig.Data::timeout).orElse(0);
+		int t = ListenConfig.LISTEN_CONFIG.fetch(ListenConfig.Data::timeout,0);
 		if (t == -1) return;
 		if ((System.currentTimeMillis() / 1000L) - timeout >= t) {
 			stopServer();
@@ -50,7 +50,7 @@ public class ListenCore {
 
 
 	public static HttpServer createServer() {
-		if (!ListenConfig.LISTEN_CONFIG.map(ListenConfig.Data::enable).orElse(false)) return null;
+		if (Boolean.FALSE.equals(ListenConfig.LISTEN_CONFIG.fetch(ListenConfig.Data::enable))) return null;
 		return cs();
 	}
 

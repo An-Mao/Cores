@@ -36,7 +36,7 @@ public class Cores {
 		modEventBus.addListener(this::commonSetup);
 
 
-		if (Js.GraalJs) LOGGER.info("GraalJS is loaded. GraalJS Mode");
+		if (Js.GRAALJS) LOGGER.info("GraalJS is loaded. GraalJS Mode");
 		else LOGGER.info("GraalJS not loaded. Nashorn Mode");
 
 	}
@@ -50,31 +50,11 @@ public class Cores {
 	private void commonSetup(FMLCommonSetupEvent event) {
 		ListenCore.initServer();
 		ListenCore.startServer();
-        /*
-        _EasyJS easyJS = _EasyJS.NotSafe();
-        System.out.println(easyJS.runCode("1+1"));
-
-         */
 	}
 
 	private void registerRegistries(NewRegistryEvent event) {
-		event.register(ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry());
-		event.register(ListenRegister.LISTEN_REGISTER.getRegistry());
+		event.register(ColorSchemeRegister.COLOR_SCHEME_REGISTER.registry());
+		event.register(ListenRegister.LISTEN_REGISTER.registry());
 	}
-
-
-        /*
-        @SubscribeEvent
-        public static void onLevelChange(PlayerXpEvent.LevelChange levelChange) {
-            if (levelChange.getEntity() instanceof ServerPlayer serverPlayer) {
-                int points;
-                if (levelChange.getLevels() < 0) points = PlayerHelper.getExperienceForLevel(-levelChange.getLevels());
-                else points = PlayerHelper.getExperienceForLevel(levelChange.getLevels());
-                serverPlayer.giveExperiencePoints(points);
-                levelChange.setCanceled(true);
-            }
-        }
-
-         */
 
 }

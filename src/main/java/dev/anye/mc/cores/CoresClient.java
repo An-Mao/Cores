@@ -7,6 +7,7 @@ import dev.anye.mc.cores.am.color.ColorSchemes;
 import dev.anye.mc.cores.am.util.KeyBinding;
 import dev.anye.mc.cores.cr.CoresRegs;
 import dev.anye.mc.cores.render.CRenderPipelines;
+import dev.anye.mc.cores.screen.SettingScreen;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.Entity;
@@ -20,6 +21,8 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterRenderPipelinesEvent;
 import net.neoforged.neoforge.client.event.RenderLivingEvent;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent;
 
 
@@ -27,16 +30,17 @@ import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEve
 @EventBusSubscriber(modid = Cores.MOD_ID, value = Dist.CLIENT)
 public class CoresClient {
 	public CoresClient(ModContainer container) {
-
+		//Nothing
+		container.registerExtensionPoint(IConfigScreenFactory.class, (modContainer,modListScreen)->new SettingScreen());
 	}
 
 	@SubscribeEvent
 	public static void onClientSetup(FMLClientSetupEvent event) {
-		ColorConfig.instance.ifPresent(c -> {
+		ColorConfig.instance.read(c -> {
 			String scheme = c.getColorScheme();
 			Identifier colorSchemeRes = Identifier.tryParse(scheme);
 			if (colorSchemeRes != null) {
-				ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().get(colorSchemeRes).ifPresent(cs -> ColorSchemes.setGlobal(cs.value()));
+				ColorSchemeRegister.COLOR_SCHEME_REGISTER.registry().get(colorSchemeRes).ifPresent(cs -> ColorSchemes.setGlobal(cs.value()));
 			}
 		});
 	}

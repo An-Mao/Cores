@@ -6,7 +6,7 @@ import dev.anye.core.javascript._NashornJS;
 import net.neoforged.fml.ModList;
 
 public class Js {
-	public static final boolean GraalJs = GraalJsIsInstall();
+	public static final boolean GRAALJS = GraalJsIsInstall();
 
 	private Js(){}
 	public static boolean GraalJsIsInstall() {
@@ -14,7 +14,7 @@ public class Js {
 	}
 
 	public static _JavaScript<?, ?> getJsEngine(boolean cache) {
-		return GraalJs ? new _GraalJS(cache) : new _NashornJS(cache);
+		return GRAALJS ? new _GraalJS(cache) : new _NashornJS(cache);
 	}
 
 }

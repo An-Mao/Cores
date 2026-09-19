@@ -96,6 +96,7 @@ public class Register<T> {
 	public Registry<T> registry() {
 		return registry;
 	}
+
 	@Deprecated(since = "2.0.5")
 	public Registry<T> getRegistry() {
 		return registry();

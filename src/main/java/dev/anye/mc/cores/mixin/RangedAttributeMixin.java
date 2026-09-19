@@ -26,7 +26,7 @@ public class RangedAttributeMixin {
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void cores$init$modifyMaxHealth(String descriptionId, double defaultValue, double minValue, double maxValue, CallbackInfo ci) {
 		if (MixinConfigs.EnableFixAttributes) {
-			Configs.ATTRIBUTE.ifPresent(map -> {
+			Configs.ATTRIBUTE.read(map -> {
 				AttributeData attributeData = map.getOrDefault(descriptionId, null);
 				if (attributeData != null) {
 					this.minValue = attributeData.min();

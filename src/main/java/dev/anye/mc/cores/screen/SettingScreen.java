@@ -29,8 +29,8 @@ public class SettingScreen extends Screen {
 	@Override
 	protected void init() {
 		super.init();
-		int x = this.width / 2,
-				y = this.height / 2;
+		int x = this.width / 2;
+		int y = this.height / 2;
 		SimpleLabel label = new SimpleLabel(64, y - 8, 16, 16, Component.translatable("screen." + Cores.MOD_ID + ".settings.label.select_color"), true, false, true);
 		addRenderableWidget(label);
 		saveButton = new SimpleButton(x - 32, this.height - 64, 64, 16, Component.translatable("screen." + Cores.MOD_ID + ".settings.button.save"), true, false, true, this::save);
@@ -53,7 +53,7 @@ public class SettingScreen extends Screen {
 			Identifier identifier = ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().getKey(colorScheme);
 			if (identifier == null) return;
 			String key = identifier.toString();
-			ColorConfig.instance.ifPresent(colorConfigData -> colorConfigData.setColorScheme(key));
+			ColorConfig.instance.update(colorConfigData -> colorConfigData.setColorScheme(key));
 			ColorConfig.instance.save();
 			ColorSchemes.setGlobal(colorScheme);
 			this.minecraft.setScreenAndShow(new SettingScreen());
