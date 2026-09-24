@@ -3,12 +3,16 @@ package dev.anye.mc.cores.render.element;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.logging.LogUtils;
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
+import dev.anye.core.math._MathCDT;
 import dev.anye.mc.cores.dt.GlowData;
+import dev.anye.mc.cores.render.GuiGraphicsX;
+import dev.anye.mc.cores.render.Render2DHelper;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.state.gui.GuiElementRenderState;
 import org.joml.Matrix3x2f;
+import org.joml.Matrix3x2fStack;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
@@ -30,13 +34,13 @@ import javax.annotation.Nullable;
 public record RoundedRectBorderRenderState(
 		RenderPipeline pipeline,
 		TextureSetup textureSetup,
-		Matrix3x2f pose, float width, float height, float radius, int borderColor, float borderThickness,
+		Matrix3x2fStack pose, float width, float height, float radius, int borderColor, float borderThickness,
 		GlowData glowData,
 		@Nullable ScreenRectangle scissorArea, @Nullable ScreenRectangle bounds) implements GuiElementRenderState {
 	private static final Logger LOGGER = LogUtils.getLogger();
 			
 	public RoundedRectBorderRenderState(
-			Matrix3x2f pose,float width, float height, float radius, int borderColor,
+			Matrix3x2fStack pose,float width, float height, float radius, int borderColor,
 			float borderThickness,
 			@Nullable ScreenRectangle scissorArea, @Nullable ScreenRectangle bounds) {
 		this(RenderPipelines.GUI, TextureSetup.noTexture(), pose, width, height, radius, borderColor, borderThickness,new GlowData.Builder().setColor(borderColor).build(), scissorArea, bounds);
@@ -50,35 +54,45 @@ public record RoundedRectBorderRenderState(
 	public void buildVertices(@NonNull VertexConsumer vertexConsumer) {
 		if ( width < 0 || height < 0) return;
 
-		if (glowData != null && glowData.outerGlowRange() > 0) {
+		/*if (glowData != null && glowData.outerGlowRange() > 0) {
 			drawBox(vertexConsumer, pose,
 					0, 0,
 					width + glowData.outerGlowRange() * 2, height + glowData.outerGlowRange() * 2,
 					radius + glowData.outerGlowRange(), glowData.outerGlowRange(), glowData().outerGlowColor(), glowData().outerGlowColor(), glowData().smoothness());
-		}
+		}*/
 
 		float borderX = glowData != null ? glowData.outerGlowColor() : 0;
 		float borderY = glowData != null ? glowData.outerGlowColor() : 0;
+		float w = width - borderX * 2;
+		float h = height - borderY * 2;
 
 		if (borderThickness > 0) {
-			drawBox(vertexConsumer, pose, borderX, borderY, width, height, radius, borderThickness, borderColor, borderColor,1.0F );
+			pose.pushMatrix();
+			pose.translate(borderX,borderY);
+			Render2DHelper.border(vertexConsumer,pose,w,h,radius,borderColor);
+//
+//			Render2DHelper.fan(vertexConsumer,pose,_MathCDT.ARC_180, _MathCDT.ARC_270,borderColor,radius);
+//			Render2DHelper.fan(vertexConsumer,pose,_MathCDT.ARC_270, _MathCDT.ARC_360,borderColor,radius);
+//			Render2DHelper.fan(vertexConsumer,pose,0, _MathCDT.ARC_90,borderColor,radius);
+//			Render2DHelper.fan(vertexConsumer,pose,_MathCDT.ARC_90, _MathCDT.ARC_180,borderColor,radius);
+			pose.popMatrix();
 		}
 
-		if (glowData != null && glowData.innerGlowRange() > 0) {
+		/*if (glowData != null && glowData.innerGlowRange() > 0) {
 			float inR = Math.max(0, radius - borderThickness);
 			drawBox(vertexConsumer, pose,
 					borderX + borderThickness, borderY + borderThickness,
 					width - borderThickness * 2, height - borderThickness * 2,
 					inR, glowData.innerGlowRange(),
 					glowData.innerGlowColor(), glowData.innerGlowColor(), glowData.smoothness()); // 外边缘为实体色，内边缘为透明
-		}
+		}*/
 	}
 
 	/**
 	 * 绘制零重叠的梯形/扇形闭合边框。
 	 * 该算法通过内、外半径精确计算顶点，确保圆角与直边完美拼接，彻底避免Alpha重叠导致的颜色加深。
 	 */
-	private void drawBox(VertexConsumer consumer, Matrix3x2f pose,
+	private void drawBox(VertexConsumer vertexConsumer, Matrix3x2fStack pose,
 						 float x, float y, float w, float h,
 						 float r, float t,
 						 int outColor, int inColor, float smoothness) {
@@ -103,37 +117,12 @@ public record RoundedRectBorderRenderState(
 		float cxInBR = x + w - t - rIn, cyInBR = y + h - t - rIn;
 		float cxInBL = x + t + rIn, cyInBL = y + h - t - rIn;
 
-		// 绘制直边梯形 (严格遵循逆时针顶点顺序)
-		// Top
-		addQuad(consumer, pose,
-				cxTL, y, outColor,
-				cxInTL, y + t, inColor,
-				cxInTR, y + t, inColor,
-				cxTR, y, outColor);
-		// Bottom
-		addQuad(consumer, pose,
-				cxInBL, y + h - t, inColor,
-				cxBL, y + h, outColor,
-				cxBR, y + h, outColor,
-				cxInBR, y + h - t, inColor);
-		// Left
-		addQuad(consumer, pose,
-				x, cyTL, outColor,
-				x, cyBL, outColor,
-				x + t, cyInBL, inColor,
-				x + t, cyInTL, inColor);
-		// Right
-		addQuad(consumer, pose,
-				x + w - t, cyInTR, inColor,
-				x + w - t, cyInBR, inColor,
-				x + w, cyBR, outColor,
-				x + w, cyTR, outColor);
 
 		// 绘制四个圆角扇形面[cite: 5]
-		drawCornerFan(consumer, pose, cxTL, cyTL, r, cxInTL, cyInTL, rIn, Math.PI, Math.PI * 1.5, outColor, inColor, smoothness);
-		drawCornerFan(consumer, pose, cxTR, cyTR, r, cxInTR, cyInTR, rIn, Math.PI * 1.5, Math.PI * 2, outColor, inColor, smoothness);
-		drawCornerFan(consumer, pose, cxBR, cyBR, r, cxInBR, cyInBR, rIn, 0, Math.PI * 0.5, outColor, inColor, smoothness);
-		drawCornerFan(consumer, pose, cxBL, cyBL, r, cxInBL, cyInBL, rIn, Math.PI * 0.5, Math.PI, outColor, inColor, smoothness);
+		drawCornerFan(vertexConsumer, pose, cxTL, cyTL, r, cxInTL, cyInTL, rIn, Math.PI, Math.PI * 1.5, outColor, inColor, smoothness);
+		drawCornerFan(vertexConsumer, pose, cxTR, cyTR, r, cxInTR, cyInTR, rIn, Math.PI * 1.5, Math.PI * 2, outColor, inColor, smoothness);
+		drawCornerFan(vertexConsumer, pose, cxBR, cyBR, r, cxInBR, cyInBR, rIn, 0, Math.PI * 0.5, outColor, inColor, smoothness);
+		drawCornerFan(vertexConsumer, pose, cxBL, cyBL, r, cxInBL, cyInBL, rIn, Math.PI * 0.5, Math.PI, outColor, inColor, smoothness);
 	}
 
 	private void drawCornerFan(VertexConsumer consumer, Matrix3x2f pose,

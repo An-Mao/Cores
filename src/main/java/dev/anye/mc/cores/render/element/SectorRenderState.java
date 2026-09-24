@@ -4,12 +4,13 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.logging.LogUtils;
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import dev.anye.core.math._MathCDT;
+import dev.anye.mc.cores.render.Render2DHelper;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.state.gui.GuiElementRenderState;
-import net.minecraft.util.Mth;
 import org.joml.Matrix3x2fStack;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
@@ -42,10 +43,11 @@ public record SectorRenderState(
 	}
 
 	@Override
-	public void buildVertices(VertexConsumer vertexConsumer) {
+	public void buildVertices(@NonNull VertexConsumer vertexConsumer) {
 		pose.pushMatrix();
 		pose.translate(x(), y());
-		double arc = endArc - startArc;
+		Render2DHelper.fan(vertexConsumer,pose,startArc,endArc,color,outerRadius);
+		/*double arc = endArc - startArc;
 		vertexConsumer.addVertexWith2DPose(pose, 0, 0).setColor(color);
 		int segments = (int) Math.ceil(Math.abs(arc) / ANGLE_RESOLUTION);
 		if (segments < 1) segments = 1;
@@ -54,7 +56,7 @@ public record SectorRenderState(
 			float x = Mth.cos(currentArc) * outerRadius;
 			float y = Mth.sin(currentArc) * outerRadius;
 			vertexConsumer.addVertexWith2DPose(pose, x, y).setColor(color);
-		}
+		}*/
 		pose.popMatrix();
 	}
 }
