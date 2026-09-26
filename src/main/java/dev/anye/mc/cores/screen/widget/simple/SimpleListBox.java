@@ -3,7 +3,7 @@ package dev.anye.mc.cores.screen.widget.simple;
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.core.debug._DeBug;
 import dev.anye.core.math._Math;
-import dev.anye.mc.cores.render.GuiGraphicsX;
+import dev.anye.mc.cores.render.GuiGraphicsHelper;
 import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -226,7 +226,7 @@ public class SimpleListBox extends SimpleWidgetCore<SimpleListBox> {
 						poseStack.popMatrix();
 						drawString(guiGraphics, elemX + getRadius() + strX, elemY + getRadius() + getStrY(), txtColor, FixStrWidth(getDataComponent(elemIndex)));
 						if (mouseOver)
-							GuiGraphicsX.renderTooltip(guiGraphics, font, getData(elemIndex).getTooltip(), mouseX, mouseY);
+							GuiGraphicsHelper.renderTooltip(guiGraphics, font, getData(elemIndex).getTooltip(), mouseX, mouseY);
 					}
 				} else {
 					break;

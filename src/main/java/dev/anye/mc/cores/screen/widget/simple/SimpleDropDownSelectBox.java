@@ -3,7 +3,7 @@ package dev.anye.mc.cores.screen.widget.simple;
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.core.debug._DeBug;
 import dev.anye.core.math._Math;
-import dev.anye.mc.cores.render.GuiGraphicsX;
+import dev.anye.mc.cores.render.GuiGraphicsHelper;
 import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -295,7 +295,7 @@ public class SimpleDropDownSelectBox extends SimpleWidgetCore<SimpleDropDownSele
 					guiGraphics.fill(getContentX(), lineY, getContentEndX(), lineY + getUsualContentHeight(), getBackgroundSelectColor());
 				}
 				guiGraphics.text(getFont(), Component.literal(FixStrWidth(select)), sx, sy + lineH + linePosY, tc, false);
-				if (mouseOver) GuiGraphicsX.renderTooltip(guiGraphics, font, getDataTooltip(i), mouseX, mouseY);
+				if (mouseOver) GuiGraphicsHelper.renderTooltip(guiGraphics, font, getDataTooltip(i), mouseX, mouseY);
 			}
 		}
 		poseStack.popMatrix();

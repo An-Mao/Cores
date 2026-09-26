@@ -2,7 +2,8 @@ package dev.anye.mc.cores.screen.widget;
 
 import dev.anye.core.debug._DeBug;
 import dev.anye.core.math._Math;
-import dev.anye.mc.cores.render.GuiGraphicsX;
+import dev.anye.core.math._MathCDT;
+import dev.anye.mc.cores.render.GuiGraphicsHelper;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -97,7 +98,7 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 	public void setSectors(int sectors) {
 		this.sectors = sectors;
 		setFanAngle(360d / sectors);
-		setFanArc(_Math.TWICE_PI / sectors);
+		setFanArc(_MathCDT.TWICE_PI / sectors);
 	}
 
 	public void setInnerRadius(int innerRadius) {
@@ -148,8 +149,8 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 	}
 
 	@Override
-	public void onClick(MouseButtonEvent p_446284_, boolean p_434599_) {
-		onClick(p_446284_.x(), p_446284_.y(), p_446284_.button());
+	public void onClick(MouseButtonEvent mouseButtonEvent, boolean doubleClick) {
+		onClick(mouseButtonEvent.x(), mouseButtonEvent.y(), mouseButtonEvent.button());
 	}
 
 	public void onClick(double pMouseX, double pMouseY, int button) {
@@ -186,7 +187,7 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 			int centerX = getX(), centerY = getY();
 			double angle = Math.atan2(mouseY - centerY, mouseX - centerX) + halfFanArc;
 			if (angle < 0) {
-				angle += _Math.TWICE_PI;
+				angle += _MathCDT.TWICE_PI;
 			}
 			for (int i = 0; i < sectors; i++) {
 				int sIndex = startIndex + i;
@@ -210,7 +211,7 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 				 */
 				//poseStack.mu(Axis.ZP.rotation((float) (startAngle)));
 				//poseStack.mul(Axis.ZP.rotation((float) (startAngle)).);
-				GuiGraphicsX.SectorX(guiGraphics, centerX, centerY, innerRadius + 10, outerRadius, -halfFanArc, halfFanArc, bgc);
+				GuiGraphicsHelper.SectorX(guiGraphics, centerX, centerY, innerRadius + 10, outerRadius, -halfFanArc, halfFanArc, bgc);
 				if (isValidIndex(sIndex)) {
 					DT_ListBoxData boxData = getData(sIndex);
 					drawName(guiGraphics, startAngle, boxData.getComponent().getString(), tc, size);

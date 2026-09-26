@@ -1,6 +1,6 @@
 package dev.anye.mc.cores.screen.widget.square;
 
-import dev.anye.mc.cores.render.GuiGraphicsX;
+import dev.anye.mc.cores.render.GuiGraphicsHelper;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -75,7 +75,7 @@ public class SquareButton extends SquareWidgetCore<SquareButton> {
 			drawSquare(guiGraphics, backgroundHoverColor);
 			//RenderSystem.setShaderColor(1.0f,1.0f,1.0f,1.0f);
 			guiGraphics.centeredText(font, getMessage(), dx, dy, textSelectColor);
-			GuiGraphicsX.renderTooltip(guiGraphics, font, List.of(ClientTooltipComponent.create(getMessage().getVisualOrderText())), mouseX, mouseY);
+			GuiGraphicsHelper.renderTooltip(guiGraphics, font, List.of(ClientTooltipComponent.create(getMessage().getVisualOrderText())), mouseX, mouseY);
 		} else {
 			drawSquare(guiGraphics, backgroundUsualColor);
 			//RenderSystem.setShaderColor(1.0f,1.0f,1.0f,1.0f);

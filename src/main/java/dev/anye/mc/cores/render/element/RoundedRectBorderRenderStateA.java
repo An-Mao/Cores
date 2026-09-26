@@ -27,50 +27,17 @@ import javax.annotation.Nullable;
  * <li>内发光保留最小圆角，避免最终退化成直角</li>
  * </ul>
  */
-public record RoundedRectBorderRenderStateA(
-		RenderPipeline pipeline,
-		TextureSetup textureSetup,
-
-		Matrix3x2f pose,
-
-		float x,
-		float y,
-		float width,
-		float height,
-		float radius,
-
-		int borderColor,
-		float borderThickness,
-
-		boolean glow,
-		float intensity,
-
-		float innerGlowRange,
-		float outerGlowRange,
-
-		int innerGlowColor,
-		int outerGlowColor,
-
-		float smoothness,
-
-		@Nullable ScreenRectangle scissorArea,
-		@Nullable ScreenRectangle bounds
-
-) implements GuiElementRenderState {
-
-	/*
-	 * ------------------------------------------------------------------
-	 * 常量
-	 * ------------------------------------------------------------------
-	 */
-
+public record RoundedRectBorderRenderStateA(RenderPipeline pipeline, TextureSetup textureSetup, Matrix3x2f pose,
+											float x, float y, float width, float height, float radius, int borderColor,
+											float borderThickness, boolean glow, float intensity, float innerGlowRange,
+											float outerGlowRange, int innerGlowColor, int outerGlowColor,
+											float smoothness, @Nullable ScreenRectangle scissorArea,
+											@Nullable ScreenRectangle bounds) implements GuiElementRenderState {
 	private static final float EPSILON = 0.0001F;
-
 	/**
 	 * 默认边框宽度。
 	 */
 	private static final float DEFAULT_BORDER_THICKNESS = 1.0F;
-
 	/**
 	 * 发光最少分段。
 	 */
@@ -102,122 +69,39 @@ public record RoundedRectBorderRenderStateA(
 	 */
 	private static final float MIN_INNER_CORNER_RADIUS = 0.75F;
 
-	/*
-	 * ------------------------------------------------------------------
-	 * 兼容旧构造器
-	 * ------------------------------------------------------------------
-	 */
-
-	public RoundedRectBorderRenderStateA(
-			Matrix3x2f pose,
-
-			float x,
-			float y,
-			float width,
-			float height,
-			float radius,
-
-			int borderColor,
-
-			boolean glow,
-			float intensity,
-
-			float innerGlowRange,
-			float outerGlowRange,
-
-			int innerGlowColor,
-			int outerGlowColor,
-
-			float smoothness,
-
-			@Nullable ScreenRectangle scissorArea,
-			@Nullable ScreenRectangle bounds) {
-		this(
-				RenderPipelines.GUI,
-				TextureSetup.noTexture(),
-
-				pose,
-
-				x,
-				y,
-				width,
-				height,
-				radius,
-
-				borderColor,
-
-				DEFAULT_BORDER_THICKNESS,
-
-				glow,
-				intensity,
-
-				innerGlowRange,
-				outerGlowRange,
-
-				innerGlowColor,
-				outerGlowColor,
-
-				smoothness,
-
-				scissorArea,
-				bounds);
+	public RoundedRectBorderRenderStateA(Matrix3x2f pose, float x, float y, float width, float height, float radius, int borderColor, boolean glow, float intensity, float innerGlowRange, float outerGlowRange, int innerGlowColor, int outerGlowColor, float smoothness, @Nullable ScreenRectangle scissorArea, @Nullable ScreenRectangle bounds) {
+		this(RenderPipelines.GUI, TextureSetup.noTexture(), pose, x, y, width, height, radius, borderColor, DEFAULT_BORDER_THICKNESS, glow, intensity, innerGlowRange, outerGlowRange, innerGlowColor, outerGlowColor, smoothness, scissorArea, bounds);
 	}
-
-	/*
-	 * ------------------------------------------------------------------
-	 * 主入口
-	 * ------------------------------------------------------------------
-	 */
 
 	@Override
 	public void buildVertices(VertexConsumer vertexConsumer) {
-
 		if (width <= EPSILON || height <= EPSILON) {
 			return;
 		}
-
 		final float safeWidth = width;
 		final float safeHeight = height;
-
 		/*
 		 * 基础圆角。
 		 */
-		final float maxRadius = Math.min(
-				safeWidth,
-				safeHeight) * 0.5F;
+		final float maxRadius = Math.min(safeWidth, safeHeight) * 0.5F;
 
-		final float safeRadius = clamp(
-				radius,
-				0.0F,
-				maxRadius);
-
+		final float safeRadius = clamp(radius, 0.0F, maxRadius);
 		/*
 		 * 边框厚度。
 		 */
-		final float maxThickness = Math.min(
-				safeWidth,
-				safeHeight) * 0.5F;
+		final float maxThickness = Math.min(safeWidth, safeHeight) * 0.5F;
 
-		final float safeThickness = clamp(
-				borderThickness,
-				0.0F,
-				maxThickness);
+		final float safeThickness = clamp(borderThickness, 0.0F, maxThickness);
 
 		/*
 		 * intensity 只负责 glowColor 派生颜色。
 		 */
-		final float safeIntensity = clamp(
-				intensity,
-				0.0F,
-				1.0F);
+		final float safeIntensity = clamp(intensity, 0.0F, 1.0F);
 
 		/*
 		 * smoothness。
 		 */
-		final float safeSmoothness = clamp(
-				smoothness,
-				0.0F,
-				1.0F);
+		final float safeSmoothness = clamp(smoothness, 0.0F, 1.0F);
 
 		/*
 		 * --------------------------------------------------------------
@@ -225,15 +109,9 @@ public record RoundedRectBorderRenderStateA(
 		 * --------------------------------------------------------------
 		 */
 
-		final int actualInnerGlowColor = resolveGlowColor(
-				innerGlowColor,
-				borderColor,
-				safeIntensity);
+		final int actualInnerGlowColor = resolveGlowColor(innerGlowColor, borderColor, safeIntensity);
 
-		final int actualOuterGlowColor = resolveGlowColor(
-				outerGlowColor,
-				borderColor,
-				safeIntensity);
+		final int actualOuterGlowColor = resolveGlowColor(outerGlowColor, borderColor, safeIntensity);
 
 		/*
 		 * --------------------------------------------------------------
@@ -243,21 +121,8 @@ public record RoundedRectBorderRenderStateA(
 		 * --------------------------------------------------------------
 		 */
 
-		if (glow
-				&& outerGlowRange > EPSILON) {
-
-			drawOuterGlow(
-					vertexConsumer,
-
-					safeRadius,
-
-					Math.max(
-							0.0F,
-							outerGlowRange),
-
-					actualOuterGlowColor,
-
-					safeSmoothness);
+		if (glow && outerGlowRange > EPSILON) {
+			drawOuterGlow(vertexConsumer, safeRadius, Math.max(0.0F, outerGlowRange), actualOuterGlowColor, safeSmoothness);
 		}
 
 		/*
@@ -266,23 +131,8 @@ public record RoundedRectBorderRenderStateA(
 		 * --------------------------------------------------------------
 		 */
 
-		if (glow
-				&& innerGlowRange > EPSILON
-				&& safeThickness < maxThickness) {
-
-			drawInnerGlow(
-					vertexConsumer,
-
-					safeRadius,
-					safeThickness,
-
-					Math.max(
-							0.0F,
-							innerGlowRange),
-
-					actualInnerGlowColor,
-
-					safeSmoothness);
+		if (glow && innerGlowRange > EPSILON && safeThickness < maxThickness) {
+			drawInnerGlow(vertexConsumer, safeRadius, safeThickness, Math.max(0.0F, innerGlowRange), actualInnerGlowColor, safeSmoothness);
 		}
 
 		/*
@@ -301,11 +151,9 @@ public record RoundedRectBorderRenderStateA(
 
 		if (safeThickness > EPSILON) {
 
-			drawBorder(
-					vertexConsumer,
+			drawBorder(vertexConsumer,
 
-					safeRadius,
-					safeThickness,
+					safeRadius, safeThickness,
 
 					borderColor,
 
@@ -319,15 +167,13 @@ public record RoundedRectBorderRenderStateA(
 	 * ------------------------------------------------------------------
 	 */
 
-	private void drawBorder(
-			VertexConsumer consumer,
+	private void drawBorder(VertexConsumer consumer,
 
-			float radius,
-			float thickness,
+							float radius, float thickness,
 
-			int color,
+							int color,
 
-			float smoothness) {
+							float smoothness) {
 		/*
 		 * 外边界：
 		 *
@@ -349,21 +195,15 @@ public record RoundedRectBorderRenderStateA(
 		 */
 		final float outerRadius = radius;
 
-		final float innerRadius = Math.max(
-				0.0F,
-				radius - thickness);
+		final float innerRadius = Math.max(0.0F, radius - thickness);
 
-		drawRoundedRing(
-				consumer,
+		drawRoundedRing(consumer,
 
-				outerInset,
-				innerInset,
+				outerInset, innerInset,
 
-				outerRadius,
-				innerRadius,
+				outerRadius, innerRadius,
 
-				color,
-				color,
+				color, color,
 
 				smoothness);
 	}
@@ -374,67 +214,39 @@ public record RoundedRectBorderRenderStateA(
 	 * ------------------------------------------------------------------
 	 */
 
-	private void drawOuterGlow(
-			VertexConsumer consumer,
-
-			float radius,
-			float range,
-
-			int color,
-
-			float smoothness) {
-
-		if (range <= EPSILON) {
-			return;
-		}
-
-		final int bands = getGlowBandCount(
-				range,
-				smoothness);
-
+	private void drawOuterGlow(VertexConsumer consumer, float radius, float range, int color, float smoothness) {
+		if (range <= EPSILON) return;
+		final int bands = getGlowBandCount(range, smoothness);
 		for (int i = 0; i < bands; i++) {
-
 			/*
 			 * 0 = 靠近边框
 			 * 1 = 最外侧
 			 */
 			final float t0 = (float) i / bands;
-
 			final float t1 = (float) (i + 1) / bands;
-
 			/*
 			 * 外轮廓。
 			 */
 			final float outerInset = -range * t1;
-
 			/*
 			 * 内轮廓。
 			 */
 			final float innerInset = -range * t0;
-
 			/*
 			 * Alpha 从内向外衰减。
 			 */
-			final float alphaInner = glowFalloff(
-					t0,
-					smoothness);
+			final float alphaInner = glowFalloff(t0, smoothness);
 
-			final float alphaOuter = glowFalloff(
-					t1,
-					smoothness);
+			final float alphaOuter = glowFalloff(t1, smoothness);
 
 			/*
 			 * 只改变 Alpha。
 			 *
 			 * RGB 保持原始 glowColor。
 			 */
-			final int innerColor = withAlpha(
-					color,
-					alphaInner);
+			final int innerColor = withAlpha(color, alphaInner);
 
-			final int outerColor = withAlpha(
-					color,
-					alphaOuter);
+			final int outerColor = withAlpha(color, alphaOuter);
 
 			/*
 			 * 对圆角矩形做 offset。
@@ -446,22 +258,9 @@ public record RoundedRectBorderRenderStateA(
 			 * 这样圆角会向外自然扩散。
 			 */
 			final float outerRadius = radius - outerInset;
-
 			final float innerRadius = radius - innerInset;
 
-			drawRoundedRing(
-					consumer,
-
-					outerInset,
-					innerInset,
-
-					outerRadius,
-					innerRadius,
-
-					outerColor,
-					innerColor,
-
-					smoothness);
+			drawRoundedRing(consumer, outerInset, innerInset, outerRadius, innerRadius, outerColor, innerColor, smoothness);
 		}
 	}
 
@@ -471,28 +270,14 @@ public record RoundedRectBorderRenderStateA(
 	 * ------------------------------------------------------------------
 	 */
 
-	private void drawInnerGlow(
-			VertexConsumer consumer,
-
-			float radius,
-			float borderThickness,
-
-			float requestedRange,
-
-			int color,
-
-			float smoothness) {
-
+	private void drawInnerGlow(VertexConsumer consumer, float radius, float borderThickness, float requestedRange, int color, float smoothness) {
 		if (requestedRange <= EPSILON) {
 			return;
 		}
-
 		/*
 		 * 内边框当前圆角半径。
 		 */
-		final float borderInnerRadius = Math.max(
-				0.0F,
-				radius - borderThickness);
+		final float borderInnerRadius = Math.max(0.0F, radius - borderThickness);
 
 		/*
 		 * 如果这里本身已经没有圆角，
@@ -517,43 +302,31 @@ public record RoundedRectBorderRenderStateA(
 		 * │ │
 		 * └──────┘
 		 */
-		final float minRadius = Math.min(
-				MIN_INNER_CORNER_RADIUS,
-				borderInnerRadius * 0.35F);
+		final float minRadius = Math.min(MIN_INNER_CORNER_RADIUS, borderInnerRadius * 0.35F);
 
 		/*
 		 * 最多只能向内侵蚀到 minRadius。
 		 */
-		final float maxAdditionalRange = Math.max(
-				0.0F,
-				borderInnerRadius - minRadius);
+		final float maxAdditionalRange = Math.max(0.0F, borderInnerRadius - minRadius);
 
-		final float actualRange = Math.min(
-				requestedRange,
-				maxAdditionalRange);
+		final float actualRange = Math.min(requestedRange, maxAdditionalRange);
 
 		if (actualRange <= EPSILON) {
 			return;
 		}
 
-		final int bands = getGlowBandCount(
-				actualRange,
-				smoothness);
+		final int bands = getGlowBandCount(actualRange, smoothness);
 
 		for (int i = 0; i < bands; i++) {
-
 			final float t0 = (float) i / bands;
-
 			final float t1 = (float) (i + 1) / bands;
 
 			/*
 			 * 内发光从边框内缘开始。
 			 */
-			final float outerInset = borderThickness
-					+ actualRange * t0;
+			final float outerInset = borderThickness + actualRange * t0;
 
-			final float innerInset = borderThickness
-					+ actualRange * t1;
+			final float innerInset = borderThickness + actualRange * t1;
 
 			/*
 			 * 对应的圆角半径。
@@ -571,35 +344,15 @@ public record RoundedRectBorderRenderStateA(
 			/*
 			 * 内发光 Alpha。
 			 */
-			final float alphaOuter = glowFalloff(
-					t0,
-					smoothness);
+			final float alphaOuter = glowFalloff(t0, smoothness);
 
-			final float alphaInner = glowFalloff(
-					t1,
-					smoothness);
+			final float alphaInner = glowFalloff(t1, smoothness);
 
-			final int outerColor = withAlpha(
-					color,
-					alphaOuter);
+			final int outerColor = withAlpha(color, alphaOuter);
 
-			final int innerColor = withAlpha(
-					color,
-					alphaInner);
+			final int innerColor = withAlpha(color, alphaInner);
 
-			drawRoundedRing(
-					consumer,
-
-					outerInset,
-					innerInset,
-
-					outerRadius,
-					innerRadius,
-
-					outerColor,
-					innerColor,
-
-					smoothness);
+			drawRoundedRing(consumer, outerInset, innerInset, outerRadius, innerRadius, outerColor, innerColor, smoothness);
 		}
 	}
 
@@ -609,63 +362,24 @@ public record RoundedRectBorderRenderStateA(
 	 * ------------------------------------------------------------------
 	 */
 
-	private void drawRoundedRing(
-			VertexConsumer consumer,
-
-			float outerInset,
-			float innerInset,
-
-			float outerRadius,
-			float innerRadius,
-
-			int outerColor,
-			int innerColor,
-
-			float smoothness) {
-
+	private void drawRoundedRing(VertexConsumer consumer, float outerInset, float innerInset, float outerRadius, float innerRadius, int outerColor, int innerColor, float smoothness) {
 		final float outerWidth = width - outerInset * 2.0F;
-
 		final float outerHeight = height - outerInset * 2.0F;
-
 		final float innerWidth = width - innerInset * 2.0F;
-
 		final float innerHeight = height - innerInset * 2.0F;
 
-		if (outerWidth <= EPSILON
-				|| outerHeight <= EPSILON) {
-			return;
-		}
-
-		if (innerWidth <= EPSILON
-				|| innerHeight <= EPSILON) {
-			return;
-		}
-
+		if (outerWidth <= EPSILON || outerHeight <= EPSILON) return;
+		if (innerWidth <= EPSILON || innerHeight <= EPSILON) return;
 		/*
 		 * 安全半径。
 		 */
-		final float safeOuterRadius = clamp(
-				outerRadius,
-				0.0F,
-				Math.min(
-						outerWidth,
-						outerHeight) * 0.5F);
-
-		final float safeInnerRadius = clamp(
-				innerRadius,
-				0.0F,
-				Math.min(
-						innerWidth,
-						innerHeight) * 0.5F);
+		final float safeOuterRadius = clamp(outerRadius, 0.0F, Math.min(outerWidth, outerHeight) * 0.5F);
+		final float safeInnerRadius = clamp(innerRadius, 0.0F, Math.min(innerWidth, innerHeight) * 0.5F);
 
 		/*
 		 * 根据最大的圆角决定细分。
 		 */
-		final int arcSegments = getArcSegments(
-				Math.max(
-						safeOuterRadius,
-						safeInnerRadius),
-				smoothness);
+		final int arcSegments = getArcSegments(Math.max(safeOuterRadius, safeInnerRadius), smoothness);
 
 		/*
 		 * 一个完整路径由：
@@ -694,51 +408,20 @@ public record RoundedRectBorderRenderStateA(
 
 		final float[] innerY = new float[pointCount];
 
-		buildRoundedPath(
-				outerX,
-				outerY,
+		buildRoundedPath(outerX, outerY, outerInset, safeOuterRadius, arcSegments);
 
-				outerInset,
-				safeOuterRadius,
-
-				arcSegments);
-
-		buildRoundedPath(
-				innerX,
-				innerY,
-
-				innerInset,
-				safeInnerRadius,
-
-				arcSegments);
+		buildRoundedPath(innerX, innerY, innerInset, safeInnerRadius, arcSegments);
 
 		/*
 		 * 逐边生成环带。
 		 */
 		for (int i = 0; i < pointCount; i++) {
-
-			final int next = (i + 1 == pointCount)
-					? 0
-					: i + 1;
-
-			addQuad(
-					consumer,
-
-					outerX[i],
-					outerY[i],
-					outerColor,
-
-					innerX[i],
-					innerY[i],
-					innerColor,
-
-					innerX[next],
-					innerY[next],
-					innerColor,
-
-					outerX[next],
-					outerY[next],
-					outerColor);
+			final int next = (i + 1 == pointCount) ? 0 : i + 1;
+			addQuad(consumer,
+					outerX[i], outerY[i], outerColor,
+					innerX[i], innerY[i], innerColor,
+					innerX[next], innerY[next], innerColor,
+					outerX[next], outerY[next], outerColor);
 		}
 	}
 
@@ -748,21 +431,13 @@ public record RoundedRectBorderRenderStateA(
 	 * ------------------------------------------------------------------
 	 */
 
-	private void buildRoundedPath(
-			float[] outX,
-			float[] outY,
-			float inset,
-			float cornerRadius,
-			int arcSegments) {
+	private void buildRoundedPath(float[] outX, float[] outY, float inset, float cornerRadius, int arcSegments) {
 		final float left = x + inset;
 		final float top = y + inset;
 		final float right = x + width - inset;
 		final float bottom = y + height - inset;
 
-		final float r = clamp(
-				cornerRadius,
-				0.0F,
-				Math.min(right - left, bottom - top) * 0.5F);
+		final float r = clamp(cornerRadius, 0.0F, Math.min(right - left, bottom - top) * 0.5F);
 
 		final float ctlX = left + r;
 		final float ctlY = top + r;
@@ -849,10 +524,7 @@ public record RoundedRectBorderRenderStateA(
 	 * ------------------------------------------------------------------
 	 */
 
-	private static int resolveGlowColor(
-			int configuredColor,
-			int borderColor,
-			float intensity) {
+	private static int resolveGlowColor(int configuredColor, int borderColor, float intensity) {
 
 		/*
 		 * 显式指定颜色：
@@ -886,20 +558,11 @@ public record RoundedRectBorderRenderStateA(
 		 * 0 -> 原始颜色
 		 * 1 -> 白色
 		 */
-		final int outRed = lerp(
-				red,
-				255,
-				intensity);
+		final int outRed = lerp(red, 255, intensity);
 
-		final int outGreen = lerp(
-				green,
-				255,
-				intensity);
+		final int outGreen = lerp(green, 255, intensity);
 
-		final int outBlue = lerp(
-				blue,
-				255,
-				intensity);
+		final int outBlue = lerp(blue, 255, intensity);
 
 		/*
 		 * 最重要：
@@ -908,22 +571,11 @@ public record RoundedRectBorderRenderStateA(
 		 *
 		 * 不进行任何白化。
 		 */
-		return alpha
-				| (outRed << 16)
-				| (outGreen << 8)
-				| outBlue;
+		return alpha | (outRed << 16) | (outGreen << 8) | outBlue;
 	}
 
-	private static int lerp(
-			int a,
-			int b,
-			float t) {
-		return Math.round(
-				a + (b - a)
-						* clamp(
-								t,
-								0.0F,
-								1.0F));
+	private static int lerp(int a, int b, float t) {
+		return Math.round(a + (b - a) * clamp(t, 0.0F, 1.0F));
 	}
 
 	/*
@@ -932,26 +584,18 @@ public record RoundedRectBorderRenderStateA(
 	 * ------------------------------------------------------------------
 	 */
 
-	private static int withAlpha(
-			int color,
-			float factor) {
+	private static int withAlpha(int color, float factor) {
 
-		factor = clamp(
-				factor,
-				0.0F,
-				1.0F);
+		factor = clamp(factor, 0.0F, 1.0F);
 
 		final int sourceAlpha = (color >>> 24) & 0xFF;
 
-		final int alpha = Math.round(
-				sourceAlpha
-						* factor);
+		final int alpha = Math.round(sourceAlpha * factor);
 
 		/*
 		 * RGB 一字不动。
 		 */
-		return (alpha << 24)
-				| (color & 0x00FFFFFF);
+		return (alpha << 24) | (color & 0x00FFFFFF);
 	}
 
 	/*
@@ -960,14 +604,9 @@ public record RoundedRectBorderRenderStateA(
 	 * ------------------------------------------------------------------
 	 */
 
-	private static float glowFalloff(
-			float t,
-			float smoothness) {
+	private static float glowFalloff(float t, float smoothness) {
 
-		t = clamp(
-				t,
-				0.0F,
-				1.0F);
+		t = clamp(t, 0.0F, 1.0F);
 
 		/*
 		 * smoothstep：
@@ -981,12 +620,9 @@ public record RoundedRectBorderRenderStateA(
 		 * smoothness 越高，
 		 * 光晕会越集中在边缘附近。
 		 */
-		final float power = 1.5F
-				+ smoothness * 1.5F;
+		final float power = 1.5F + smoothness * 1.5F;
 
-		return (float) Math.pow(
-				1.0F - s,
-				power);
+		return (float) Math.pow(1.0F - s, power);
 	}
 
 	/*
@@ -995,9 +631,7 @@ public record RoundedRectBorderRenderStateA(
 	 * ------------------------------------------------------------------
 	 */
 
-	private static int getGlowBandCount(
-			float range,
-			float smoothness) {
+	private static int getGlowBandCount(float range, float smoothness) {
 
 		if (range <= EPSILON) {
 			return MIN_GLOW_BANDS;
@@ -1008,18 +642,9 @@ public record RoundedRectBorderRenderStateA(
 		 *
 		 * smoothness 再额外提高一点。
 		 */
-		final int bands = 2
-				+ (int) Math.ceil(
-						Math.min(
-								range * 0.5F,
-								4.0F))
-				+ Math.round(
-						smoothness * 2.0F);
+		final int bands = 2 + (int) Math.ceil(Math.min(range * 0.5F, 4.0F)) + Math.round(smoothness * 2.0F);
 
-		return clampInt(
-				bands,
-				MIN_GLOW_BANDS,
-				MAX_GLOW_BANDS);
+		return clampInt(bands, MIN_GLOW_BANDS, MAX_GLOW_BANDS);
 	}
 
 	/*
@@ -1028,9 +653,7 @@ public record RoundedRectBorderRenderStateA(
 	 * ------------------------------------------------------------------
 	 */
 
-	private static int getArcSegments(
-			float radius,
-			float smoothness) {
+	private static int getArcSegments(float radius, float smoothness) {
 
 		if (radius <= EPSILON) {
 			return 1;
@@ -1041,16 +664,9 @@ public record RoundedRectBorderRenderStateA(
 		 *
 		 * smoothness 再提高细分。
 		 */
-		final int segments = 6
-				+ Math.round(
-						radius * 0.45F)
-				+ Math.round(
-						smoothness * 14.0F);
+		final int segments = 6 + Math.round(radius * 0.45F) + Math.round(smoothness * 14.0F);
 
-		return clampInt(
-				segments,
-				MIN_ARC_SEGMENTS,
-				MAX_ARC_SEGMENTS);
+		return clampInt(segments, MIN_ARC_SEGMENTS, MAX_ARC_SEGMENTS);
 	}
 
 	/*
@@ -1059,52 +675,23 @@ public record RoundedRectBorderRenderStateA(
 	 * ------------------------------------------------------------------
 	 */
 
-	private void addQuad(
-			VertexConsumer consumer,
+	private void addQuad(VertexConsumer consumer,
 
-			float x1,
-			float y1,
-			int c1,
+						 float x1, float y1, int c1,
 
-			float x2,
-			float y2,
-			int c2,
+						 float x2, float y2, int c2,
 
-			float x3,
-			float y3,
-			int c3,
+						 float x3, float y3, int c3,
 
-			float x4,
-			float y4,
-			int c4) {
+						 float x4, float y4, int c4) {
 
-		consumer
-				.addVertexWith2DPose(
-						pose,
-						x1,
-						y1)
-				.setColor(c1);
+		consumer.addVertexWith2DPose(pose, x1, y1).setColor(c1);
 
-		consumer
-				.addVertexWith2DPose(
-						pose,
-						x2,
-						y2)
-				.setColor(c2);
+		consumer.addVertexWith2DPose(pose, x2, y2).setColor(c2);
 
-		consumer
-				.addVertexWith2DPose(
-						pose,
-						x3,
-						y3)
-				.setColor(c3);
+		consumer.addVertexWith2DPose(pose, x3, y3).setColor(c3);
 
-		consumer
-				.addVertexWith2DPose(
-						pose,
-						x4,
-						y4)
-				.setColor(c4);
+		consumer.addVertexWith2DPose(pose, x4, y4).setColor(c4);
 	}
 
 	/*
@@ -1113,25 +700,11 @@ public record RoundedRectBorderRenderStateA(
 	 * ------------------------------------------------------------------
 	 */
 
-	private static float clamp(
-			float value,
-			float min,
-			float max) {
-		return Math.max(
-				min,
-				Math.min(
-						max,
-						value));
+	private static float clamp(float value, float min, float max) {
+		return Math.max(min, Math.min(max, value));
 	}
 
-	private static int clampInt(
-			int value,
-			int min,
-			int max) {
-		return Math.max(
-				min,
-				Math.min(
-						max,
-						value));
+	private static int clampInt(int value, int min, int max) {
+		return Math.max(min, Math.min(max, value));
 	}
 }

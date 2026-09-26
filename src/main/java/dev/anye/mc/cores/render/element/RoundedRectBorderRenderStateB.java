@@ -36,7 +36,8 @@ public record RoundedRectBorderRenderStateB(
 		RenderPipeline pipeline,
 		TextureSetup textureSetup,
 		Matrix3x2f pose, float x, float y, float width, float height, float radius, int borderColor, float borderThickness,
-		boolean glow, float intensity, float innerGlowRange, float outerGlowRange, int innerGlowColor, int outerGlowColor, float smoothness,
+		boolean glow, float intensity, float innerGlowRange, float outerGlowRange, int innerGlowColor, int outerGlowColor,
+		float smoothness,
 		@Nullable ScreenRectangle scissorArea,
 		@Nullable ScreenRectangle bounds) implements GuiElementRenderState {
 

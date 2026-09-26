@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import javax.annotation.Nullable;
 
 /**
- * 圆角矩形边框，无背景填充，如果需要填充背景可以使用{@link RoundedRectRenderState}
+ * 圆角矩形，含背景填充，如果不需要填充背景可以使用{@link RoundedRectBorderRenderState}
  * @param pipeline
  * @param textureSetup
  * @param pose
@@ -25,20 +25,21 @@ import javax.annotation.Nullable;
  * @param height
  * @param radius
  * @param borderColor
+ * @param fillColor        内部填充颜色
  * @param scissorArea      裁剪区域
  * @param bounds           渲染边界
  */
-public record RoundedRectBorderRenderState(
+public record RoundedRectRenderState(
 		RenderPipeline pipeline,
 		TextureSetup textureSetup,
-		Matrix3x2fStack pose, float x, float y, float width, float height, float radius, int borderColor,
+		Matrix3x2fStack pose, float x, float y, float width, float height, float radius, int borderColor,int fillColor,
 		@Nullable ScreenRectangle scissorArea, @Nullable ScreenRectangle bounds) implements GuiElementRenderState {
 	private static final Logger LOGGER = LogUtils.getLogger();
-			
-	public RoundedRectBorderRenderState(
-			Matrix3x2fStack pose, float x, float y,float width, float height, float radius, int borderColor,
+
+	public RoundedRectRenderState(
+			Matrix3x2fStack pose, float x, float y,float width, float height, float radius, int borderColor,int fillColor,
 			@Nullable ScreenRectangle scissorArea, @Nullable ScreenRectangle bounds) {
-		this(RenderPipelines.GUI, TextureSetup.noTexture(), pose,x,y, width, height, radius, borderColor, scissorArea, bounds);
+		this(RenderPipelines.GUI, TextureSetup.noTexture(), pose,x,y, width, height, radius, borderColor,fillColor, scissorArea, bounds);
 	}
 
 
@@ -63,6 +64,8 @@ public record RoundedRectBorderRenderState(
 			Render2DHelper.fan(vertexConsumer,pose,_Arc.c(90), _Arc.c(180),radius,0,borderColor);
 			pose.popMatrix();
 		}
+		pose.translate(radius,radius);
+		Render2DHelper.rect(vertexConsumer,pose,width - radius - radius ,height - radius - radius,fillColor);
 		pose.popMatrix();
 	}
 }

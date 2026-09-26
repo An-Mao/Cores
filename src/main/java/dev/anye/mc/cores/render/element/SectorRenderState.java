@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
  * @param pose
  * @param x
  * @param y
- * @param outerRadius
+ * @param radius
  * @param startArc
  * @param endArc
  * @param color
@@ -32,10 +32,9 @@ import javax.annotation.Nullable;
 public record SectorRenderState(
 		RenderPipeline pipeline,
 		TextureSetup textureSetup,
-		Matrix3x2fStack pose, int x, int y, int outerRadius, double startArc, double endArc, int color,
+		Matrix3x2fStack pose, int x, int y, int radius, double startArc, double endArc, int color,
 		@Nullable ScreenRectangle scissorArea,
 		@Nullable ScreenRectangle bounds) implements GuiElementRenderState {
-	public static final double ANGLE_RESOLUTION = _MathCDT.ARC;
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	public SectorRenderState(Matrix3x2fStack pose, int x, int y, int outerRadius, double startArc, double endArc, int color, @Nullable ScreenRectangle scissorArea, @Nullable ScreenRectangle bounds) {
@@ -46,15 +45,15 @@ public record SectorRenderState(
 	public void buildVertices(@NonNull VertexConsumer vertexConsumer) {
 		pose.pushMatrix();
 		pose.translate(x(), y());
-		Render2DHelper.fan(vertexConsumer,pose,startArc,endArc,color,outerRadius);
+		Render2DHelper.fan(vertexConsumer,pose,startArc,endArc, radius,color);
 		/*double arc = endArc - startArc;
 		vertexConsumer.addVertexWith2DPose(pose, 0, 0).setColor(color);
 		int segments = (int) Math.ceil(Math.abs(arc) / ANGLE_RESOLUTION);
 		if (segments < 1) segments = 1;
 		for (int i = 0; i <= segments; i++) {
 			float currentArc = (float) (startArc + arc * i / segments);
-			float x = Mth.cos(currentArc) * outerRadius;
-			float y = Mth.sin(currentArc) * outerRadius;
+			float x = Mth.cos(currentArc) * radius;
+			float y = Mth.sin(currentArc) * radius;
 			vertexConsumer.addVertexWith2DPose(pose, x, y).setColor(color);
 		}*/
 		pose.popMatrix();

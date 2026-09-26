@@ -1,7 +1,7 @@
 package dev.anye.mc.cores.screen.widget.simple;
 
 import dev.anye.core.color.scheme._ColorScheme;
-import dev.anye.mc.cores.render.GuiGraphicsX;
+import dev.anye.mc.cores.render.GuiGraphicsHelper;
 import dev.anye.mc.cores.screen.widget.RenderWidgetCore;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
@@ -196,7 +196,7 @@ public abstract class SimpleWidgetCore<T extends SimpleWidgetCore<T>> extends Re
 	}
 
 	protected void renderShape(GuiGraphicsExtractor poseStack, int x, int y, int width, int height, int radius, int borderColor, int fillColor) {
-		GuiGraphicsX.RoundedRect(poseStack, x, y, width, height, radius, borderColor, fillColor);
+		GuiGraphicsHelper.RoundedRect(poseStack, x, y, width, height, radius, borderColor, fillColor);
 	}
 
 	@Override

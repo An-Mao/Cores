@@ -2,7 +2,7 @@ package dev.anye.mc.cores.screen.widget.square;
 
 import dev.anye.core.color._ColorCDT;
 import dev.anye.core.debug._DeBug;
-import dev.anye.mc.cores.render.GuiGraphicsX;
+import dev.anye.mc.cores.render.GuiGraphicsHelper;
 import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
 import dev.anye.mc.cores.screen.widget.DT_XYWHUV;
 import net.minecraft.client.gui.Font;
@@ -207,7 +207,7 @@ public class SquareListBox extends SquareWidgetCore<SquareListBox> {
 							bgc = backgroundHoverColor;
 							tc = textSelectColor;
 							idex = ni;
-							GuiGraphicsX.renderTooltip(guiGraphics, font, getData(ni).getTooltip(), mouseX, mouseY);
+							GuiGraphicsHelper.renderTooltip(guiGraphics, font, getData(ni).getTooltip(), mouseX, mouseY);
 						}
 						drawSquare(guiGraphics, dx, dy, elementalWidth, elementalHeight, bgc);
 						drawString(guiGraphics, dx, dy + strY, tc, FixStrWidth(getDataComponent(ni)));

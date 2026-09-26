@@ -1,7 +1,7 @@
 package dev.anye.mc.cores.render;
 
 import dev.anye.core.color._ColorCDT;
-import dev.anye.core.math._Math;
+import dev.anye.core.math._Arc;
 import dev.anye.core.math._MathCDT;
 import dev.anye.mc.cores.render.element.*;
 import net.minecraft.client.Minecraft;
@@ -18,7 +18,8 @@ import org.joml.Vector2ic;
 
 import java.util.List;
 
-public class GuiGraphicsX{
+public final class GuiGraphicsHelper {
+	private GuiGraphicsHelper(){}
 	public static void Sector(GuiGraphicsExtractor guiGraphics, int x, int y, int outerRadius, double startArc, double endArc, int color) {
 		guiGraphics.submitGuiElementRenderState(new SectorRenderState(
 				guiGraphics.pose(),
@@ -27,8 +28,8 @@ public class GuiGraphicsX{
 				startArc,
 				endArc,
 				color,
-				getBounds(x, y, outerRadius),
-				getBounds(x, y, outerRadius)
+				getBounds(x - 10, y -10, outerRadius + 20),
+				getBounds(x - 10, y-10, outerRadius +20)
 		));
 	}
 
@@ -58,40 +59,43 @@ public class GuiGraphicsX{
 
 	/**
 	 * 绘制圆角矩形
-	 * @param guiGraphics
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param radius
-	 * @param borderColor
-	 * @param fillColor
+	 * @param guiGraphics GuiGraphicsExtractor
+	 * @param x x
+	 * @param y y
+	 * @param width w
+	 * @param height h
+	 * @param radius r
+	 * @param borderColor 边框颜色
+	 * @param fillColor 填充颜色
 	 */
 	public static void RoundedRect(GuiGraphicsExtractor guiGraphics, int x, int y, int width, int height, int radius, int borderColor, int fillColor) {
 		Matrix3x2fStack poseStack = guiGraphics.pose();
 		poseStack.pushMatrix();
-		guiGraphics.submitGuiElementRenderState(new RoundedRectBorderRenderState(
+		//poseStack.translate(x,y);
+		guiGraphics.submitGuiElementRenderState(new RoundedRectGlowDataBorderRenderState(
 				poseStack,
+				x,y,
 				width,
 				height,
 				radius,
-				fillColor,radius,
+				borderColor,
 				getBounds(x, y, width, height),
 				getBounds(x, y, width, height)
 		));
-		/*guiGraphics.submitGuiElementRenderState(new RectRenderState(
-				RenderPipelines.GUI,
-				TextureSetup.noTexture(),
-				poseStack,
-				x,
-				y,
-				width,
-				height,
-				radius,
-				fillColor,
-				getBounds(x, y, width, height),
-				getBounds(x, y, width, height)
-		));*/
+
+//		guiGraphics.submitGuiElementRenderState(new RectRenderState(
+//				RenderPipelines.GUI,
+//				TextureSetup.noTexture(),
+//				poseStack,
+//				x + radius,
+//				y + radius,
+//				width - radius * 2,
+//				height- radius * 2,
+//				radius,
+//				fillColor,
+//				getBounds(x, y, width, height),
+//				getBounds(x, y, width, height)
+//		));
 		poseStack.popMatrix();
 
 		//RoundedBorder(guiGraphics, x, y, width, height, radius, borderColor);
@@ -145,10 +149,10 @@ public class GuiGraphicsX{
 		int minX = x + radius, minY = y + radius, maxX = x + width - radius, maxY = y + height - radius;
 		Matrix3x2fStack poseStack = guiGraphics.pose();
 		poseStack.pushMatrix();
-		GuiGraphicsX.SectorX(guiGraphics, minX, minY, 0, radius, _MathCDT.ARC_180, _MathCDT.ARC_270, color);
-		GuiGraphicsX.SectorX(guiGraphics, maxX, minY, 0, radius, _MathCDT.ARC_270, _MathCDT.ARC_360, color);
-		GuiGraphicsX.SectorX(guiGraphics, maxX, maxY, 0, radius, 0, _MathCDT.ARC_90, color);
-		GuiGraphicsX.SectorX(guiGraphics, minX, maxY, 0, radius, _MathCDT.ARC_90, _MathCDT.ARC_180, color);
+		GuiGraphicsHelper.SectorX(guiGraphics, minX, minY, 0, radius, _Arc.c(180), _Arc.c(270), color);
+		GuiGraphicsHelper.SectorX(guiGraphics, maxX, minY, 0, radius, _Arc.c(270), _Arc.c(360), color);
+		GuiGraphicsHelper.SectorX(guiGraphics, maxX, maxY, 0, radius, _Arc.c(0), _Arc.c(90), color);
+		GuiGraphicsHelper.SectorX(guiGraphics, minX, maxY, 0, radius, _Arc.c(90), _Arc.c(180), color);
 		poseStack.popMatrix();
 	}
 
@@ -182,7 +186,7 @@ public class GuiGraphicsX{
 	}
 
 	public static void renderTooltip(GuiGraphicsExtractor guiGraphics, Font font, List<ClientTooltipComponent> components, int mouseX, int mouseY) {
-		guiGraphics.tooltip(font, components, mouseX, mouseY, GuiGraphicsX::positionTooltip, null,false);
+		guiGraphics.tooltip(font, components, mouseX, mouseY, GuiGraphicsHelper::positionTooltip, null,false);
 	}
 
 	public static ScreenRectangle getBounds(int x, int y, int w, int h) {

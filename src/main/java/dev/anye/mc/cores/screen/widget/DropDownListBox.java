@@ -2,7 +2,7 @@ package dev.anye.mc.cores.screen.widget;
 
 import dev.anye.core.color._ColorCDT;
 import dev.anye.core.debug._DeBug;
-import dev.anye.mc.cores.render.GuiGraphicsX;
+import dev.anye.mc.cores.render.GuiGraphicsHelper;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -180,7 +180,7 @@ public class DropDownListBox extends DropDownListBoxCore {
 				if (pMouseX > getX() && pMouseX < getX() + width && pMouseY > lineY && pMouseY < lineY + dt_xywh.height()) {
 					bgc = bgHoverColor;
 					hc = textHoverColor;
-					GuiGraphicsX.renderTooltip(guiGraphics, font, getDataTooltip(i), pMouseX, pMouseY);
+					GuiGraphicsHelper.renderTooltip(guiGraphics, font, getDataTooltip(i), pMouseX, pMouseY);
 				}
 				if (texture == null) {
 					guiGraphics.fill(dt_xywh.x(), lineY, dt_xywh.x() + width, lineY + dt_xywh.height(), bgc);

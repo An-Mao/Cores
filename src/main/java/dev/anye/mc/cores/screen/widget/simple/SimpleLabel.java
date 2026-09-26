@@ -1,7 +1,7 @@
 package dev.anye.mc.cores.screen.widget.simple;
 
 import dev.anye.core.math._Math;
-import dev.anye.mc.cores.render.GuiGraphicsX;
+import dev.anye.mc.cores.render.GuiGraphicsHelper;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
@@ -125,7 +125,7 @@ public class SimpleLabel extends SimpleWidgetCore<SimpleLabel> {
 			guiGraphics.text(font, getMessage(), getDrawX(), getDrawY(), tc, false);
 		}
 		if (mouseOver && getCustomTooltip() != null && !getCustomTooltip().isEmpty()) {
-			GuiGraphicsX.renderTooltip(guiGraphics, getFont(), getCustomTooltip(), pMouseX, pMouseY);
+			GuiGraphicsHelper.renderTooltip(guiGraphics, getFont(), getCustomTooltip(), pMouseX, pMouseY);
 		}
 
 	}

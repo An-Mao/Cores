@@ -54,8 +54,8 @@ public class RouletteMenu extends RenderWidgetCore<RouletteMenu> {
                     double endAngle = (i + 1) * sectorAngle;
                     int bgColor = (finalAngle >= startAngle && finalAngle < endAngle) ? highlightColor : normalColor;
                     for (double a = startAngle; a < endAngle; a += Math.PI / 180) {
-                        float x2 = (float) (centerX + Math.cos(a) * outerRadius);
-                        float y2 = (float) (centerY + Math.sin(a) * outerRadius);
+                        float x2 = (float) (centerX + Math.cos(a) * radius);
+                        float y2 = (float) (centerY + Math.sin(a) * radius);
                         vertexConsumer.addVertex(x2, y2, 0).setColor(bgColor);//.endVertex();
                     }
                 }
@@ -75,8 +75,8 @@ public class RouletteMenu extends RenderWidgetCore<RouletteMenu> {
                 double endAngle = (i + 1) * sectorAngle;
                 int bgColor = (angle >= startAngle && angle < endAngle) ? highlightColor : normalColor;
                 for (double a = startAngle; a < endAngle; a += Math.PI / 180) {
-                    float x2 = (float) (centerX + Math.cos(a) * outerRadius);
-                    float y2 = (float) (centerY + Math.sin(a) * outerRadius);
+                    float x2 = (float) (centerX + Math.cos(a) * radius);
+                    float y2 = (float) (centerY + Math.sin(a) * radius);
                     buffer.addVertex(x2, y2, 0).setColor(bgColor);//.endVertex();
                 }
             }
