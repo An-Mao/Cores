@@ -1,5 +1,7 @@
 # **Cores**
 
+**注意，自26.3版本起，许可协议已更改，旧版本依旧使用原来的许可。**
+
 [English](https://github.com/An-Mao/Cores/blob/main/README.MD)
 
 此Mod已内置[Core](https://github.com/An-Mao/JavaDevCore)

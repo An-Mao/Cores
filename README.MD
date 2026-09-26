@@ -1,5 +1,7 @@
 # **Cores**
 
+**Please note that the license agreement has changed starting with version 26.3; older versions continue to use the original license.**
+
 [简体中文](https://github.com/An-Mao/Cores/blob/main/README_ZH.MD)
 
 This mod has a built-in [Core](https://github.com/An-Mao/JavaDevCore) library.
