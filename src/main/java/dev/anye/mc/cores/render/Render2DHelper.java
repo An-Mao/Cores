@@ -2,8 +2,8 @@ package dev.anye.mc.cores.render;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.anye.core.math._Arc;
-import dev.anye.core.math._MathCDT;
 import dev.anye.mc.cores.dt.FadeColorData;
+import dev.anye.mc.cores.dt.Quad;
 import net.minecraft.util.Mth;
 import org.joml.Matrix3x2fStack;
 
@@ -365,6 +365,35 @@ public final class Render2DHelper {
 		vertexConsumer.addVertexWith2DPose(pose, width, 0).setColor(rightTopColor);
 		pose.popMatrix();
 	}
+
+
+	/**
+	 * (逆时针)绘制渐变矩形
+	 * <pre>
+	 * A - D
+	 * |   |
+	 * B - C
+	 * </pre>
+	 * @param vertexConsumer 顶点缓存
+	 * @param pose 变换矩阵
+	 * @param quad pos
+	 * @param color color
+	 */
+	public static void rect(VertexConsumer vertexConsumer, Matrix3x2fStack pose,
+							Quad quad,
+							FadeColorData color){
+		pose.pushMatrix();
+		vertexConsumer.addVertexWith2DPose(pose, quad.leftTopX(), quad.leftTopY()).setColor(color.leftTopColor());
+		vertexConsumer.addVertexWith2DPose(pose, quad.leftBottomX(), quad.leftBottomY()).setColor(color.leftBottomColor());
+		vertexConsumer.addVertexWith2DPose(pose, quad.rightBottomX(), quad.rightBottomY()).setColor(color.rightBottomColor());
+		vertexConsumer.addVertexWith2DPose(pose, quad.rightTopX(), quad.rightTopY()).setColor(color.rightTopColor());
+		pose.popMatrix();
+	}
+
+
+
+
+
 	/**
 	 * (逆时针)绘制渐变矩形
 	 * <pre>

@@ -3,7 +3,6 @@ package dev.anye.mc.cores.render.element;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.logging.LogUtils;
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
-import dev.anye.core.math._MathCDT;
 import dev.anye.mc.cores.render.Render2DHelper;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
@@ -46,16 +45,6 @@ public record SectorRenderState(
 		pose.pushMatrix();
 		pose.translate(x(), y());
 		Render2DHelper.fan(vertexConsumer,pose,startArc,endArc, radius,color);
-		/*double arc = endArc - startArc;
-		vertexConsumer.addVertexWith2DPose(pose, 0, 0).setColor(color);
-		int segments = (int) Math.ceil(Math.abs(arc) / ANGLE_RESOLUTION);
-		if (segments < 1) segments = 1;
-		for (int i = 0; i <= segments; i++) {
-			float currentArc = (float) (startArc + arc * i / segments);
-			float x = Mth.cos(currentArc) * radius;
-			float y = Mth.sin(currentArc) * radius;
-			vertexConsumer.addVertexWith2DPose(pose, x, y).setColor(color);
-		}*/
 		pose.popMatrix();
 	}
 }

@@ -36,10 +36,6 @@ public record RectRenderState(
 	public void buildVertices(@NonNull VertexConsumer vertexConsumer) {
 		pose.pushMatrix().translate(x,y);
 		Render2DHelper.rect(vertexConsumer,pose,width,height,fillColor);
-//		vertexConsumer.addVertexWith2DPose(pose, x + radius, y + radius).setColor(fillColor);
-//		vertexConsumer.addVertexWith2DPose(pose, x + radius, y + height - radius).setColor(fillColor);
-//		vertexConsumer.addVertexWith2DPose(pose, x + width - radius, y + height - radius).setColor(fillColor);
-//		vertexConsumer.addVertexWith2DPose(pose, x + width - radius, y + radius).setColor(fillColor);
 		pose.popMatrix();
 	}
 }

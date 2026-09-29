@@ -3,8 +3,6 @@ package dev.anye.mc.cores.render.element;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.logging.LogUtils;
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
-import dev.anye.core.math._Arc;
-import dev.anye.core.math._MathCDT;
 import dev.anye.mc.cores.render.Render2DHelper;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
@@ -53,14 +51,7 @@ public record RoundedRectBorderRenderState(
 		if (radius > 0) {
 			pose.pushMatrix();
 			Render2DHelper.border(vertexConsumer,pose,width,height,radius,borderColor);
-			pose.translate(radius,radius);
-			Render2DHelper.fan(vertexConsumer,pose,_Arc.c(180), _Arc.c(270),radius,0,borderColor);
-			pose.translate(width - radius - radius,0);
-			Render2DHelper.fan(vertexConsumer,pose,_Arc.c(270), _Arc.c(360),radius,0,borderColor);
-			pose.translate(0,height - radius - radius);
-			Render2DHelper.fan(vertexConsumer,pose, _Arc.c(0), _Arc.c(90),radius,0,borderColor);
-			pose.translate(- width + radius + radius,0);
-			Render2DHelper.fan(vertexConsumer,pose,_Arc.c(90), _Arc.c(180),radius,0,borderColor);
+			Render2DHelper.fan4(vertexConsumer,pose,radius,0,width - radius - radius, height - radius - radius,borderColor);
 			pose.popMatrix();
 		}
 		pose.popMatrix();

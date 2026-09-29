@@ -1,7 +1,6 @@
 package dev.anye.mc.cores.screen.widget;
 
 import dev.anye.core.debug._DeBug;
-import dev.anye.core.math._Math;
 import dev.anye.core.math._MathCDT;
 import dev.anye.mc.cores.render.GuiGraphicsHelper;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

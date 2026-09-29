@@ -3,10 +3,9 @@ package dev.anye.mc.cores.render.element;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.logging.LogUtils;
 import com.mojang.renderpearl.api.pipeline.RenderPipeline;
-import dev.anye.core.math._Arc;
-import dev.anye.core.math._MathCDT;
 import dev.anye.mc.cores.dt.FadeColorData;
 import dev.anye.mc.cores.dt.GlowData;
+import dev.anye.mc.cores.dt.Quad;
 import dev.anye.mc.cores.render.Render2DHelper;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
@@ -25,7 +24,7 @@ import javax.annotation.Nullable;
  * @param pose
  * @param width
  * @param height
- * @param radius
+ * @param radius 边框宽度/圆角半径
  * @param borderColor
  * @param scissorArea      裁剪区域
  * @param bounds           渲染边界
@@ -54,13 +53,13 @@ public record RoundedRectGlowDataBorderRenderState(
 		pose.pushMatrix();
 		pose.translate(x,y);
 		//实际边框 X
-		float borderX = glowData.outerGlowRange();
+		float outerBorderX = glowData.outerGlowRange();
 		//实际边框 Y
-		float borderY = glowData.outerGlowRange();
+		float outerBorderY = glowData.outerGlowRange();
 		//不含外发光的总体宽度
-		float w = width - borderX - borderX;
+		float w = width - outerBorderX - outerBorderX;
 		//不含外发光的总体高度
-		float h = height - borderY - borderY;
+		float h = height - outerBorderY - outerBorderY;
 
 		//不含外发光以及边框大小的宽度
 		float borderW = w - radius - radius;
@@ -69,11 +68,12 @@ public record RoundedRectGlowDataBorderRenderState(
 		//外发光
 		if (glowData.outerGlowRange() > 0){
 			pose.pushMatrix();
-			pose.translate(0,borderY + radius);
-			FadeColorData fade = glowData.outerGlowColor().lr();
+
 			//left
+			pose.translate(0,outerBorderY + radius);
+			FadeColorData fade = glowData.outerGlowColor().right();
 			Render2DHelper.rect(vertexConsumer,pose,glowData.outerGlowRange(),borderH, fade.leftTopColor(),fade.leftBottomColor(),fade.rightBottomColor(), fade.rightTopColor());
-			pose.translate(w + borderX,0);
+			pose.translate(w + outerBorderX,0);
 
 			//right
 			fade = glowData.outerGlowColor();
@@ -81,12 +81,12 @@ public record RoundedRectGlowDataBorderRenderState(
 			pose.popMatrix();
 
 			pose.pushMatrix();
-			pose.translate(borderX + radius,0);
+			pose.translate(outerBorderX + radius,0);
 
 			//top
 			fade = glowData.outerGlowColor().up();
 			Render2DHelper.rect(vertexConsumer,pose,borderW,glowData.innerGlowRange(),fade.leftTopColor(),fade.leftBottomColor(),fade.rightBottomColor(), fade.rightTopColor());
-			pose.translate(0,h + borderY);
+			pose.translate(0,h + outerBorderY);
 
 			//bottom
 			fade = glowData.outerGlowColor().down();
@@ -99,7 +99,7 @@ public record RoundedRectGlowDataBorderRenderState(
 		//边框
 		if (radius > 0) {
 			pose.pushMatrix();
-			pose.translate(borderX,borderY);
+			pose.translate(outerBorderX,outerBorderY);
 			Render2DHelper.border(vertexConsumer,pose,w,h,radius,borderColor);
 			Render2DHelper.fan4(vertexConsumer,pose,radius,0,borderW,borderH,borderColor);
 
@@ -115,12 +115,31 @@ public record RoundedRectGlowDataBorderRenderState(
 		}
 		//内发光
 		if (glowData.innerGlowRange() > 0){
-			float innerX = borderX + radius;
-			float innerY = borderY + radius;
+			float innerX = outerBorderX + radius;
+			float innerY = outerBorderY + radius;
+			float innerW = width - 2 * glowData().outerGlowRange() - 2 * radius;
+			float innerH = height - 2 * glowData().outerGlowRange() - 2 * radius;
 
-			float innerSpaceWidth = width - innerX * 2 - glowData.innerGlowRange() * 2;
-			float innerSpaceHeight = height - innerY * 2 - glowData.innerGlowRange() * 2;
 
+			float innerSpaceWidth = innerW - glowData.innerGlowRange() * 2;
+			float innerSpaceHeight = innerH - glowData.innerGlowRange() * 2;
+
+			pose.translate(innerX,innerY);
+			FadeColorData fade = glowData.innerGlowColor();
+			Render2DHelper.rect(vertexConsumer,pose,Quad.nomarlRightTrapezoid(innerH,glowData.innerGlowRange(),innerSpaceHeight, glowData().innerGlowRange()),fade);
+
+			fade = glowData.innerGlowColor().down();
+			Render2DHelper.rect(vertexConsumer,pose,Quad.nomarlDownTrapezoid(innerW,glowData.innerGlowRange(),innerSpaceWidth, glowData().innerGlowRange()),fade);
+			pose.pushMatrix();
+			pose.translate(0,innerH - glowData.innerGlowRange());
+			fade = glowData.innerGlowColor().up();
+			Render2DHelper.rect(vertexConsumer,pose,Quad.nomarlUpTrapezoid(innerSpaceWidth,glowData.innerGlowRange(),innerW, glowData().innerGlowRange()),fade);
+			pose.popMatrix();
+
+			pose.translate(innerW - glowData.innerGlowRange(),0);
+			fade = glowData.innerGlowColor().right();
+			Render2DHelper.rect(vertexConsumer,pose,Quad.nomarlLeftTrapezoid(innerSpaceHeight,glowData.innerGlowRange(),innerH, glowData().innerGlowRange()),fade);
+/*
 			pose.translate(innerX,innerY);
 			pose.pushMatrix();
 			//left
@@ -166,9 +185,8 @@ public record RoundedRectGlowDataBorderRenderState(
 			pose.rotate((float) _Arc.cc(90));
 			Render2DHelper.rect(vertexConsumer,pose, glowData().innerGlowRange(), glowData.innerGlowRange(),fade.tb());
 			pose.popMatrix();
-			pose.popMatrix();
+			pose.popMatrix();*/
 		}
-
 
 		pose.popMatrix();
 	}

@@ -5,7 +5,6 @@ import dev.anye.mc.cores.Cores;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
-import org.lwjgl.glfw.GLFW;
 
 public class KeyBinding {
 	public static final Identifier KEY_CATEGORY_RES = Identifier.fromNamespaceAndPath(Cores.MOD_ID, "cores");

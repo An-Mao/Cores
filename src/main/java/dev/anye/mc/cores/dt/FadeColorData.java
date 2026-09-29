@@ -25,7 +25,7 @@ public record FadeColorData(
 	 * </pre>
 	 * @return FadeColorData
 	 */
-	public FadeColorData lr(){
+	public FadeColorData right(){
 		return new FadeColorData(rightTopColor,rightBottomColor,
 				leftBottomColor,leftTopColor);
 	}

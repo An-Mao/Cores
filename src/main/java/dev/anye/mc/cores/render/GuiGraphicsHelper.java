@@ -2,8 +2,10 @@ package dev.anye.mc.cores.render;
 
 import dev.anye.core.color._ColorCDT;
 import dev.anye.core.math._Arc;
-import dev.anye.core.math._MathCDT;
-import dev.anye.mc.cores.render.element.*;
+import dev.anye.mc.cores.render.element.BorderRenderState;
+import dev.anye.mc.cores.render.element.RoundedRectGlowDataBorderRenderState;
+import dev.anye.mc.cores.render.element.SectorRenderState;
+import dev.anye.mc.cores.render.element.SectorXRenderState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
