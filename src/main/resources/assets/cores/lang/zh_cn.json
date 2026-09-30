@@ -35,5 +35,8 @@
   "screen.cores.settings.title": "设置",
   "screen.cores.settings.label.select_color": "选择配色方案",
   "screen.cores.settings.drop_down_select.color_scheme": "配色方案",
-  "screen.cores.settings.button.save": "保存"
+  "screen.cores.settings.button.save": "保存",
+  "screen.cores.settings.button.chang_background": "渲染背景",
+  "screen.cores.settings.button.chang_rounded": "渲染圆角",
+  "screen.cores.settings.button.chang_glow": "渲染发光"
 }

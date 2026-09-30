@@ -4,75 +4,51 @@ import dev.anye.core.math._Math;
 import dev.anye.mc.cores.render.GuiGraphicsHelper;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
+import org.jspecify.annotations.NonNull;
 
 public class SimpleLabel extends SimpleWidgetCore<SimpleLabel> {
-	private int drawX, drawY;
-	private boolean AutoWidth, AutoHeight;
+	private int drawX;
+	private int drawY;
+	private boolean autoWidth;
+	private boolean autoHeight;
 	private boolean centerText;
 
-	public SimpleLabel(int x, int y, int w, int h, Component pMessage, int borderColor, int fillColor, int textColor, boolean AutoWidth, boolean AutoHeight, boolean centerText) {
+	public SimpleLabel(int x, int y, int w, int h, Component pMessage) {
 		super(x, y, w, h, pMessage);
-
-		setAutoWidth(AutoWidth);
-		setAutoHeight(AutoHeight);
+		setAutoWidth(autoWidth);
+		setAutoHeight(autoHeight);
 		setCenterText(centerText);
-		setBorderUsualColor(borderColor);
-		setBorderHoverColor(borderColor);
-		setBackgroundHoverColor(fillColor);
-		setBackgroundUsualColor(fillColor);
-		setTextUsualColor(textColor);
-		setTextHoverColor(textColor);
-
+		setHoverColor(false);
 	}
 
-	public SimpleLabel(int x, int y, int w, int h, Component pMessage, boolean AutoWidth, boolean AutoHeight, boolean centerText) {
-		super(x, y, w, h, pMessage);
-		setAutoWidth(AutoWidth);
-		setAutoHeight(AutoHeight);
-		setCenterText(centerText);
-	}
-
-	public SimpleLabel(int x, int y, int w, int h, Component pMessage, int borderColor, int fillColor, int textColor, boolean AutoWidth, boolean AutoHeight) {
-		this(x, y, w, h, pMessage, borderColor, fillColor, textColor, AutoWidth, AutoHeight, false);
-	}
-
-	public SimpleLabel(int x, int y, int w, int h, Component pMessage, int borderColor, int fillColor, int textColor, boolean AutoWidth) {
-		this(x, y, w, h, pMessage, borderColor, fillColor, textColor, AutoWidth, false);
-
-	}
-
-	public SimpleLabel(int x, int y, int w, int h, Component pMessage, int borderColor, int fillColor, int textColor) {
-		this(x, y, w, h, pMessage, borderColor, fillColor, textColor, true);
-
-	}
 
 	@Override
-	public void setMessage(Component pMessage) {
-		super.setMessage(pMessage);
+	public void setMessage(@NonNull Component message) {
+		super.setMessage(message);
 		setAutoWidth(isAutoWidth());
 	}
 
 	public boolean isAutoWidth() {
-		return AutoWidth;
+		return autoWidth;
 	}
 
-	public SimpleLabel setAutoWidth(boolean AutoWidth) {
-		this.AutoWidth = AutoWidth;
-		if (this.AutoWidth) {
-			setWidth(font.width(getMessage()) + getRadius() * 2 + 10);
+	public SimpleLabel setAutoWidth(boolean autoWidth) {
+		this.autoWidth = autoWidth;
+		if (this.autoWidth) {
+			setWidth((int) (font.width(getMessage()) + borderRender.borderTotalWidth() * 2 + 10));
 			setCenterText(centerText);
 		}
 		return this;
 	}
 
 	public boolean isAutoHeight() {
-		return AutoHeight;
+		return autoHeight;
 	}
 
 	public SimpleLabel setAutoHeight(boolean autoHeight) {
-		this.AutoHeight = autoHeight;
-		if (this.AutoHeight) {
-			setHeight(font.lineHeight + getRadius() * 2 + 4);
+		this.autoHeight = autoHeight;
+		if (this.autoHeight) {
+			setHeight((int) (font.lineHeight + borderRender.borderTotalHeight() * 2 + 4));
 			setCenterText(centerText);
 		}
 		return this;
@@ -116,7 +92,7 @@ public class SimpleLabel extends SimpleWidgetCore<SimpleLabel> {
 	@Override
 	protected void renderContent(GuiGraphicsExtractor guiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
 		//guiGraphics.setColor(1.0f,1.0f,1.0f,1.0f);
-		boolean mouseOver = isMouseOver(pMouseX, pMouseY);
+		boolean mouseOver = hoverColor && isMouseOver(pMouseX, pMouseY);
 		int tc = mouseOver ? getTextHoverColor() : getTextUsualColor();
 		if (isCenterText()) {
 			guiGraphics.text(font, getMessage(), getDrawX() - _Math.half(font.width(getMessage())), getDrawY(), tc, false);

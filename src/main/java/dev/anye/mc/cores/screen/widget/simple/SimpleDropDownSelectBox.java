@@ -1,5 +1,6 @@
 package dev.anye.mc.cores.screen.widget.simple;
 
+import com.mojang.logging.LogUtils;
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.core.debug._DeBug;
 import dev.anye.core.math._Math;
@@ -11,23 +12,27 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3x2fStack;
+import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class SimpleDropDownSelectBox extends SimpleWidgetCore<SimpleDropDownSelectBox> {
+	private static final Logger LOGGER = LogUtils.getLogger();
 	private List<DT_ListBoxData> dataList;
 	private int nowSelectIndex = -1;
 	private boolean showList = false;
-	private int line,
-			lineHeight,
-			linePosY,
-			pages,
-			nowPage;
-	private int usualHeight, usualContentHeight;
-	private int backgroundSelectColor,
-			textSelectColor;
+	private int line;
+	private int lineHeight;
+	private int linePosY;
+	private int pages;
+	private int nowPage;
+	private int usualHeight;
+	private int usualContentHeight;
+//	private int backgroundSelectColor;
+//	private int textSelectColor;
 
 	public SimpleDropDownSelectBox(int x, int y, int w, int h, Component pMessage, DT_ListBoxData... data) {
 		this(x, y, w, h, pMessage, Arrays.asList(data));
@@ -77,7 +82,7 @@ public class SimpleDropDownSelectBox extends SimpleWidgetCore<SimpleDropDownSele
 	@Override
 	public SimpleDropDownSelectBox setRadius(int radius) {
 		super.setRadius(radius);
-		setUsualContentHeight(getUsualHeight() - 2 * radius);
+		setUsualContentHeight((int) (getUsualHeight() - 2 * borderRender.borderTotalHeight()));
 		setLine(line);
 		return self();
 	}
@@ -204,9 +209,9 @@ public class SimpleDropDownSelectBox extends SimpleWidgetCore<SimpleDropDownSele
 	}
 
 	@Override
-	public void onClick(MouseButtonEvent p_446284_, boolean p_434599_) {
-		super.onClick(p_446284_, p_434599_);
-		onClick(p_446284_.x(), p_446284_.y());
+	public void onClick(@NonNull MouseButtonEvent mouseButtonEvent, boolean doubleClick) {
+		super.onClick(mouseButtonEvent, doubleClick);
+		onClick(mouseButtonEvent.x(), mouseButtonEvent.y());
 	}
 
 	public void onClick(double pMouseX, double pMouseY) {
@@ -238,21 +243,19 @@ public class SimpleDropDownSelectBox extends SimpleWidgetCore<SimpleDropDownSele
 
 	@Override
 	public boolean mouseScrolled(double pMouseX, double pMouseY, double sx, double sy) {
-		if (showList) {
-			if (isInWidget(pMouseX, pMouseY)) {
-				if (sy < 0 && getNowPage() < pages) {
-					setNowPage(getNowPage() + 1);
-				} else if (sy > 0 && getNowPage() > 1) {
-					setNowPage(getNowPage() - 1);
-				}
-				return true;
+		if (showList && isInWidget(pMouseX, pMouseY)) {
+			LOGGER.debug("mouseScrolled");
+			if (sy < 0 && getNowPage() < pages) {
+				setNowPage(getNowPage() + 1);
+			} else if (sy > 0 && getNowPage() > 1) {
+				setNowPage(getNowPage() - 1);
 			}
+			return true;
 		}
 		return super.mouseScrolled(pMouseX, pMouseY, sx, sy);
-
 	}
 
-	@Override
+/*	@Override
 	protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
 		if (showList) {
 			Matrix3x2fStack poseStack = pGuiGraphics.pose();
@@ -263,7 +266,7 @@ public class SimpleDropDownSelectBox extends SimpleWidgetCore<SimpleDropDownSele
 			return;
 		}
 		super.extractWidgetRenderState(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
-	}
+	}*/
 
 	@Override
 	protected void renderContent(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -280,7 +283,12 @@ public class SimpleDropDownSelectBox extends SimpleWidgetCore<SimpleDropDownSele
 
 		int sx = getContentX() + 1;
 		int sy = getContentY();
+
+		//LOGGER.debug("{},{}",sx,sy);
+
 		guiGraphics.text(getFont(), Component.literal(FixStrWidth(c)), sx, sy + linePosY, getTextHoverColor(), false);
+
+
 		if (showList) {
 			for (int i = 0; i < line; i++) {
 				int lineH = (i + 1) * getUsualContentHeight();

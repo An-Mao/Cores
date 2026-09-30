@@ -1,4 +1,4 @@
-package dev.anye.mc.cores.am.gui;
+package dev.anye.mc.cores.screen;
 
 import dev.anye.mc.cores.screen.widget.simple.SimpleEditBox;
 import net.minecraft.client.gui.screens.Screen;

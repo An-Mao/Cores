@@ -2,10 +2,9 @@ package dev.anye.mc.cores.render;
 
 import dev.anye.core.color._ColorCDT;
 import dev.anye.core.math._Arc;
-import dev.anye.mc.cores.render.element.BorderRenderState;
-import dev.anye.mc.cores.render.element.RoundedRectGlowDataBorderRenderState;
-import dev.anye.mc.cores.render.element.SectorRenderState;
-import dev.anye.mc.cores.render.element.SectorXRenderState;
+import dev.anye.mc.cores.dt.FadeColorData;
+import dev.anye.mc.cores.dt.GlowData;
+import dev.anye.mc.cores.render.element.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -74,33 +73,30 @@ public final class GuiGraphicsHelper {
 		Matrix3x2fStack poseStack = guiGraphics.pose();
 		poseStack.pushMatrix();
 		//poseStack.translate(x,y);
-		guiGraphics.submitGuiElementRenderState(new RoundedRectGlowDataBorderRenderState(
+		/*guiGraphics.submitGuiElementRenderState(new RoundedRectGlowDataBorderRenderState(
 				poseStack,
 				x,y,
 				width,
 				height,
+				radius,borderColor,getBounds(x,y,width,height),getBounds(x,y,width,height)
+		));*/
+
+		guiGraphics.submitGuiElementRenderState(new RectRenderState(
+				RenderPipelines.GUI,
+				TextureSetup.noTexture(),
+				poseStack,
+				x + radius,
+				y + radius,
+				width - radius * 2,
+				height- radius * 2,
 				radius,
-				borderColor,
+				fillColor,
 				getBounds(x, y, width, height),
 				getBounds(x, y, width, height)
 		));
-
-//		guiGraphics.submitGuiElementRenderState(new RectRenderState(
-//				RenderPipelines.GUI,
-//				TextureSetup.noTexture(),
-//				poseStack,
-//				x + radius,
-//				y + radius,
-//				width - radius * 2,
-//				height- radius * 2,
-//				radius,
-//				fillColor,
-//				getBounds(x, y, width, height),
-//				getBounds(x, y, width, height)
-//		));
 		poseStack.popMatrix();
 
-		//RoundedBorder(guiGraphics, x, y, width, height, radius, borderColor);
+		RoundedBorder(guiGraphics, x, y, width, height, radius, borderColor);
 
 
 	}

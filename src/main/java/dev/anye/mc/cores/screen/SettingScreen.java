@@ -5,11 +5,11 @@ import dev.anye.mc.cores.Cores;
 import dev.anye.mc.cores.am.color.ColorConfig;
 import dev.anye.mc.cores.am.color.ColorSchemeRegister;
 import dev.anye.mc.cores.am.color.ColorSchemes;
-import dev.anye.mc.cores.am.gui.TestScreen;
 import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
 import dev.anye.mc.cores.screen.widget.simple.SimpleButton;
 import dev.anye.mc.cores.screen.widget.simple.SimpleDropDownSelectBox;
 import dev.anye.mc.cores.screen.widget.simple.SimpleLabel;
+import dev.anye.mc.cores.screen.widget.simple.SimpleWidgetCore;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -19,28 +19,74 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SettingScreen extends Screen {
+
 	SimpleDropDownSelectBox colorSelectBox;
 	SimpleButton saveButton;
 
 	public SettingScreen() {
-		super(Component.translatable("screen." + Cores.MOD_ID + ".settings.title"));
+		super(Component.translatable("screen.cores.settings.title"));
 	}
 
 	@Override
 	protected void init() {
 		super.init();
-		int x = this.width / 2;
-		int y = this.height / 2;
-		SimpleLabel label = new SimpleLabel(64, y - 8, 16, 16, Component.translatable("screen." + Cores.MOD_ID + ".settings.label.select_color"), true, false, true);
+		int centerX = this.width / 2;
+		int centerY = this.height / 2;
+
+		int ix = 10;
+		int iy = 10;
+		SimpleButton button = new SimpleButton(
+				ix, iy,
+				30, 20,
+				Component.translatable("screen.cores.settings.button.chang_background"),
+				true, false, true,
+				()->{
+					SimpleWidgetCore.setBackground();
+					this.minecraft.setScreenAndShow(new SettingScreen());
+				});
+		addRenderableWidget(button);
+		ix += button.getWidth() + 10;
+
+		button = new SimpleButton(
+				ix, iy,
+				30, 20,
+				Component.translatable("screen.cores.settings.button.chang_rounded"),
+				true, false, true,
+				()->{
+					SimpleWidgetCore.setRounded();
+					this.minecraft.setScreenAndShow(new SettingScreen());
+				});
+		addRenderableWidget(button);
+
+		ix += button.getWidth() + 10;
+
+		button = new SimpleButton(
+				ix, iy,
+				30, 20,
+				Component.translatable("screen.cores.settings.button.chang_glow"),
+				true, false, true,
+				()->{
+					SimpleWidgetCore.setGlow();
+					this.minecraft.setScreenAndShow(new SettingScreen());
+				});
+		addRenderableWidget(button);
+
+		ix = 10;
+		iy += 50;
+		SimpleLabel label = new SimpleLabel(ix, iy, 20, 20, Component.translatable("screen.cores.settings.label.select_color"))
+				.setAutoWidth(true).setCenterText(true);
 		addRenderableWidget(label);
-		saveButton = new SimpleButton(x - 32, this.height - 64, 64, 16, Component.translatable("screen." + Cores.MOD_ID + ".settings.button.save"), true, false, true, this::save);
-		addRenderableWidget(saveButton);
-		colorSelectBox = new SimpleDropDownSelectBox(label.getX() + label.getWidth() + 5, label.getY(), 80, 16, ColorSchemeRegister.getSchemeComponent(ColorSchemes.getGlobal()), getRegColor())
+		ix += label.getWidth() + 10;
+		colorSelectBox = new SimpleDropDownSelectBox(ix, iy, 80, 20, ColorSchemeRegister.getSchemeComponent(ColorSchemes.getGlobal()), getRegColor())
 				.setRadius(2);
 		addRenderableWidget(colorSelectBox);
+
+
+		saveButton = new SimpleButton(centerX, this.height - 35, 64, 20, Component.translatable("screen.cores.settings.button.save"), true, false, true, this::save);
+		addRenderableWidget(saveButton);
 		//addRenderableWidget(new SimpleEditBox(100,16,128,20,Component.empty()));
-		SimpleButton test = new SimpleButton(10,10,50,24,Component.literal("Test"),SettingScreen::openTest);
-		addRenderableWidget(test);
+//		SimpleButton test = new SimpleButton(10,10,50,24,Component.literal("Test"),SettingScreen::openTest);
+//		addRenderableWidget(test);
 	}
 
 	public static void openTest() {

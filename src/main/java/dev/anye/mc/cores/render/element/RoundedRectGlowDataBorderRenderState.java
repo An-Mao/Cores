@@ -126,19 +126,19 @@ public record RoundedRectGlowDataBorderRenderState(
 
 			pose.translate(innerX,innerY);
 			FadeColorData fade = glowData.innerGlowColor();
-			Render2DHelper.rect(vertexConsumer,pose,Quad.nomarlRightTrapezoid(innerH,glowData.innerGlowRange(),innerSpaceHeight, glowData().innerGlowRange()),fade);
+			Render2DHelper.rect(vertexConsumer,pose,Quad.normalRightTrapezoid(innerH,glowData.innerGlowRange(),innerSpaceHeight, glowData().innerGlowRange()),fade);
 
 			fade = glowData.innerGlowColor().down();
-			Render2DHelper.rect(vertexConsumer,pose,Quad.nomarlDownTrapezoid(innerW,glowData.innerGlowRange(),innerSpaceWidth, glowData().innerGlowRange()),fade);
+			Render2DHelper.rect(vertexConsumer,pose,Quad.normalDownTrapezoid(innerW,glowData.innerGlowRange(),innerSpaceWidth, glowData().innerGlowRange()),fade);
 			pose.pushMatrix();
 			pose.translate(0,innerH - glowData.innerGlowRange());
 			fade = glowData.innerGlowColor().up();
-			Render2DHelper.rect(vertexConsumer,pose,Quad.nomarlUpTrapezoid(innerSpaceWidth,glowData.innerGlowRange(),innerW, glowData().innerGlowRange()),fade);
+			Render2DHelper.rect(vertexConsumer,pose,Quad.normalUpTrapezoid(innerSpaceWidth,glowData.innerGlowRange(),innerW, glowData().innerGlowRange()),fade);
 			pose.popMatrix();
 
 			pose.translate(innerW - glowData.innerGlowRange(),0);
 			fade = glowData.innerGlowColor().right();
-			Render2DHelper.rect(vertexConsumer,pose,Quad.nomarlLeftTrapezoid(innerSpaceHeight,glowData.innerGlowRange(),innerH, glowData().innerGlowRange()),fade);
+			Render2DHelper.rect(vertexConsumer,pose,Quad.normalLeftTrapezoid(innerSpaceHeight,glowData.innerGlowRange(),innerH, glowData().innerGlowRange()),fade);
 /*
 			pose.translate(innerX,innerY);
 			pose.pushMatrix();

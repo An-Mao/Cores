@@ -31,6 +31,8 @@ public abstract class RenderWidgetCore<T extends RenderWidgetCore<T>> extends Ab
 	protected int backgroundHoverColor;
 	protected int backgroundSelectColor;
 
+	protected boolean hoverColor;
+
 	//过小的z轴可能导致元素在某些元素的下面
 	protected int layerZ = 1000;
 
@@ -45,6 +47,12 @@ public abstract class RenderWidgetCore<T extends RenderWidgetCore<T>> extends Ab
 		super(x, y, w, h, message);
 		setFont(font);
 		setColorScheme(ColorSchemes.getGlobal());
+		setHoverColor(true);
+	}
+
+	public T setHoverColor(boolean hoverColor) {
+		this.hoverColor = hoverColor;
+		return self();
 	}
 
 	/**

@@ -35,5 +35,8 @@
   "screen.cores.settings.title": "Setting",
   "screen.cores.settings.label.select_color": "Select Color Scheme",
   "screen.cores.settings.drop_down_select.color_scheme": "Color Scheme",
-  "screen.cores.settings.button.save": "Save"
+  "screen.cores.settings.button.save": "Save",
+  "screen.cores.settings.button.chang_background": "Background",
+  "screen.cores.settings.button.chang_rounded": "Rounded",
+  "screen.cores.settings.button.chang_glow": "Glow"
 }

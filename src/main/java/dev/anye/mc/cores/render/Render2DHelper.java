@@ -1,14 +1,25 @@
 package dev.anye.mc.cores.render;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.logging.LogUtils;
 import dev.anye.core.math._Arc;
 import dev.anye.mc.cores.dt.FadeColorData;
 import dev.anye.mc.cores.dt.Quad;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.util.Mth;
 import org.joml.Matrix3x2fStack;
+import org.slf4j.Logger;
 
 public final class Render2DHelper {
+	private static final Logger LOGGER = LogUtils.getLogger();
 	private Render2DHelper(){}
+	public static ScreenRectangle getBounds(int x, int y, int w, int h) {
+		return new ScreenRectangle(x, y, w, h);
+	}
+
+	public static ScreenRectangle getBounds(int x, int y, int r) {
+		return new ScreenRectangle(x - r, y - r, r + r, r + r);
+	}
 
 	/**
 	 * 依靠w，h绘制四个角落
