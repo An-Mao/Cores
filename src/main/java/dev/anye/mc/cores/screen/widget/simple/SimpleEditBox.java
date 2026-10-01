@@ -413,7 +413,7 @@ public class SimpleEditBox extends SimpleWidgetCore<SimpleEditBox> {
 			String displayed = this.font.plainSubstrByWidth(this.value.substring(this.displayPos), this.getInnerWidth());
 			boolean cursorOnScreen = relCursorPos >= 0 && relCursorPos <= displayed.length();
 			boolean showCursor = this.isFocused() && TextCursorUtils.isCursorVisible(Util.getMillis() - this.focusedTime) && cursorOnScreen;
-			int drawX = this.textX;
+			int drawX = (int) this.borderRender.cX();
 			int relHighlightPos = Mth.clamp(this.highlightPos - this.displayPos, 0, displayed.length());
 			if (!displayed.isEmpty()) {
 				String half = cursorOnScreen ? displayed.substring(0, relCursorPos) : displayed;

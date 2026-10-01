@@ -52,7 +52,7 @@ public class ColorSchemeRegister {
 			String k = path.getFileName().toString();
 			new ColorSchemeIO(k).read(csi -> {
 				String key = k.substring(0, k.length() - 5);
-				if (csi != null && !COLOR_SCHEME_REGISTER.getRegistry().containsKey(Identifier.tryBuild(Cores.MOD_ID, key)))
+				if (csi != null && !COLOR_SCHEME_REGISTER.registry().containsKey(Identifier.fromNamespaceAndPath(Cores.MOD_ID, key)))
 					reg(key, () -> new ColorSchemeConfigLoad(csi));
 			});
 		});

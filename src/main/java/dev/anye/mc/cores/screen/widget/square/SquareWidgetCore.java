@@ -16,7 +16,7 @@ public abstract class SquareWidgetCore<T extends SquareWidgetCore<T>> extends Re
 	}
 
 	protected void drawSquare(GuiGraphicsExtractor guiGraphics, DT_XYWH dt_xywh, int color) {
-		drawSquare(guiGraphics, dt_xywh.x(), dt_xywh.y(), dt_xywh.width(), dt_xywh.height(), color);
+		drawSquare(guiGraphics, dt_xywh.x(), dt_xywh.y(), dt_xywh.w(), dt_xywh.height(), color);
 	}
 
 	protected void drawSquare(GuiGraphicsExtractor guiGraphics, int color) {

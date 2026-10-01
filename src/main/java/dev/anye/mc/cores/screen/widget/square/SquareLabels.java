@@ -16,7 +16,7 @@ public class SquareLabels extends SquareWidgetCore<SquareLabels> {
 	}
 
 	public SquareLabels(DT_XYWH dt_xywh, Component pMessage, int color, int textColor) {
-		this(dt_xywh.x(), dt_xywh.y(), dt_xywh.width(), dt_xywh.height(), pMessage, color, textColor);
+		this(dt_xywh.x(), dt_xywh.y(), dt_xywh.w(), dt_xywh.height(), pMessage, color, textColor);
 	}
 
 	public void setDx(int dx) {

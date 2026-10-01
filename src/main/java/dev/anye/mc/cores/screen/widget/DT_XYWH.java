@@ -1,4 +1,6 @@
 package dev.anye.mc.cores.screen.widget;
 
-public record DT_XYWH(int x, int y, int width, int height) {
+import dev.anye.core.dt.ITwoDimensionalI;
+
+public record DT_XYWH(int x, int y, int w, int h) implements ITwoDimensionalI {
 }

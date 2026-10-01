@@ -91,6 +91,19 @@ public record FadeColorData(
 	}
 
 
+	public static FadeColorData withColor(int color, float intensity, boolean alpha) {
+		int c = _ColorSupport.fade(color, intensity, alpha);
+		int e = c & 0x00FFFFFF;
+		return new FadeColorData(c,c,e,e);
+	}
+
+	public static FadeColorData withColor(int color, float intensity) {
+		return withColor(color, intensity,false);
+	}
+
+	public static FadeColorData withColor(int color) {
+		return withColor(color, 2F);
+	}
 
 	public static FadeColorData create(int color){
 		return new FadeColorData(color,color,color,color);

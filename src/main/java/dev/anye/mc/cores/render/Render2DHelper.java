@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.logging.LogUtils;
 import dev.anye.core.math._Arc;
 import dev.anye.mc.cores.dt.FadeColorData;
+import dev.anye.mc.cores.dt.IVertexWith2DPose;
 import dev.anye.mc.cores.dt.Quad;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.util.Mth;
@@ -13,17 +14,17 @@ import org.slf4j.Logger;
 public final class Render2DHelper {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private Render2DHelper(){}
+
+
 	public static ScreenRectangle getBounds(int x, int y, int w, int h) {
 		return new ScreenRectangle(x, y, w, h);
 	}
-
 	public static ScreenRectangle getBounds(int x, int y, int r) {
 		return new ScreenRectangle(x - r, y - r, r + r, r + r);
 	}
 
 	/**
 	 * 依靠w，h绘制四个角落
-	 *
 	 * <pre>
 	 *     绘制顺序
 	 *     1 - 4
@@ -280,7 +281,6 @@ public final class Render2DHelper {
 	 * @param radius 半径
 	 */
 	public static void fan(VertexConsumer vertexConsumer, Matrix3x2fStack pose, double startArc, double endArc, float radius, int color){
-		pose.pushMatrix();
 		double arc = endArc - startArc;
 		vertexConsumer.addVertexWith2DPose(pose, 0, 0).setColor(color);
 		int segments = (int) Math.ceil(Math.abs(arc) / _Arc.ARC);
@@ -291,14 +291,15 @@ public final class Render2DHelper {
 			float y = Mth.sin(currentArc) * radius;
 			vertexConsumer.addVertexWith2DPose(pose, x, y).setColor(color);
 		}
-		pose.popMatrix();
 	}
 
 	/**
+	 * 绘制无四角边框
+	 * <pre>
 	 * 1 —— 4
 	 * |    |
 	 * 2 —— 3
-	 * 绘制无四角边框
+	 * </pre>
 	 * @param vertexConsumer 顶点缓存
 	 * @param pose 矩阵
 	 * @param width 宽度
@@ -307,7 +308,6 @@ public final class Render2DHelper {
 	 * @param color 颜色
 	 */
 	public static void border(VertexConsumer vertexConsumer, Matrix3x2fStack pose,float width,float height,float size,int color){
-		pose.pushMatrix();
 		// Top border
 		vertexConsumer.addVertexWith2DPose(pose, size, 0).setColor(color);
 		vertexConsumer.addVertexWith2DPose(pose, size, size).setColor(color);
@@ -328,7 +328,6 @@ public final class Render2DHelper {
 		vertexConsumer.addVertexWith2DPose(pose, width - size, height - size).setColor(color);
 		vertexConsumer.addVertexWith2DPose(pose, width, height - size).setColor(color);
 		vertexConsumer.addVertexWith2DPose(pose, width, size).setColor(color);
-		pose.popMatrix();
 	}
 
 	/**
@@ -341,14 +340,6 @@ public final class Render2DHelper {
 	 */
 	public static void rect(VertexConsumer vertexConsumer, Matrix3x2fStack pose,float width,float height,int color){
 		rect(vertexConsumer,pose,width,height,color,color,color,color);
-		/*
-		pose.pushMatrix();
-		vertexConsumer.addVertexWith2DPose(pose, 0, 0).setColor(color);
-		vertexConsumer.addVertexWith2DPose(pose, 0, height).setColor(color);
-		vertexConsumer.addVertexWith2DPose(pose, width, height).setColor(color);
-		vertexConsumer.addVertexWith2DPose(pose, width, 0).setColor(color);
-		pose.popMatrix();
-		*/
 	}
 	/**
 	 * (逆时针)绘制渐变矩形
@@ -369,12 +360,10 @@ public final class Render2DHelper {
 	public static void rect(VertexConsumer vertexConsumer, Matrix3x2fStack pose,
 							float width,float height,
 							int leftTopColor,int leftBottomColor,int rightBottomColor,int rightTopColor){
-		pose.pushMatrix();
 		vertexConsumer.addVertexWith2DPose(pose, 0, 0).setColor(leftTopColor);
 		vertexConsumer.addVertexWith2DPose(pose, 0, height).setColor(leftBottomColor);
 		vertexConsumer.addVertexWith2DPose(pose, width, height).setColor(rightBottomColor);
 		vertexConsumer.addVertexWith2DPose(pose, width, 0).setColor(rightTopColor);
-		pose.popMatrix();
 	}
 
 
@@ -393,16 +382,11 @@ public final class Render2DHelper {
 	public static void rect(VertexConsumer vertexConsumer, Matrix3x2fStack pose,
 							Quad quad,
 							FadeColorData color){
-		pose.pushMatrix();
 		vertexConsumer.addVertexWith2DPose(pose, quad.leftTopX(), quad.leftTopY()).setColor(color.leftTopColor());
 		vertexConsumer.addVertexWith2DPose(pose, quad.leftBottomX(), quad.leftBottomY()).setColor(color.leftBottomColor());
 		vertexConsumer.addVertexWith2DPose(pose, quad.rightBottomX(), quad.rightBottomY()).setColor(color.rightBottomColor());
 		vertexConsumer.addVertexWith2DPose(pose, quad.rightTopX(), quad.rightTopY()).setColor(color.rightTopColor());
-		pose.popMatrix();
 	}
-
-
-
 
 
 	/**
@@ -421,11 +405,27 @@ public final class Render2DHelper {
 	public static void rect(VertexConsumer vertexConsumer, Matrix3x2fStack pose,
 							float width,float height,
 							FadeColorData color){
-		pose.pushMatrix();
 		vertexConsumer.addVertexWith2DPose(pose, 0, 0).setColor(color.leftTopColor());
 		vertexConsumer.addVertexWith2DPose(pose, 0, height).setColor(color.leftBottomColor());
 		vertexConsumer.addVertexWith2DPose(pose, width, height).setColor(color.rightBottomColor());
 		vertexConsumer.addVertexWith2DPose(pose, width, 0).setColor(color.rightTopColor());
-		pose.popMatrix();
+
+
 	}
+	public static void rect(IVertexWith2DPose vertex,
+							float width, float height,
+							FadeColorData color){
+		vertex.addVertex(0, 0).setColor(color.leftTopColor());
+		vertex.addVertex(0, height).setColor(color.leftBottomColor());
+		vertex.addVertex(width, height).setColor(color.rightBottomColor());
+		vertex.addVertex(width, 0).setColor(color.rightTopColor());
+
+
+
+
+	}
+
+
+
+
 }

@@ -1,18 +1,13 @@
 package dev.anye.mc.cores.am.color.scheme;
 
+import dev.anye.core.color._StateColors;
 import dev.anye.core.color.scheme._ColorScheme;
 
-public class AmberBlaze extends _ColorScheme {
-	@Override
-	public void pushColor() {
-		Color c = new Color(0xFFFFB300, 0xFFFFA000, 0xFFFF8F00);
-		addColor(BORDER, c);
-		addColor(ELEMENT_BORDER, c);
-		c = new Color(0xFFFFF3E0, 0x66FFCC80, 0x4DFFB74D);
-		addColor(BACKGROUND, c);
-		addColor(ELEMENT_BACKGROUND, c);
-		c = new Color(0xFF4E342E, 0x994E342E, 0xCC4E342E);
-		addColor(TEXT, c);
-		addColor(ELEMENT_TEXT, c);
+public final class AmberBlaze extends _ColorScheme {
+	public AmberBlaze() {
+		super(
+				new _StateColors(0xFFFFB300, 0xFFFFA000, 0xFFFF8F00),
+				new _StateColors(0xFF4E342E, 0x994E342E, 0xCC4E342E),
+				new _StateColors(0xFFFFF3E0, 0x66FFCC80, 0x4DFFB74D));
 	}
 }

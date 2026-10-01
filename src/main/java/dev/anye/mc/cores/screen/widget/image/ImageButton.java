@@ -20,7 +20,7 @@ public class ImageButton extends AbstractWidget {
 
 	//private ToolTip tip;
 	public ImageButton(DT_ImageInfo imageInfo, DT_XYWH xywh, Component pMessage, OnPress onPress) {
-		this(imageInfo, xywh.x(), xywh.y(), xywh.width(), xywh.height(), pMessage, onPress);
+		this(imageInfo, xywh.x(), xywh.y(), xywh.w(), xywh.height(), pMessage, onPress);
 	}
 
 	public ImageButton(DT_ImageInfo imageInfo, int pX, int pY, int pWidth, int pHeight, Component pMessage, OnPress onPress) {

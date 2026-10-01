@@ -40,7 +40,7 @@ public record RoundedRectGlowDataBorderRenderState(
 	public RoundedRectGlowDataBorderRenderState(
 			Matrix3x2fStack pose, float x, float y,float width, float height, float radius, int borderColor,
 			@Nullable ScreenRectangle scissorArea, @Nullable ScreenRectangle bounds) {
-		this(RenderPipelines.GUI, TextureSetup.noTexture(), pose,x,y, width, height, radius, borderColor, GlowData.Builder().setIntensity(2).setColor(borderColor).build(), scissorArea, bounds);
+		this(RenderPipelines.GUI, TextureSetup.noTexture(), pose,x,y, width, height, radius, borderColor, new GlowData().setIntensity(2).setColor(borderColor), scissorArea, bounds);
 	}
 
 
@@ -72,12 +72,12 @@ public record RoundedRectGlowDataBorderRenderState(
 			//left
 			pose.translate(0,outerBorderY + radius);
 			FadeColorData fade = glowData.outerGlowColor().right();
-			Render2DHelper.rect(vertexConsumer,pose,glowData.outerGlowRange(),borderH, fade.leftTopColor(),fade.leftBottomColor(),fade.rightBottomColor(), fade.rightTopColor());
+			Render2DHelper.rect(vertexConsumer,pose,glowData.outerGlowRange(),borderH, fade);
 			pose.translate(w + outerBorderX,0);
 
 			//right
 			fade = glowData.outerGlowColor();
-			Render2DHelper.rect(vertexConsumer,pose,glowData.outerGlowRange(),borderH, fade.leftTopColor(),fade.leftBottomColor(),fade.rightBottomColor(), fade.rightTopColor());
+			Render2DHelper.rect(vertexConsumer,pose,glowData.outerGlowRange(),borderH, fade);
 			pose.popMatrix();
 
 			pose.pushMatrix();
@@ -85,12 +85,12 @@ public record RoundedRectGlowDataBorderRenderState(
 
 			//top
 			fade = glowData.outerGlowColor().up();
-			Render2DHelper.rect(vertexConsumer,pose,borderW,glowData.innerGlowRange(),fade.leftTopColor(),fade.leftBottomColor(),fade.rightBottomColor(), fade.rightTopColor());
+			Render2DHelper.rect(vertexConsumer,pose,borderW,glowData.innerGlowRange(),fade);
 			pose.translate(0,h + outerBorderY);
 
 			//bottom
 			fade = glowData.outerGlowColor().down();
-			Render2DHelper.rect(vertexConsumer,pose,borderW,glowData.outerGlowRange(),fade.leftTopColor(),fade.leftBottomColor(),fade.rightBottomColor(), fade.rightTopColor());
+			Render2DHelper.rect(vertexConsumer,pose,borderW,glowData.outerGlowRange(),fade);
 			pose.popMatrix();
 
 			fade = glowData.outerGlowColor().up();

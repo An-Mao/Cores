@@ -3,7 +3,7 @@ package dev.anye.mc.cores.screen.widget.square;
 import dev.anye.core.color._ColorCDT;
 import dev.anye.core.debug._DeBug;
 import dev.anye.mc.cores.render.GuiGraphicsHelper;
-import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
+import dev.anye.mc.cores.screen.widget.SimpleListBoxData;
 import dev.anye.mc.cores.screen.widget.DT_XYWHUV;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -14,7 +14,7 @@ import org.joml.Matrix3x2fStack;
 import java.util.List;
 
 public class SquareListBox extends SquareWidgetCore<SquareListBox> {
-	private List<DT_ListBoxData> data;
+	private List<SimpleListBoxData> data;
 	private int dataSize;
 	private int line, row, index, startIndex;
 	private int elementalWidth, elementalHeight;
@@ -23,7 +23,7 @@ public class SquareListBox extends SquareWidgetCore<SquareListBox> {
 	private int bgColor, textSelectColor, textColor;
 	private int left = 0, top = 0, strX, strY;
 
-	public SquareListBox(int x, int y, int w, int h, int elementalWidth, int elementalHeight, Component pMessage, List<DT_ListBoxData> data) {
+	public SquareListBox(int x, int y, int w, int h, int elementalWidth, int elementalHeight, Component pMessage, List<SimpleListBoxData> data) {
 		super(x, y, w, h, pMessage);
 		this.data = data;
 		this.dataSize = this.data.size();
@@ -31,14 +31,14 @@ public class SquareListBox extends SquareWidgetCore<SquareListBox> {
 		this.elementalHeight = elementalHeight;
 		this.index = -1;
 		this.startIndex = 0;
-		this.bgColor = _ColorCDT.black;
-		this.textColor = _ColorCDT.white;
-		this.textSelectColor = _ColorCDT.yellow;
+		this.bgColor = _ColorCDT.BLACK;
+		this.textColor = _ColorCDT.WHITE;
+		this.textSelectColor = _ColorCDT.YELLOW;
 		resetAutoSpace();
 		setStrY();
 	}
 
-	public void setData(List<DT_ListBoxData> data) {
+	public void setData(List<SimpleListBoxData> data) {
 		this.data = data;
 		this.dataSize = this.data.size();
 		this.index = -1;
@@ -207,7 +207,7 @@ public class SquareListBox extends SquareWidgetCore<SquareListBox> {
 							bgc = backgroundHoverColor;
 							tc = textSelectColor;
 							idex = ni;
-							GuiGraphicsHelper.renderTooltip(guiGraphics, font, getData(ni).getTooltip(), mouseX, mouseY);
+							GuiGraphicsHelper.renderTooltip(guiGraphics, font, getData(ni).tooltip(), mouseX, mouseY);
 						}
 						drawSquare(guiGraphics, dx, dy, elementalWidth, elementalHeight, bgc);
 						drawString(guiGraphics, dx, dy + strY, tc, FixStrWidth(getDataComponent(ni)));
@@ -221,7 +221,7 @@ public class SquareListBox extends SquareWidgetCore<SquareListBox> {
 		poseStack.popMatrix();
 	}
 
-	public DT_ListBoxData getData(int index) {
+	public SimpleListBoxData getData(int index) {
 		if (index < this.data.size()) {
 			return this.data.get(index);
 		}
@@ -230,9 +230,9 @@ public class SquareListBox extends SquareWidgetCore<SquareListBox> {
 	}
 
 	public Component getDataComponent(int index) {
-		DT_ListBoxData d = getData(index);
+		SimpleListBoxData d = getData(index);
 		if (d != null) {
-			return d.getComponent();
+			return d.name();
 		}
 		_DeBug.ThrowError("error data");
 		return Component.literal("Error :: Null");
@@ -266,9 +266,9 @@ public class SquareListBox extends SquareWidgetCore<SquareListBox> {
 
 	public void onClick(double pMouseX, double pMouseY) {
 		if (isMouseOver(pMouseX, pMouseY) && index >= 0) {
-			DT_ListBoxData d = getData(index);
+			SimpleListBoxData d = getData(index);
 			if (d != null) {
-				d.OnPress(d.getValue());
+				d.onPress(d.value());
 			}
 		}
 	}

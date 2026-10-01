@@ -20,7 +20,7 @@ import java.util.List;
 
 public class DropDownListBox extends DropDownListBoxCore {
 	private final DT_XYWH dt_xywh;
-	private List<DT_ListBoxData> dataList;
+	private List<SimpleListBoxData> dataList;
 	private final Component msg;
 	private int nowSelectIndex = -1;
 	private boolean showList = false;
@@ -28,26 +28,26 @@ public class DropDownListBox extends DropDownListBoxCore {
 	private int pages, nowPage;
 	private int layerZ = 300;
 
-	public DropDownListBox(int x, int y, int w, int h, Component pMessage, DT_ListBoxData... data) {
+	public DropDownListBox(int x, int y, int w, int h, Component pMessage, SimpleListBoxData... data) {
 		this(x, y, w, h, pMessage, Arrays.asList(data));
 	}
 
-	public DropDownListBox(int x, int y, int w, int h, Component pMessage, List<DT_ListBoxData> data) {
+	public DropDownListBox(int x, int y, int w, int h, Component pMessage, List<SimpleListBoxData> data) {
 		super(x, y, w, h, pMessage);
 		dt_xywh = new DT_XYWH(x, y, w, h);
 		this.texture = null;
-		setTextColor(_ColorCDT.black, _ColorCDT.black, _ColorCDT.blue);
-		setBgColor(Color.LIGHT_GRAY.getRGB(), _ColorCDT.white, Color.GRAY.getRGB());
+		setTextColor(_ColorCDT.BLACK, _ColorCDT.BLACK, _ColorCDT.BLUE);
+		setBgColor(Color.LIGHT_GRAY.getRGB(), _ColorCDT.WHITE, Color.GRAY.getRGB());
 		this.dataList = data;
 		this.msg = pMessage;
 		setLine(7);
 	}
 
-	public void setDataList(DT_ListBoxData... data) {
+	public void setDataList(SimpleListBoxData... data) {
 		setDataList(Arrays.asList(data));
 	}
 
-	public void setDataList(List<DT_ListBoxData> dataList) {
+	public void setDataList(List<SimpleListBoxData> dataList) {
 		nowPage = 1;
 		nowSelectIndex = -1;
 		this.dataList = dataList;
@@ -75,42 +75,42 @@ public class DropDownListBox extends DropDownListBoxCore {
 		return n;
 	}
 
-	public List<DT_ListBoxData> getDataList() {
+	public List<SimpleListBoxData> getDataList() {
 		return dataList;
 	}
 
 	public Component getSelectComponent() {
-		DT_ListBoxData dropDownListBoxData = getSelectData();
+		SimpleListBoxData dropDownListBoxData = getSelectData();
 		if (dropDownListBoxData != null) {
-			return dropDownListBoxData.getComponent();
+			return dropDownListBoxData.name();
 		}
 		return Component.literal("---NULL---");
 	}
 
 	public Component getComponent(int index) {
-		DT_ListBoxData dropDownListBoxData = getData(index);
+		SimpleListBoxData dropDownListBoxData = getData(index);
 		if (dropDownListBoxData != null) {
-			return dropDownListBoxData.getComponent();
+			return dropDownListBoxData.name();
 		}
 		return Component.literal("---NULL---");
 	}
 
 	public List<ClientTooltipComponent> getDataTooltip(int index) {
-		DT_ListBoxData dropDownListBoxData = getData(index);
+		SimpleListBoxData dropDownListBoxData = getData(index);
 		if (dropDownListBoxData != null) {
-			return dropDownListBoxData.getTooltip();
+			return dropDownListBoxData.tooltip();
 		}
 		return List.of(ClientTooltipComponent.create(Component.literal("---NULL---").getVisualOrderText()));
 	}
 
-	public DT_ListBoxData getSelectData() {
+	public SimpleListBoxData getSelectData() {
 		if (nowSelectIndex >= 0 && nowSelectIndex < dataList.size()) {
 			return dataList.get(nowSelectIndex);
 		}
 		return null;
 	}
 
-	public DT_ListBoxData getData(int index) {
+	public SimpleListBoxData getData(int index) {
 		int i = (nowPage - 1) * line + index;
 		if (i >= 0 && i < dataList.size()) {
 			return dataList.get(i);
@@ -123,7 +123,7 @@ public class DropDownListBox extends DropDownListBoxCore {
 			_DeBug.ThrowError("Error Select");
 			return null;
 		} else {
-			return dataList.get(nowSelectIndex).getValue();
+			return dataList.get(nowSelectIndex).value();
 		}
 	}
 
@@ -211,9 +211,9 @@ public class DropDownListBox extends DropDownListBoxCore {
 		if (i > 0) {
 			nowSelectIndex = i - 1;
 			nowSelectIndex += (nowPage - 1) * line;
-			DT_ListBoxData dropDownListBoxData = getSelectData();
+			SimpleListBoxData dropDownListBoxData = getSelectData();
 			if (dropDownListBoxData != null) {
-				dropDownListBoxData.OnPress(getSelectValue());
+				dropDownListBoxData.onPress(getSelectValue());
 			}
 		}
 	}

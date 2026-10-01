@@ -38,5 +38,7 @@
   "screen.cores.settings.button.save": "保存",
   "screen.cores.settings.button.chang_background": "渲染背景",
   "screen.cores.settings.button.chang_rounded": "渲染圆角",
-  "screen.cores.settings.button.chang_glow": "渲染发光"
+  "screen.cores.settings.button.chang_glow": "渲染发光",
+  "screen.cores.settings.button.inner_glow": "内发光",
+  "screen.cores.settings.button.outer_glow": "外发光"
 }

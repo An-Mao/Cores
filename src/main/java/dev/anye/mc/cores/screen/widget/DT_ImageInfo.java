@@ -4,9 +4,12 @@ import net.minecraft.resources.Identifier;
 
 public class DT_ImageInfo {
 	public final Identifier image;
-	public final int imageWidth, imageHeight;
-	public final int elementWidth, elementHeight;
-	public final int u, v;
+	public final int imageWidth;
+	public final int imageHeight;
+	public final int elementWidth;
+	public final int elementHeight;
+	public final int u;
+	public final int v;
 
 	public DT_ImageInfo(Identifier image) {
 		this(image, 96, 32, 32, 32);

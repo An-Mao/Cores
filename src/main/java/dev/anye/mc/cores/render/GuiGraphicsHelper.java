@@ -76,9 +76,9 @@ public final class GuiGraphicsHelper {
 		/*guiGraphics.submitGuiElementRenderState(new RoundedRectGlowDataBorderRenderState(
 				poseStack,
 				x,y,
-				width,
+				w,
 				height,
-				radius,borderColor,getBounds(x,y,width,height),getBounds(x,y,width,height)
+				radius,borderColor,getBounds(x,y,w,height),getBounds(x,y,w,height)
 		));*/
 
 		guiGraphics.submitGuiElementRenderState(new RectRenderState(
@@ -156,7 +156,7 @@ public final class GuiGraphicsHelper {
 
 
 	public static void DrawString(GuiGraphicsExtractor guiGraphics, String str, int x, int y) {
-		DrawString(guiGraphics, Minecraft.getInstance().font, str, x, y, _ColorCDT.black);
+		DrawString(guiGraphics, Minecraft.getInstance().font, str, x, y, _ColorCDT.BLACK);
 	}
 
 	public static void DrawString(GuiGraphicsExtractor guiGraphics, Font font, String str, int x, int y, int color) {
@@ -176,7 +176,7 @@ public final class GuiGraphicsHelper {
 	}
 
 	public void DrawString(GuiGraphicsExtractor guiGraphics, int x, int y, Component component) {
-		DrawString(guiGraphics, Minecraft.getInstance().font, x, y, _ColorCDT.black, false, component);
+		DrawString(guiGraphics, Minecraft.getInstance().font, x, y, _ColorCDT.BLACK, false, component);
 	}
 
 	public static Vector2ic positionTooltip(int screenWidth, int screenHeight, int mouseX, int mouseY, int tooltipWidth, int tooltipHeight) {

@@ -12,10 +12,10 @@ public class SimpleButton extends SimpleLabel {
 		this(x, y, w, h, pMessage, true, false, true, onPress);
 	}
 
-	public SimpleButton(int x, int y, int w, int h, Component pMessage, boolean AutoWidth, boolean AutoHeight, boolean centerText, OnPress onPress) {
+	public SimpleButton(int x, int y, int w, int h, Component pMessage, boolean autoWidth, boolean autoHeight, boolean centerText, OnPress onPress) {
 		super(x, y, w, h, pMessage);
-		setAutoWidth(AutoWidth);
-		setAutoHeight(AutoHeight);
+		setAutoWidth(autoWidth);
+		setAutoHeight(autoHeight);
 		setCenterText(centerText);
 		setHoverColor(true);
 		this.onPress = onPress;

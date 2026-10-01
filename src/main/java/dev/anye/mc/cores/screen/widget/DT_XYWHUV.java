@@ -11,7 +11,7 @@ public class DT_XYWHUV {
 	public DT_XYWHUV(DT_XYWH dt_xywh, int uOffset, int vOffset) {
 		this.x = dt_xywh.x();
 		this.y = dt_xywh.y();
-		this.width = dt_xywh.width();
+		this.width = dt_xywh.w();
 		this.height = dt_xywh.height();
 		UOffset = uOffset;
 		VOffset = vOffset;

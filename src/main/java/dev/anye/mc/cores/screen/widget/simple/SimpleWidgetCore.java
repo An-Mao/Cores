@@ -1,7 +1,6 @@
 package dev.anye.mc.cores.screen.widget.simple;
 
 import com.mojang.logging.LogUtils;
-import dev.anye.core.color._ColorSupport;
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.mc.cores.am.config.Configs;
 import dev.anye.mc.cores.am.config.general.GeneralConfigData;
@@ -19,9 +18,11 @@ import org.slf4j.Logger;
 
 public abstract class SimpleWidgetCore<T extends SimpleWidgetCore<T>> extends RenderWidgetCore<T> {
 	private static final Logger LOGGER = LogUtils.getLogger();
-	private static boolean Background = Configs.GENERAL.fetch(GeneralConfigData::simpleWidgetBackground,true);
-	private static boolean Rounded = Configs.GENERAL.fetch(GeneralConfigData::simpleWidgetRounded,false);
-	private static boolean Glow = Configs.GENERAL.fetch(GeneralConfigData::simpleWidgetGlow,false);
+	protected static boolean Background = Configs.GENERAL.fetch(GeneralConfigData::simpleWidgetBackground,true);
+	protected static boolean Rounded = Configs.GENERAL.fetch(GeneralConfigData::simpleWidgetRounded,false);
+	protected static boolean Glow = Configs.GENERAL.fetch(GeneralConfigData::simpleWidgetGlow,false);
+	protected static boolean InnerGlow = Configs.GENERAL.fetch(GeneralConfigData::simpleInnerGlow,false);
+	protected static boolean OuterGlow = Configs.GENERAL.fetch(GeneralConfigData::simpleOuterGlow,false);
 
 	protected int radius;
 	protected int borderUsualColor;
@@ -34,14 +35,14 @@ public abstract class SimpleWidgetCore<T extends SimpleWidgetCore<T>> extends Re
 	protected int contentEndX;
 	protected int contentEndY;
 
-	protected GlowData glowData = GlowData.Builder().setInnerGlowRange(2).setOuterGlowRange(2).setIntensity(2).setColor(0xffffffff).build();
-	protected GlowData usualGlowColor = null;
-	protected GlowData hoverGlowColor = null;
+	protected FadeColorData usualGlowColor = null;
+	protected FadeColorData hoverGlowColor = null;
 
-	protected final SimpleBorderRender borderRender = new SimpleBorderRender()
+	protected final SimpleBorderRender borderRender = new SimpleBorderRender(
+			new GlowData().setEnable(Glow).setInnerGlowRange(2).setOuterGlowRange(2).setIntensity(2).setInner(InnerGlow).setOuter(OuterGlow)
+	)
 			.setBackgroundState(Background)
-			.setRounded(Rounded)
-			.setGlow(Glow ? glowData : null);
+			.setRounded(Rounded);
 
 	public static void setBackground() {
 		Background = !Background;
@@ -51,13 +52,25 @@ public abstract class SimpleWidgetCore<T extends SimpleWidgetCore<T>> extends Re
 
 	public static void setRounded() {
 		Rounded = !Rounded;
-		Configs.GENERAL.update(generalConfigData -> generalConfigData.setsimpleWidgetRounded(Rounded));
+		Configs.GENERAL.update(generalConfigData -> generalConfigData.setSimpleWidgetRounded(Rounded));
 		Configs.GENERAL.save();
 	}
 
 	public static void setGlow() {
 		Glow = !Glow;
-		Configs.GENERAL.update(generalConfigData -> generalConfigData.setsimpleWidgetGlow(Glow));
+		Configs.GENERAL.update(generalConfigData -> generalConfigData.setSimpleWidgetGlow(Glow));
+		Configs.GENERAL.save();
+	}
+
+	public static void setInnerGlow() {
+		InnerGlow = !InnerGlow;
+		Configs.GENERAL.update(generalConfigData -> generalConfigData.setSimpleInnerGlow(InnerGlow));
+		Configs.GENERAL.save();
+	}
+
+	public static void setOuterGlow() {
+		OuterGlow = !OuterGlow;
+		Configs.GENERAL.update(generalConfigData -> generalConfigData.setSimpleOuterGlow(OuterGlow));
 		Configs.GENERAL.save();
 	}
 
@@ -68,16 +81,16 @@ public abstract class SimpleWidgetCore<T extends SimpleWidgetCore<T>> extends Re
 	protected SimpleWidgetCore(int x, int y, int w, int h, int r, Component pMessage) {
 		super(x, y, w, h, pMessage);
 		setRadius(r);
-		usualGlowColor = GlowData.Builder().setInnerGlowRange(2).setOuterGlowRange(2).setIntensity(2).setColor(borderUsualColor).build();
-		hoverGlowColor = GlowData.Builder().setInnerGlowRange(2).setOuterGlowRange(2).setIntensity(2).setColor(borderHoverColor).build();
+		usualGlowColor = FadeColorData.withColor(borderUsualColor);
+		hoverGlowColor = FadeColorData.withColor(borderHoverColor);
 	}
 
 	@Override
 	public T setColorScheme(_ColorScheme colorScheme) {
 		super.setColorScheme(colorScheme);
-		setBorderUsualColor(colorScheme.getColor("border").UsualColor());
-		setBorderHoverColor(colorScheme.getColor("border").HoverColor());
-		setBorderSelectColor(colorScheme.getColor("border").SelectColor());
+		setBorderUsualColor(colorScheme.border().normal().leftTopColor());
+		setBorderHoverColor(colorScheme.border().hover().leftTopColor());
+		setBorderSelectColor(colorScheme.border().selected().leftTopColor());
 		return self();
 	}
 
@@ -124,8 +137,7 @@ public abstract class SimpleWidgetCore<T extends SimpleWidgetCore<T>> extends Re
 
 	public T setBorderUsualColor(int borderUsualColor) {
 		this.borderUsualColor = borderUsualColor;
-		LOGGER.debug("borderUsualColor {}", _ColorSupport.intToHexColor(borderUsualColor));
-		usualGlowColor = GlowData.Builder().setInnerGlowRange(2).setOuterGlowRange(2).setIntensity(2).setColor(borderUsualColor).build();
+		usualGlowColor = FadeColorData.withColor(borderUsualColor);
 		return self();
 	}
 
@@ -135,7 +147,7 @@ public abstract class SimpleWidgetCore<T extends SimpleWidgetCore<T>> extends Re
 
 	public T setBorderHoverColor(int borderHoverColor) {
 		this.borderHoverColor = borderHoverColor;
-		hoverGlowColor = GlowData.Builder().setInnerGlowRange(2).setOuterGlowRange(2).setIntensity(2).setColor(borderHoverColor).build();
+		hoverGlowColor = FadeColorData.withColor(borderHoverColor);
 		return self();
 	}
 
@@ -225,7 +237,7 @@ public abstract class SimpleWidgetCore<T extends SimpleWidgetCore<T>> extends Re
 		if (this.visible) {
 			int borderColor;
 			int fillColor;
-			GlowData glow;
+			FadeColorData glow;
 			if (hoverColor && isMouseOver(pMouseX, pMouseY)) {
 				borderColor = getBorderHoverColor();
 				fillColor = getBackgroundHoverColor();
@@ -240,7 +252,7 @@ public abstract class SimpleWidgetCore<T extends SimpleWidgetCore<T>> extends Re
 			/*guiGraphics.submitGuiElementRenderState(
 					new SimpleBorderRender(poseStack,
 							x,y,
-							width, height,
+							w, height,
 							radius,
 							borderColor
 					)
@@ -254,7 +266,7 @@ public abstract class SimpleWidgetCore<T extends SimpleWidgetCore<T>> extends Re
 
 			poseStack.pushMatrix();
 			guiGraphics.submitGuiElementRenderState(
-					borderRender.set(poseStack).setBackground(fillColor).setBorderColor(borderColor).setGlowColor(Glow ? glow : null)
+					borderRender.set(poseStack).setBackground(fillColor).setBorderColor(borderColor).setGlowColor(glow)
 			);
 			//poseStack.translate(getX(), getY());
 			//renderShape(guiGraphics, borderColor, fillColor);

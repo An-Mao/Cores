@@ -1,41 +1,50 @@
 package dev.anye.mc.cores.screen.widget.simple;
 
+import com.mojang.logging.LogUtils;
+import dev.anye.core.color.IStateColor;
+import dev.anye.core.color._StateColors;
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.core.debug._DeBug;
 import dev.anye.core.math._Math;
+import dev.anye.mc.cores.dt.FadeColorData;
+import dev.anye.mc.cores.dt.GlowData;
 import dev.anye.mc.cores.render.GuiGraphicsHelper;
-import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
+import dev.anye.mc.cores.render.SimpleBorderRender;
+import dev.anye.mc.cores.screen.widget.SimpleListBoxData;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import org.joml.Matrix3x2fStack;
+import org.slf4j.Logger;
 
 import java.util.List;
 
 public class SimpleListBox extends SimpleWidgetCore<SimpleListBox> {
-	protected List<DT_ListBoxData> data;
-	protected int
-			dataSize,
-			line,
-			row,
-			index,
-			startIndex,
-			elementalWidth,
-			elementalHeight,
-			widthSpace,
-			heightSpace,
-			strX = 1,
-			strY,
-			elementalBorderUsualColor,
-			elementalBorderHoverColor,
-			elementalTextUsualColor,
-			elementalTextHoverColor,
-			elementalBackgroundUsualColor,
-			elementalBackgroundHoverColor;
+	private static final Logger LOGGER = LogUtils.getLogger();
+	protected List<SimpleListBoxData> data;
+	protected int dataSize;
+	protected int line;
+	protected int row;
+	protected int index;
+	protected int startIndex;
+	protected int elementalWidth;
+	protected int elementalHeight;
+	protected int widthSpace;
+	protected int heightSpace;
+	protected int strX = 1;
+	protected int strY;
+	protected int elementalBorderUsualColor;
+	protected int elementalBorderHoverColor;
+	protected int elementalTextUsualColor;
+	protected int elementalTextHoverColor;
+	protected int elementalBackgroundUsualColor;
+	protected int elementalBackgroundHoverColor;
+	protected final GlowData elementGlowData;
 
-	public SimpleListBox(int x, int y, int w, int h, int elementalWidth, int elementalHeight, Component pMessage, List<DT_ListBoxData> data) {
-		super(x, y, w, h, pMessage);
+	public SimpleListBox(int x, int y, int w, int h, int elementalWidth, int elementalHeight, List<SimpleListBoxData> data) {
+		super(x, y, w, h, Component.empty());
+		elementGlowData = new GlowData().setEnable(Glow).setOuter(OuterGlow).setInner(InnerGlow).setInnerGlowRange(1).setOuterGlowRange(1);
 		this.data = data;
 		this.dataSize = this.data.size();
 		this.elementalWidth = elementalWidth;
@@ -44,23 +53,23 @@ public class SimpleListBox extends SimpleWidgetCore<SimpleListBox> {
 		this.heightSpace = 4;
 		this.index = -1;
 		this.startIndex = 0;
-		setStrY();
 		resetAutoSpace();
+		setStrY();
 		//setColorScheme(ColorSchemes.getGlobal());
 	}
 
 	@Override
 	public SimpleListBox setColorScheme(_ColorScheme colorScheme) {
 		super.setColorScheme(colorScheme);
-		_ColorScheme.Color color = colorScheme.getColor("element_border");
-		this.elementalBorderHoverColor = color.HoverColor();
-		this.elementalBorderUsualColor = color.UsualColor();
-		color = colorScheme.getColor("element_text");
-		this.elementalTextHoverColor = color.HoverColor();
-		this.elementalTextUsualColor = color.UsualColor();
-		color = colorScheme.getColor("element_background");
-		this.elementalBackgroundHoverColor = color.HoverColor();
-		this.elementalBackgroundUsualColor = color.UsualColor();
+		IStateColor color = colorScheme.elementBorder();
+		this.elementalBorderHoverColor = color.hover().leftTopColor();
+		this.elementalBorderUsualColor = color.normal().leftTopColor();
+		color = colorScheme.elementText();
+		this.elementalTextHoverColor = color.hover().leftTopColor();
+		this.elementalTextUsualColor = color.normal().leftTopColor();
+		color = colorScheme.elementBackground();
+		this.elementalBackgroundHoverColor = color.hover().leftTopColor();
+		this.elementalBackgroundUsualColor = color.normal().leftTopColor();
 		return self();
 	}
 
@@ -118,7 +127,7 @@ public class SimpleListBox extends SimpleWidgetCore<SimpleListBox> {
 		return elementalBackgroundUsualColor;
 	}
 
-	public SimpleListBox setData(List<DT_ListBoxData> data) {
+	public SimpleListBox setData(List<SimpleListBoxData> data) {
 		this.data = data;
 		this.dataSize = this.data.size();
 		this.index = -1;
@@ -135,19 +144,23 @@ public class SimpleListBox extends SimpleWidgetCore<SimpleListBox> {
 
 	public void resetAutoSpace() {
 		//计算宽度
-		int i = getElementalWidth() + getWidthSpace() * 2;
+		int i =  getWidthSpace() + getElementalWidth() + getWidthSpace();
+		//计算每行数量
 		this.row = getContentW() / i;
-		int space = (getContentW() - row * i) / row;
-		this.widthSpace += _Math.half1(space);
+		//计算间距
+		float space = (float) (getContentW() - row * getElementalWidth()) / row;
+		//重置间距
+		this.widthSpace = (int) (space / 2);
+
 		//计算高度
-		i = getElementalHeight() + getHeightSpace() * 2;
-		this.line = getContentH() / i;
-		space = (getContentH() - line * i) / line;
-		this.heightSpace += _Math.half1(space);
+		int hi = getElementalHeight() + getHeightSpace() * 2;
+		this.line = getContentH() / hi;
+		int hs = (getContentH() - line * hi) / line;
+		this.heightSpace += _Math.half1(hs);
 	}
 
 	public void setStrY() {
-		this.strY = _Math.half1(getElementalContentHeight() / font.lineHeight) + 1;
+		this.strY = _Math.half1(getElementalContentHeight() - font.lineHeight) + 1;
 	}
 
 	public int getStrY() {
@@ -208,35 +221,48 @@ public class SimpleListBox extends SimpleWidgetCore<SimpleListBox> {
 				if (startIndex < dataSize) {
 					int elemIndex = startIndex + i * row + r;
 					if (elemIndex < dataSize) {
-						int elemX = getContentX() + getWidthSpace() + r * (getElementalWidth() + getWidthSpace() + getWidthSpace());
-						int borderColor = getElementalBorderUsualColor(), backgroundColor = getElementalBackgroundUsualColor(), txtColor = getElementalTextUsualColor();
+						int elemX = getContentX() + getWidthSpace() + r *(getWidthSpace() +  getElementalWidth() + getWidthSpace());
+						int borderColor = getElementalBorderUsualColor();
+						int backgroundColor = getElementalBackgroundUsualColor();
+						int txtColor = getElementalTextUsualColor();
 						boolean mouseOver = mouseX > elemX
 								&& mouseX < elemX + elementalWidth
 								&& mouseY > elemY
 								&& mouseY < elemY + elementalHeight;
+						FadeColorData glow = usualGlowColor;
 						if (mouseOver) {
-							borderColor = getElementalBorderHoverColor();
-							backgroundColor = getElementalBackgroundHoverColor();
-							txtColor = getElementalTextHoverColor();
+							if (hoverColor) {
+								borderColor = getElementalBorderHoverColor();
+								backgroundColor = getElementalBackgroundHoverColor();
+								txtColor = getElementalTextHoverColor();
+								glow = hoverGlowColor;
+							}
 							idex = elemIndex;
 						}
 						Matrix3x2fStack poseStack = guiGraphics.pose();
-						poseStack.pushMatrix();
-						renderShape(guiGraphics, elemX, elemY, elementalWidth, elementalHeight, getRadius(), borderColor, backgroundColor);
-						poseStack.popMatrix();
-						drawString(guiGraphics, elemX + getRadius() + strX, elemY + getRadius() + getStrY(), txtColor, FixStrWidth(getDataComponent(elemIndex)));
-						if (mouseOver)
-							GuiGraphicsHelper.renderTooltip(guiGraphics, font, getData(elemIndex).getTooltip(), mouseX, mouseY);
+						SimpleBorderRender simpleBorderRender = new SimpleBorderRender(elementGlowData)
+								.setBackgroundState(Background)
+								.setRounded(Rounded)
+								.set(elemX, elemY, elementalWidth, elementalHeight,getRadius())
+								.set(poseStack)
+								.setBackground(backgroundColor)
+								.setBorderColor(borderColor)
+								.setGlowColor(glow);
+						guiGraphics.submitGuiElementRenderState(simpleBorderRender);
+						drawString(guiGraphics, (int) (elemX + simpleBorderRender.borderTotalWidth() + strX), (int) (elemY + simpleBorderRender.borderTotalWidth() + getStrY()), txtColor, FixStrWidth(getDataComponent(elemIndex), (int) simpleBorderRender.cW()));
+						//renderShape(guiGraphics, elemX, elemY, elementalWidth, elementalHeight, getRadius(), borderColor, backgroundColor);
 					}
 				} else {
 					break;
 				}
 			}
 		}
+		if (idex != -1)
+			GuiGraphicsHelper.renderTooltip(guiGraphics, font, getData(idex).tooltip(), mouseX, mouseY);
 		index = idex;
 	}
 
-	public DT_ListBoxData getData(int index) {
+	public SimpleListBoxData getData(int index) {
 		if (index < this.data.size()) {
 			return this.data.get(index);
 		}
@@ -245,12 +271,12 @@ public class SimpleListBox extends SimpleWidgetCore<SimpleListBox> {
 	}
 
 	public Component getDataComponent(int index) {
-		DT_ListBoxData d = getData(index);
+		SimpleListBoxData d = getData(index);
 		if (d != null) {
-			return d.getComponent();
+			return d.name();
 		}
 		_DeBug.ThrowError("error data");
-		return Component.literal("Error :: Null");
+		return Component.literal("Error");
 	}
 
 	@Override
@@ -265,25 +291,25 @@ public class SimpleListBox extends SimpleWidgetCore<SimpleListBox> {
 	}
 
 	@Override
-	public void onClick(MouseButtonEvent p_446284_, boolean p_434599_) {
-		onClick(p_446284_.x(), p_446284_.y());
+	public void onClick(MouseButtonEvent mouseButtonEvent, boolean doubleClick) {
+		onClick(mouseButtonEvent.x(), mouseButtonEvent.y());
 	}
 
 	public void onClick(double pMouseX, double pMouseY) {
 		if (isMouseOver(pMouseX, pMouseY) && index >= 0) {
-			DT_ListBoxData d = getData(index);
+			SimpleListBoxData d = getData(index);
 			if (d != null) {
-				d.OnPress(d.getValue());
+				d.onPress(d.value());
 			}
 		}
 	}
 
-	public String FixStrWidth(String s) {
-		return font.plainSubstrByWidth(s, getElementalContentWidth());
+	public String FixStrWidth(String s,int w) {
+		return font.plainSubstrByWidth(s, w);
 	}
 
-	public String FixStrWidth(Component s) {
-		return FixStrWidth(s.getString());
+	public String FixStrWidth(Component s,int w) {
+		return FixStrWidth(s.getString(),w);
 	}
 
 	public int getElementalContentWidth() {
@@ -291,6 +317,7 @@ public class SimpleListBox extends SimpleWidgetCore<SimpleListBox> {
 	}
 
 	public int getElementalContentHeight() {
-		return getElementalHeight() - 2 * getRadius();
+		if (elementGlowData == null) return getElementalHeight() - 2 * getRadius();
+		return (int) (getElementalHeight() - 2 * (elementGlowData.innerGlowRange() + elementGlowData.outerGlowRange() + getRadius()));
 	}
 }

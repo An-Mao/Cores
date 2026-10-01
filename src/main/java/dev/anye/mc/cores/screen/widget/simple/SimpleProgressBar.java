@@ -4,7 +4,9 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
 public class SimpleProgressBar extends SimpleWidgetCore<SimpleProgressBar> {
-	protected int progress, maxProgress, direction;
+	protected int progress;
+	protected int maxProgress;
+	protected int direction;
 
 	public SimpleProgressBar(int x, int y, int w, int h, int progress, int maxProgress, int direction, Component pMessage) {
 		super(x, y, w, h, pMessage);

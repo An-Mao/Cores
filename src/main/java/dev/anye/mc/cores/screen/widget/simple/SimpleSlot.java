@@ -1,15 +1,13 @@
 package dev.anye.mc.cores.screen.widget.simple;
 
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
-public class SimpleSlot extends SimpleWidgetCore<SimpleSlot> {
-	protected int slotWidth, slotHeight;
+public abstract class SimpleSlot extends SimpleWidgetCore<SimpleSlot> {
+	protected int slotWidth;
+	protected int slotHeight;
 
-	public SimpleSlot(int x, int y, int w, int h, Component pMessage) {
+	protected SimpleSlot(int x, int y, int w, int h, Component pMessage) {
 		super(x, y, w, h, pMessage);
-		setLayerZ(1);
 		setSlotHeight(16);
 		setSlotWidth(16);
 	}
@@ -21,20 +19,5 @@ public class SimpleSlot extends SimpleWidgetCore<SimpleSlot> {
 
 	public void setSlotHeight(int slotHeight) {
 		this.slotHeight = slotHeight;
-	}
-
-	@Override
-	protected void renderContent(GuiGraphicsExtractor guiGraphics, int i, int i1, float v) {
-
-	}
-
-	@Override
-	public boolean mouseScrolled(double pMouseX, double pMouseY, double pScrollX, double pScrollY) {
-		return false;
-	}
-
-	@Override
-	public boolean mouseClicked(MouseButtonEvent p_447133_, boolean p_434606_) {
-		return false;
 	}
 }

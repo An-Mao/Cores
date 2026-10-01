@@ -1,11 +1,10 @@
 package dev.anye.mc.cores.screen;
 
 import dev.anye.core.color.scheme._ColorScheme;
-import dev.anye.mc.cores.Cores;
 import dev.anye.mc.cores.am.color.ColorConfig;
 import dev.anye.mc.cores.am.color.ColorSchemeRegister;
 import dev.anye.mc.cores.am.color.ColorSchemes;
-import dev.anye.mc.cores.screen.widget.DT_ListBoxData;
+import dev.anye.mc.cores.screen.widget.SimpleListBoxData;
 import dev.anye.mc.cores.screen.widget.simple.SimpleButton;
 import dev.anye.mc.cores.screen.widget.simple.SimpleDropDownSelectBox;
 import dev.anye.mc.cores.screen.widget.simple.SimpleLabel;
@@ -59,7 +58,6 @@ public class SettingScreen extends Screen {
 		addRenderableWidget(button);
 
 		ix += button.getWidth() + 10;
-
 		button = new SimpleButton(
 				ix, iy,
 				30, 20,
@@ -67,6 +65,30 @@ public class SettingScreen extends Screen {
 				true, false, true,
 				()->{
 					SimpleWidgetCore.setGlow();
+					this.minecraft.setScreenAndShow(new SettingScreen());
+				});
+		addRenderableWidget(button);
+
+		ix += button.getWidth() + 10;
+		button = new SimpleButton(
+				ix, iy,
+				30, 20,
+				Component.translatable("screen.cores.settings.button.inner_glow"),
+				true, false, true,
+				()->{
+					SimpleWidgetCore.setInnerGlow();
+					this.minecraft.setScreenAndShow(new SettingScreen());
+				});
+		addRenderableWidget(button);
+
+		ix += button.getWidth() + 10;
+		button = new SimpleButton(
+				ix, iy,
+				30, 20,
+				Component.translatable("screen.cores.settings.button.outer_glow"),
+				true, false, true,
+				()->{
+					SimpleWidgetCore.setOuterGlow();
 					this.minecraft.setScreenAndShow(new SettingScreen());
 				});
 		addRenderableWidget(button);
@@ -84,9 +106,11 @@ public class SettingScreen extends Screen {
 
 		saveButton = new SimpleButton(centerX, this.height - 35, 64, 20, Component.translatable("screen.cores.settings.button.save"), true, false, true, this::save);
 		addRenderableWidget(saveButton);
-		//addRenderableWidget(new SimpleEditBox(100,16,128,20,Component.empty()));
-//		SimpleButton test = new SimpleButton(10,10,50,24,Component.literal("Test"),SettingScreen::openTest);
-//		addRenderableWidget(test);
+
+		ix = 10;
+		iy += 50;
+		SimpleButton test = new SimpleButton(ix,iy,30,20,Component.literal("Test"),SettingScreen::openTest);
+		addRenderableWidget(test);
 	}
 
 	public static void openTest() {
@@ -94,8 +118,8 @@ public class SettingScreen extends Screen {
 	}
 
 	private void save() {
-		DT_ListBoxData d = colorSelectBox.getSelectData();
-		if (d != null && d.getValue() instanceof _ColorScheme colorScheme) {
+		SimpleListBoxData d = colorSelectBox.getSelectData();
+		if (d != null && d.value() instanceof _ColorScheme colorScheme) {
 			Identifier identifier = ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().getKey(colorScheme);
 			if (identifier == null) return;
 			String key = identifier.toString();
@@ -108,9 +132,9 @@ public class SettingScreen extends Screen {
 	}
 
 
-	public List<DT_ListBoxData> getRegColor() {
-		List<DT_ListBoxData> data = new ArrayList<>();
-		ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().forEach(colorScheme -> data.add(new DT_ListBoxData(ColorSchemeRegister.getSchemeComponent(colorScheme), colorScheme)));
+	public List<SimpleListBoxData> getRegColor() {
+		List<SimpleListBoxData> data = new ArrayList<>();
+		ColorSchemeRegister.COLOR_SCHEME_REGISTER.getRegistry().forEach(colorScheme -> data.add(new SimpleListBoxData(ColorSchemeRegister.getSchemeComponent(colorScheme), colorScheme)));
 		return data;
 	}
 

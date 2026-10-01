@@ -6,6 +6,7 @@ import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import dev.anye.core.math._Arc;
 import dev.anye.mc.cores.dt.FadeColorData;
 import dev.anye.mc.cores.dt.GlowData;
+import dev.anye.mc.cores.dt.IVertexWith2DPose;
 import dev.anye.mc.cores.dt.Quad;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
@@ -15,6 +16,8 @@ import org.joml.Matrix3x2fStack;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
+
+import java.util.function.Consumer;
 
 public class SimpleBorderRender implements GuiElementRenderState {
 	private static final Logger LOGGER = LogUtils.getLogger();
@@ -34,7 +37,7 @@ public class SimpleBorderRender implements GuiElementRenderState {
 	protected boolean background = false;
 	protected FadeColorData backgroundColor;
 
-	protected final GlowData glowData = new GlowData();
+	protected final GlowData glowData;
 	protected FadeColorData oLeftFade;
 	protected FadeColorData oBottomFade;
 	protected FadeColorData oRightFade;
@@ -111,9 +114,11 @@ public class SimpleBorderRender implements GuiElementRenderState {
 	protected float borderTotalWidth = 0;
 	protected float borderTotalHeight = 0;
 
-	public SimpleBorderRender(){}
-	public SimpleBorderRender(float x, float y, float width, float height,float borderThickness){
-		set( x,  y,  width,  height, borderThickness);
+	public SimpleBorderRender(){
+		this(new GlowData());
+	}
+	public SimpleBorderRender(GlowData glowData){
+		this.glowData = glowData;
 	}
 
 	public SimpleBorderRender setBackgroundState(boolean state){
@@ -151,18 +156,23 @@ public class SimpleBorderRender implements GuiElementRenderState {
 	}
 
 	public SimpleBorderRender setOuterGlowColor(FadeColorData fadeColorData){
-		this.oLeftFade = fadeColorData.right();
-		this.oBottomFade = fadeColorData.down();
-		this.oRightFade = fadeColorData;
-		this.oTopFade = fadeColorData.up();
+		glowData.setOuterGlowColor(fadeColorData);
+		this.oLeftFade = glowData.outerGlowColor().right();
+		this.oBottomFade = glowData.outerGlowColor().down();
+		this.oRightFade = glowData.outerGlowColor();
+		this.oTopFade = glowData.outerGlowColor().up();
 		return this;
 	}
 	public SimpleBorderRender setInnerGlowColor(FadeColorData fadeColorData){
-		this.iLeftFade = fadeColorData;
-		this.iBottomFade = fadeColorData.up();
-		this.iRightFade = fadeColorData.right();
-		this.iTopFade = fadeColorData.down();
+		glowData.setInnerGlowColor(fadeColorData);
+		this.iLeftFade = glowData.innerGlowColor();
+		this.iBottomFade = glowData.innerGlowColor().up();
+		this.iRightFade = glowData.innerGlowColor().right();
+		this.iTopFade = glowData.innerGlowColor().down();
 		return this;
+	}
+	public SimpleBorderRender setGlowColor(FadeColorData color){
+		return setGlowColor(color,color);
 	}
 	public SimpleBorderRender setGlowColor(FadeColorData outer,FadeColorData inner){
 		setOuterGlowColor(outer);
@@ -170,29 +180,12 @@ public class SimpleBorderRender implements GuiElementRenderState {
 		return this;
 	}
 	public SimpleBorderRender setGlowColor(GlowData glowData){
-		LOGGER.debug("setGlowColor");
 		setGlowColor(glowData.outerGlowColor(),glowData.innerGlowColor());
 		return this;
 	}
-
-	public SimpleBorderRender setGlow(GlowData glowData){
-		setGlowColor(glowData.outerGlowColor(),glowData.innerGlowColor());
-		//setOuterGlowColor(glowData.outerGlowColor());
-//		this.oLeftFade = glowData.outerGlowColor().right();
-//		this.oBottomFade = glowData.outerGlowColor().down();
-//		this.oRightFade = glowData.outerGlowColor();
-//		this.oTopFade = glowData.outerGlowColor().up();
-
-		//setInnerGlowColor(glowData.innerGlowColor());
-//		this.iLeftFade = glowData.outerGlowColor();
-//		this.iBottomFade = glowData.outerGlowColor().up();
-//		this.iRightFade = glowData.outerGlowColor().right();
-//		this.iTopFade = glowData.outerGlowColor().down();
-
-
+	public void reset(){
 		resetOuterPos();
 		resetBorderPos();
-
 		if (!rounded) {
 			oTQ = Quad.normalDownTrapezoid(oW, glowData.outerGlowRange(), oSW, glowData.outerGlowRange());
 			oLQ = Quad.normalRightTrapezoid(oH, glowData.outerGlowRange(), oSH, glowData.outerGlowRange());
@@ -204,6 +197,12 @@ public class SimpleBorderRender implements GuiElementRenderState {
 		iLQ = Quad.normalRightTrapezoid(iH, glowData.innerGlowRange(), iSH, glowData.innerGlowRange());
 		iRQ = Quad.normalLeftTrapezoid(iSH, glowData.innerGlowRange(), iH, glowData.innerGlowRange());
 		iBQ = Quad.normalUpTrapezoid(iSW, glowData.innerGlowRange(), iW, glowData.innerGlowRange());
+	}
+
+
+	public SimpleBorderRender updateGlow(Consumer<GlowData> consumer){
+		consumer.accept(this.glowData);
+		reset();
 		return this;
 	}
 
@@ -217,7 +216,7 @@ public class SimpleBorderRender implements GuiElementRenderState {
 		this.iW = this.bW - borderThickness - borderThickness;
 		this.iH = this.bH - borderThickness - borderThickness;
 
-		if (glowData.enable()){
+		if (glowData.enable() && glowData.inner()){
 			this.iSW = this.iW - glowData.innerGlowRange() - glowData.innerGlowRange();
 			this.iSH = this.iH - glowData.innerGlowRange() - glowData.innerGlowRange();
 			this.borderTotalWidth = this.iX + glowData.innerGlowRange();
@@ -244,7 +243,7 @@ public class SimpleBorderRender implements GuiElementRenderState {
 	 * 重置外发光的尺寸，仅在glow不为null时生效
 	 */
 	public void resetOuterPos(){
-		if (glowData.enable()){
+		if (glowData.enable() && glowData.outer()){
 			this.oW = width;
 			this.oH = height;
 			this.oSW = this.oW - glowData.outerGlowRange() - glowData.outerGlowRange();
@@ -257,7 +256,7 @@ public class SimpleBorderRender implements GuiElementRenderState {
 	 * 重置边框pos
 	 */
 	public void resetBorderPos(){
-		if (glowData.enable()){
+		if (glowData.enable() && glowData.outer()){
 			this.bX = glowData.outerGlowRange();
 			this.bY = glowData.outerGlowRange();
 
@@ -286,12 +285,19 @@ public class SimpleBorderRender implements GuiElementRenderState {
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.screenRectangle = new ScreenRectangle((int) x, (int) y, (int) width, (int) height);
+		setScreenRectangle();
 		this.borderThickness = borderThickness;
-		resetBorderPos();
+		reset();
 		return this;
 	}
+	public SimpleBorderRender setScreenRectangle(){
+		return setScreenRectangle(new ScreenRectangle((int) x, (int) y, (int) width, (int) height));
+	}
 
+	public SimpleBorderRender setScreenRectangle(ScreenRectangle screenRectangle){
+		this.screenRectangle = screenRectangle;
+		return this;
+	}
 
 	@Override
 	public void buildVertices(@NonNull VertexConsumer vertexConsumer) {
@@ -299,9 +305,6 @@ public class SimpleBorderRender implements GuiElementRenderState {
 		pose.pushMatrix();
 		pose.translate(x,y);
 		background(vertexConsumer);
-		//FadeColorData{leftTopColor=0xFF90FFFF, leftBottomColor=0x8090FFFF, rightBottomColor=0x8090FFFF, rightTopColor=0xFF90FFFF}
-		//color FadeColorData{leftTopColor=0xFF90FFFF, leftBottomColor=0x8090FFFF, rightBottomColor=0x8090FFFF, rightTopColor=0xFF90FFFF}
-		LOGGER.debug("color {}",oTopFade);
 		outerGlow(vertexConsumer);
 
 		border(vertexConsumer);
@@ -319,6 +322,10 @@ public class SimpleBorderRender implements GuiElementRenderState {
 		}
 	}
 
+	/**
+	 * 渲染边框
+	 * @param vertexConsumer 顶点
+	 */
 	public void border(VertexConsumer vertexConsumer){
 		if (borderThickness > 0 && bW > 0 && bH > 0) {
 			pose.pushMatrix();
@@ -357,10 +364,8 @@ public class SimpleBorderRender implements GuiElementRenderState {
 			pose.popMatrix();
 		}
 	}
-
 	public void outerGlow(VertexConsumer vertexConsumer){
-		if (glowData != null && glowData.outerGlowRange() > 0) {
-			LOGGER.debug("outerGlow");
+		if (glowData.enable() && glowData.outer() && glowData.outerGlowRange() > 0) {
 			pose.pushMatrix();
 			pose.translate(oX, oY);
 			if (rounded) {
@@ -390,7 +395,6 @@ public class SimpleBorderRender implements GuiElementRenderState {
 				//fan
 				Render2DHelper.fan4(vertexConsumer, pose, or, borderThickness, orW, orH, oTopFade);
 			} else {
-				LOGGER.debug("quad {}",oTQ);
 				//top
 				Render2DHelper.rect(vertexConsumer, pose, oTQ, oTopFade);
 				//left
@@ -409,10 +413,8 @@ public class SimpleBorderRender implements GuiElementRenderState {
 			pose.popMatrix();
 		}
 	}
-
-
 	public void innerGlow(VertexConsumer vertexConsumer){
-		if (glowData != null && glowData.innerGlowRange() > 0){
+		if (glowData.enable() && glowData.inner() && glowData.innerGlowRange() > 0){
 			pose.pushMatrix();
 			pose.translate(iX,iY);
 			//top
@@ -431,65 +433,66 @@ public class SimpleBorderRender implements GuiElementRenderState {
 		}
 	}
 
-	public void oldInnerGlow(VertexConsumer vertexConsumer){
-		if (glowData != null && glowData.innerGlowRange() > 0){
-			pose.translate(iX,iY);
-			pose.pushMatrix();
-			//left
-			pose.translate(0,glowData.innerGlowRange());
-			FadeColorData fade = glowData.innerGlowColor();
-			Render2DHelper.rect(vertexConsumer,pose,glowData.innerGlowRange(),iSH, fade);
-			//right
-			pose.translate(iSW + glowData.innerGlowRange(),0);
-			fade = glowData.innerGlowColor().right();
-			Render2DHelper.rect(vertexConsumer,pose,glowData.innerGlowRange(),iSH, fade);
-			pose.popMatrix();
-
-			pose.pushMatrix();
-			//top
-			pose.translate(glowData.innerGlowRange(),0);
-			fade = glowData.innerGlowColor().down();
-			Render2DHelper.rect(vertexConsumer,pose,iSW,glowData.innerGlowRange(),fade);
-
-			//bottom
-			pose.translate(0,iSH + glowData.innerGlowRange());
-			fade = glowData.innerGlowColor().up();
-			Render2DHelper.rect(vertexConsumer,pose,iSW,glowData.innerGlowRange(),fade);
-			pose.popMatrix();
-
-			pose.pushMatrix();
-			fade = new FadeColorData(glowData.innerGlowColor().leftTopColor(),glowData.innerGlowColor().leftBottomColor(),glowData.innerGlowColor().leftTopColor(),glowData.innerGlowColor().rightTopColor());
-			Render2DHelper.rect(vertexConsumer,pose, glowData.innerGlowRange(), glowData.innerGlowRange(),fade.tb());
-
-			pose.translate(0,iSH + glowData.innerGlowRange());
-
-			pose.pushMatrix();
-			pose.translate(0,glowData.innerGlowRange());
-			pose.rotate((float) _Arc.ccn(90));
-			Render2DHelper.rect(vertexConsumer,pose, glowData.innerGlowRange(), glowData.innerGlowRange(),fade.tb());
-			pose.popMatrix();
-
-			pose.translate(iSW + glowData.innerGlowRange(),0);
-			Render2DHelper.rect(vertexConsumer,pose, glowData.innerGlowRange(), glowData.innerGlowRange(),fade.up());
-
-			pose.translate(0,- iSH - glowData.innerGlowRange());
-			pose.pushMatrix();
-			pose.translate(glowData.innerGlowRange(),0);
-			pose.rotate((float) _Arc.cc(90));
-			Render2DHelper.rect(vertexConsumer,pose, glowData.innerGlowRange(), glowData.innerGlowRange(),fade.tb());
-			pose.popMatrix();
-			pose.popMatrix();
-		}
+	public void innerHorizontalLine(VertexConsumer vertexConsumer,float width){
+		Render2DHelper.rect(vertexConsumer,pose,width,borderThickness,bTopFade);
 	}
 
+	/**
+	 * 横向发光线条
+	 * @param vertexConsumer
+	 * @param width
+	 */
+	public void innerGlowHorizontalLine(VertexConsumer vertexConsumer,float width){
+		if (glowData.enable() && glowData.innerGlowRange() > 0){
+			//top
+			Render2DHelper.rect(vertexConsumer,pose,width,glowData.innerGlowRange(),iBottomFade);
+			//center
+			Render2DHelper.rect(vertexConsumer,pose,width,borderThickness,bTopFade);
+			//top
+			Render2DHelper.rect(vertexConsumer,pose,width,glowData.innerGlowRange(),iTopFade);
+		} else innerHorizontalLine(vertexConsumer,width);
+	}
+	/**
+	 * 纵向发光线条
+	 * @param vertexConsumer 顶点缓存
+	 * @param height 高度
+	 */
+	public void innerGlowVerticalLine(VertexConsumer vertexConsumer,float height){
+		if (glowData.enable() && glowData.innerGlowRange() > 0){
+			//left
+			Render2DHelper.rect(vertexConsumer,pose,glowData.innerGlowRange(),height,iRightFade);
+			//center
+			Render2DHelper.rect(vertexConsumer,pose,borderThickness,height,bTopFade);
+			//top
+			Render2DHelper.rect(vertexConsumer,pose,glowData.innerGlowRange(),height,iLeftFade);
+		} else innerVerticalLine(vertexConsumer,height);
+	}
 
+	public void innerVerticalLine(VertexConsumer vertexConsumer,float height){
+		Render2DHelper.rect(vertexConsumer,pose,borderThickness,height,bTopFade);
+	}
+
+	public SimpleBorderRender setY(float y) {
+		this.y = y;
+		setScreenRectangle();
+		return this;
+	}
+
+	public SimpleBorderRender setX(float x) {
+		this.x = x;
+		setScreenRectangle();
+		return this;
+	}
+
+	public float borderThickness() {
+		return borderThickness;
+	}
 	public float borderTotalWidth() {
 		return borderTotalWidth;
 	}
 	public float borderTotalHeight() {
 		return borderTotalHeight;
 	}
-
 	public float iX() {
 		return iX;
 	}
@@ -508,15 +511,12 @@ public class SimpleBorderRender implements GuiElementRenderState {
 	public float iSH() {
 		return iSH;
 	}
-
 	public float cX() {
 		return cX;
 	}
-
 	public float cY() {
 		return cY;
 	}
-
 	public float cW() {
 		return cW;
 	}
@@ -528,12 +528,10 @@ public class SimpleBorderRender implements GuiElementRenderState {
 	public @NonNull RenderPipeline pipeline() {
 		return RenderPipelines.GUI;
 	}
-
 	@Override
 	public @NonNull TextureSetup textureSetup() {
 		return TextureSetup.noTexture();
 	}
-
 	@Override
 	public @Nullable ScreenRectangle scissorArea() {
 		return screenRectangle;

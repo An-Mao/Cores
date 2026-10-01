@@ -2,7 +2,7 @@ package dev.anye.mc.cores.am.color;
 
 import com.google.gson.reflect.TypeToken;
 
-import dev.anye.core.color.scheme._ColorScheme.Color;
+import dev.anye.core.color._StateColors;
 import dev.anye.core.json._JsonConfig;
 import dev.anye.core.system._File;
 import dev.anye.mc.cores.Cores;
@@ -20,15 +20,15 @@ public class ColorSchemeIO extends _JsonConfig<ColorSchemeIO.Data> {
 	}
 
 
-	public record Data(Color border, Color text, Color background,
-	                   Color elementBorder, Color elementText, Color elementBackground) {
+	public record Data(_StateColors border, _StateColors text, _StateColors background,
+					   _StateColors elementBorder, _StateColors elementText, _StateColors elementBackground) {
 		public static final Data DEFAULT = new Data(
-				new Color(0xFF000000, 0xFF000000, 0xFF000000),
-				new Color(0xFFFFFFFF, 0xFF0000FF, 0xFF000000),
-				new Color(0xFF000000, 0xFF000000, 0xFF000000),
-				new Color(0xFF000000, 0xFF000000, 0xFF000000),
-				new Color(0xFFFFFFFF, 0xFF0000FF, 0xFF000000),
-				new Color(0xFF000000, 0xFF000000, 0xFF000000)
+				new _StateColors(0xFF000000, 0xFF000000, 0xFF000000),
+				new _StateColors(0xFFFFFFFF, 0xFF0000FF, 0xFF000000),
+				new _StateColors(0xFF000000, 0xFF000000, 0xFF000000),
+				new _StateColors(0xFF000000, 0xFF000000, 0xFF000000),
+				new _StateColors(0xFFFFFFFF, 0xFF0000FF, 0xFF000000),
+				new _StateColors(0xFF000000, 0xFF000000, 0xFF000000)
 		);
 
 	}

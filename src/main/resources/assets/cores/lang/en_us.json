@@ -38,5 +38,7 @@
   "screen.cores.settings.button.save": "Save",
   "screen.cores.settings.button.chang_background": "Background",
   "screen.cores.settings.button.chang_rounded": "Rounded",
-  "screen.cores.settings.button.chang_glow": "Glow"
+  "screen.cores.settings.button.chang_glow": "Glow",
+  "screen.cores.settings.button.inner_glow": "Inner Glow",
+  "screen.cores.settings.button.outer_glow": "Outer Glow"
 }

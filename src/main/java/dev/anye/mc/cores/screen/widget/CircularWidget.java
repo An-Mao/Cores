@@ -19,24 +19,24 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 	protected int sectors;
 	protected int innerRadius, outerRadius;
 	protected double fanAngle, fanArc, halfFanArc;
-	protected List<DT_ListBoxData> data;
+	protected List<SimpleListBoxData> data;
 	protected int index = -1;
 	protected int startIndex = 0;
 	protected int fanTextInnerSpace;
 
-	public CircularWidget(int x, int y, int w, int h, Component message, DT_ListBoxData... data) {
+	public CircularWidget(int x, int y, int w, int h, Component message, SimpleListBoxData... data) {
 		this(x, y, w, h, message, List.of(data));
 	}
 
-	public CircularWidget(int x, int y, int w, int h, Component message, List<DT_ListBoxData> data) {
+	public CircularWidget(int x, int y, int w, int h, Component message, List<SimpleListBoxData> data) {
 		this(x, y, w, h, 9, 20, 80, message, data);
 	}
 
-	public CircularWidget(int x, int y, int w, int h, int sectors, int innerRadius, int outerRadius, Component message, DT_ListBoxData... data) {
+	public CircularWidget(int x, int y, int w, int h, int sectors, int innerRadius, int outerRadius, Component message, SimpleListBoxData... data) {
 		this(x, y, w, h, sectors, innerRadius, outerRadius, message, List.of(data));
 	}
 
-	public CircularWidget(int x, int y, int w, int h, int sectors, int innerRadius, int outerRadius, Component message, List<DT_ListBoxData> data) {
+	public CircularWidget(int x, int y, int w, int h, int sectors, int innerRadius, int outerRadius, Component message, List<SimpleListBoxData> data) {
 		super(x, y, w, h, message);
 		if (sectors < 1) {
 			_DeBug.ThrowError("error sectors");
@@ -49,17 +49,17 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 		setFanTextInnerSpace(10);
 	}
 
-	public CircularWidget(int x, int y, int w, int h, int sectors, int innerRadius, int outerRadius, int highlightColor, int normalColor, Component message, DT_ListBoxData... data) {
+	public CircularWidget(int x, int y, int w, int h, int sectors, int innerRadius, int outerRadius, int highlightColor, int normalColor, Component message, SimpleListBoxData... data) {
 		this(x, y, w, h, sectors, innerRadius, outerRadius, highlightColor, normalColor, message, List.of(data));
 	}
 
-	public CircularWidget(int x, int y, int w, int h, int sectors, int innerRadius, int outerRadius, int highlightColor, int normalColor, Component message, List<DT_ListBoxData> data) {
+	public CircularWidget(int x, int y, int w, int h, int sectors, int innerRadius, int outerRadius, int highlightColor, int normalColor, Component message, List<SimpleListBoxData> data) {
 		this(x, y, w, h, sectors, innerRadius, outerRadius, message, data);
 		setBackgroundHoverColor(highlightColor);
 		setBackgroundUsualColor(normalColor);
 	}
 
-	public void setData(List<DT_ListBoxData> data) {
+	public void setData(List<SimpleListBoxData> data) {
 		this.data = data;
 	}
 
@@ -104,11 +104,11 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 		this.innerRadius = innerRadius;
 	}
 
-	public DT_ListBoxData getData() {
+	public SimpleListBoxData getData() {
 		return getData(index);
 	}
 
-	public DT_ListBoxData getData(int index) {
+	public SimpleListBoxData getData(int index) {
 		if (isValidIndex(index)) {
 			return data.get(index);
 		}
@@ -154,9 +154,9 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 
 	public void onClick(double pMouseX, double pMouseY, int button) {
 		if (flipMode == FlipMode.tire) {
-			DT_ListBoxData dtListBoxData = getData();
+			SimpleListBoxData dtListBoxData = getData();
 			if (dtListBoxData != null) {
-				dtListBoxData.OnPress(dtListBoxData.getValue());
+				dtListBoxData.onPress(dtListBoxData.value());
 			}
 		}
 	}
@@ -212,8 +212,8 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 				//poseStack.mul(Axis.ZP.rotation((float) (startAngle)).);
 				GuiGraphicsHelper.SectorX(guiGraphics, centerX, centerY, innerRadius + 10, outerRadius, -halfFanArc, halfFanArc, bgc);
 				if (isValidIndex(sIndex)) {
-					DT_ListBoxData boxData = getData(sIndex);
-					drawName(guiGraphics, startAngle, boxData.getComponent().getString(), tc, size);
+					SimpleListBoxData boxData = getData(sIndex);
+					drawName(guiGraphics, startAngle, boxData.name().getString(), tc, size);
 				}
 				poseStack.popMatrix();
 			}

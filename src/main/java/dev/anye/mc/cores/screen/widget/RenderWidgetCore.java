@@ -1,5 +1,7 @@
 package dev.anye.mc.cores.screen.widget;
 
+import dev.anye.core.color.IStateColor;
+import dev.anye.core.color._StateColors;
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.core.math._Math;
 import dev.anye.mc.cores.am.color.ColorSchemes;
@@ -33,8 +35,6 @@ public abstract class RenderWidgetCore<T extends RenderWidgetCore<T>> extends Ab
 
 	protected boolean hoverColor;
 
-	//过小的z轴可能导致元素在某些元素的下面
-	protected int layerZ = 1000;
 
 	protected int halfFontLine;
 	protected List<ClientTooltipComponent> customToolTip = new ArrayList<>();
@@ -61,14 +61,14 @@ public abstract class RenderWidgetCore<T extends RenderWidgetCore<T>> extends Ab
 	 * @return T
 	 */
 	public T setColorScheme(_ColorScheme colorScheme) {
-		_ColorScheme.Color color = colorScheme.getColor("text");
-		this.textHoverColor = color.HoverColor();
-		this.textUsualColor = color.UsualColor();
-		this.textSelectColor = color.SelectColor();
-		color = colorScheme.getColor("background");
-		this.backgroundHoverColor = color.HoverColor();
-		this.backgroundUsualColor = color.UsualColor();
-		this.backgroundSelectColor = color.SelectColor();
+		IStateColor color = colorScheme.text();
+		this.textHoverColor = color.hover().leftTopColor();
+		this.textUsualColor = color.normal().leftTopColor();
+		this.textSelectColor = color.selected().leftTopColor();
+		color = colorScheme.background();
+		this.backgroundHoverColor = color.hover().leftTopColor();
+		this.backgroundUsualColor = color.normal().leftTopColor();
+		this.backgroundSelectColor = color.selected().leftTopColor();
 		return self();
 	}
 
@@ -122,14 +122,6 @@ public abstract class RenderWidgetCore<T extends RenderWidgetCore<T>> extends Ab
 		return self();
 	}
 
-	public int getLayerZ() {
-		return layerZ;
-	}
-
-	public T setLayerZ(int layerZ) {
-		this.layerZ = layerZ;
-		return self();
-	}
 
 	public int getBackgroundUsualColor() {
 		return backgroundUsualColor;
