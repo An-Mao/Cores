@@ -1,7 +1,6 @@
 package dev.anye.mc.cores.screen.widget;
 
 import dev.anye.core.color.IStateColor;
-import dev.anye.core.color._StateColors;
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.core.math._Math;
 import dev.anye.mc.cores.am.color.ColorSchemes;

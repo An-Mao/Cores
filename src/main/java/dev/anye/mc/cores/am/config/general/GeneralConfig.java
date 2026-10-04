@@ -1,7 +1,6 @@
 package dev.anye.mc.cores.am.config.general;
 
 import com.google.gson.reflect.TypeToken;
-import dev.anye.core.json._JsonConfigR;
 import dev.anye.core.json._JsonConfigS;
 import dev.anye.core.system._File;
 import dev.anye.mc.cores.Cores;

@@ -29,8 +29,7 @@ import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEve
 @EventBusSubscriber(modid = Cores.MOD_ID, value = Dist.CLIENT)
 public class CoresClient {
 	public CoresClient(ModContainer container) {
-		//Nothing
-		container.registerExtensionPoint(IConfigScreenFactory.class, (modContainer,modListScreen)->new SettingScreen());
+		container.registerExtensionPoint(IConfigScreenFactory.class, (_, _)->new SettingScreen());
 	}
 
 	@SubscribeEvent

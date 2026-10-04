@@ -1,5 +1,6 @@
 package dev.anye.mc.cores.screen.widget;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.anye.core.debug._DeBug;
 import dev.anye.core.math._MathCDT;
 import dev.anye.mc.cores.render.GuiGraphicsHelper;
@@ -17,8 +18,11 @@ import java.util.List;
 public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 	protected FlipMode flipMode;
 	protected int sectors;
-	protected int innerRadius, outerRadius;
-	protected double fanAngle, fanArc, halfFanArc;
+	protected int innerRadius;
+	protected int outerRadius;
+	protected double fanAngle;
+	protected double fanArc;
+	protected double halfFanArc;
 	protected List<SimpleListBoxData> data;
 	protected int index = -1;
 	protected int startIndex = 0;
@@ -45,7 +49,7 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 		setSectors(sectors);
 		setInnerRadius(innerRadius);
 		setOuterRadius(outerRadius);
-		setFlipMode(FlipMode.tire);
+		setFlipMode(FlipMode.TIRE);
 		setFanTextInnerSpace(10);
 	}
 
@@ -124,20 +128,21 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 	}
 
 	@Override
-	public boolean mouseClicked(MouseButtonEvent p_447133_, boolean p_434606_) {
+	public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean doubleClick) {
 
-		return mouseClicked(p_447133_.x(), p_447133_.y(), p_447133_.button()) || super.mouseClicked(p_447133_, p_434606_);
+		return mouseClicked(mouseButtonEvent.x(), mouseButtonEvent.y(), mouseButtonEvent.button())
+						|| super.mouseClicked(mouseButtonEvent, doubleClick);
 
 	}
 
 	public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-		if (this.active && this.visible && this.flipMode == FlipMode.button) {
-			if (pButton == 0) {
+		if (this.active && this.visible && this.flipMode == FlipMode.BUTTON) {
+			if (pButton == InputConstants.MOUSE_BUTTON_LEFT) {
 				if (startIndex >= sectors) {
 					startIndex -= sectors;
 					return true;
 				}
-			} else if (pButton == 1) {
+			} else if (pButton == InputConstants.MOUSE_BUTTON_RIGHT) {
 				if (data.size() > startIndex + sectors) {
 					startIndex += sectors;
 					return true;
@@ -153,7 +158,7 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 	}
 
 	public void onClick(double pMouseX, double pMouseY, int button) {
-		if (flipMode == FlipMode.tire) {
+		if (flipMode == FlipMode.TIRE) {
 			SimpleListBoxData dtListBoxData = getData();
 			if (dtListBoxData != null) {
 				dtListBoxData.onPress(dtListBoxData.value());
@@ -163,7 +168,7 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 
 	@Override
 	public boolean mouseScrolled(double pMouseX, double pMouseY, double pScrollX, double pScrollY) {
-		if (this.flipMode == FlipMode.tire) {
+		if (this.flipMode == FlipMode.TIRE) {
 			if (pScrollY > 0) {
 				if (startIndex >= sectors) {
 					startIndex -= sectors;
@@ -183,7 +188,8 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 	@Override
 	protected void extractWidgetRenderState(@NotNull GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float v) {
 		if (visible) {
-			int centerX = getX(), centerY = getY();
+			int centerX = getX();
+			int centerY = getY();
 			double angle = Math.atan2(mouseY - centerY, mouseX - centerX) + halfFanArc;
 			if (angle < 0) {
 				angle += _MathCDT.TWICE_PI;
@@ -245,7 +251,7 @@ public class CircularWidget extends RenderWidgetCore<CircularWidget> {
 	}
 
 	public enum FlipMode {
-		tire,
-		button
+		TIRE,
+		BUTTON
 	}
 }

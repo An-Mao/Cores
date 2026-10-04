@@ -2,7 +2,6 @@ package dev.anye.mc.cores.screen.widget.simple;
 
 import com.mojang.logging.LogUtils;
 import dev.anye.core.color.IStateColor;
-import dev.anye.core.color._StateColors;
 import dev.anye.core.color.scheme._ColorScheme;
 import dev.anye.core.debug._DeBug;
 import dev.anye.core.math._Math;

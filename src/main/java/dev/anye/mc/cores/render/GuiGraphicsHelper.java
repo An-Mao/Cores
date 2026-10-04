@@ -2,9 +2,10 @@ package dev.anye.mc.cores.render;
 
 import dev.anye.core.color._ColorCDT;
 import dev.anye.core.math._Arc;
-import dev.anye.mc.cores.dt.FadeColorData;
-import dev.anye.mc.cores.dt.GlowData;
-import dev.anye.mc.cores.render.element.*;
+import dev.anye.mc.cores.render.element.BorderRenderState;
+import dev.anye.mc.cores.render.element.RectRenderState;
+import dev.anye.mc.cores.render.element.SectorRenderState;
+import dev.anye.mc.cores.render.element.SectorXRenderState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -70,8 +71,6 @@ public final class GuiGraphicsHelper {
 	 * @param fillColor 填充颜色
 	 */
 	public static void RoundedRect(GuiGraphicsExtractor guiGraphics, int x, int y, int width, int height, int radius, int borderColor, int fillColor) {
-		Matrix3x2fStack poseStack = guiGraphics.pose();
-		poseStack.pushMatrix();
 		//poseStack.translate(x,y);
 		/*guiGraphics.submitGuiElementRenderState(new RoundedRectGlowDataBorderRenderState(
 				poseStack,
@@ -81,24 +80,23 @@ public final class GuiGraphicsHelper {
 				radius,borderColor,getBounds(x,y,w,height),getBounds(x,y,w,height)
 		));*/
 
+		Matrix3x2fStack poseStack = guiGraphics.pose();
+		poseStack.pushMatrix();
 		guiGraphics.submitGuiElementRenderState(new RectRenderState(
 				RenderPipelines.GUI,
 				TextureSetup.noTexture(),
 				poseStack,
-				x + radius,
-				y + radius,
-				width - radius * 2,
-				height- radius * 2,
+				x,
+				y,
+				width,
+				height,
 				radius,
 				fillColor,
 				getBounds(x, y, width, height),
 				getBounds(x, y, width, height)
 		));
 		poseStack.popMatrix();
-
 		RoundedBorder(guiGraphics, x, y, width, height, radius, borderColor);
-
-
 	}
 
 	/**
@@ -117,8 +115,8 @@ public final class GuiGraphicsHelper {
 		if (width <= 0 || height <= 0) {
 			return;
 		}
-
-		radius = Math.max(0, Math.min(radius, Math.min(width, height) / 2));
+		//Math.max(0, Math.min(radius, Math.min(width, height) / 2));
+		radius = Math.clamp(radius, 0, Math.min(width, height) / 2);
 
 		Matrix3x2fStack poseStack = guiGraphics.pose();
 		poseStack.pushMatrix();
@@ -144,7 +142,10 @@ public final class GuiGraphicsHelper {
 	public static void Corners(GuiGraphicsExtractor guiGraphics, int x, int y, int width, int height, int radius, int color) {
 		if (width <= 0 || height <= 0 || radius <= 0) return;
 
-		int minX = x + radius, minY = y + radius, maxX = x + width - radius, maxY = y + height - radius;
+		int minX = x + radius;
+		int minY = y + radius;
+		int maxX = x + width - radius;
+		int maxY = y + height - radius;
 		Matrix3x2fStack poseStack = guiGraphics.pose();
 		poseStack.pushMatrix();
 		GuiGraphicsHelper.SectorX(guiGraphics, minX, minY, 0, radius, _Arc.c(180), _Arc.c(270), color);
