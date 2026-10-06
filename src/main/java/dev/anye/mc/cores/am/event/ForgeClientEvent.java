@@ -1,0 +1,59 @@
+package dev.anye.mc.cores.am.event;
+
+import com.google.common.collect.Multimap;
+import dev.anye.mc.cores.Cores;
+import dev.anye.mc.cores.am.util.KeyBinding;
+import dev.anye.mc.cores.helper.item.ItemHelper;
+import dev.anye.mc.cores.screen.SettingScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.Holder;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+@Mod.EventBusSubscriber(modid = Cores.MOD_ID, value = Dist.CLIENT)
+public class ForgeClientEvent {
+    @SubscribeEvent
+    public static void onKeyRegister(RegisterKeyMappingsEvent event){
+        event.register(KeyBinding.OPEN_MENU);
+    }
+
+    @SubscribeEvent
+    public static void onKeyInput(InputEvent.Key event) {
+        /*
+        Player player = Minecraft.getInstance().player;
+        if (player != null) {
+            if (player.isAlive()) {
+                System.out.println("event.getAction() ::" + event.getAction());
+                if (KeyBinding.OPEN_MENU.consumeClick()) {
+                    Minecraft.getInstance().setScreen(new TestScreen());
+                }
+            }
+        }
+
+         */
+        if (event.getKey() == KeyBinding.OPEN_MENU.getKey().getValue()) {
+            Screen screen = Minecraft.getInstance().gui.screen();
+            if (event.getAction() == 1) {
+                if (screen == null) {
+                    Minecraft.getInstance().setScreenAndShow(new SettingScreen());
+                }
+            }
+        }
+    }
+    public static void outputAttributes(){
+        Minecraft minecraft = Minecraft.getInstance();
+        LocalPlayer player = minecraft.player;
+        if (player != null){
+            Multimap<Holder<Attribute>, AttributeModifier> modifiers = ItemHelper.getAttributeModifiers(player.getMainHandItem(), EquipmentSlot.MAINHAND);
+            System.out.println(modifiers);
+        }
+    }
+}

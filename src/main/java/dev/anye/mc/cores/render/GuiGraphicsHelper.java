@@ -1,0 +1,201 @@
+package dev.anye.mc.cores.render;
+
+import dev.anye.core.color._ColorCDT;
+import dev.anye.core.math._Arc;
+import dev.anye.mc.cores.render.element.BorderRenderState;
+import dev.anye.mc.cores.render.element.RectRenderState;
+import dev.anye.mc.cores.render.element.SectorRenderState;
+import dev.anye.mc.cores.render.element.SectorXRenderState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.minecraft.client.gui.render.TextureSetup;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.Component;
+import org.joml.Matrix3x2fStack;
+import org.joml.Vector2i;
+import org.joml.Vector2ic;
+
+import java.util.List;
+
+public final class GuiGraphicsHelper {
+	private GuiGraphicsHelper(){}
+	public static void Sector(GuiGraphicsExtractor guiGraphics, int x, int y, int outerRadius, double startArc, double endArc, int color) {
+		guiGraphics.getRenderState().addGuiElement(new SectorRenderState(
+				guiGraphics.pose(),
+				x, y,
+				outerRadius,
+				startArc,
+				endArc,
+				color,
+				getBounds(x - 10, y -10, outerRadius + 20),
+				getBounds(x - 10, y-10, outerRadius +20)
+		));
+	}
+
+	public static void SectorX(GuiGraphicsExtractor guiGraphics, int x, int y, int innerRadius, int outerRadius, double startArc, double endArc, int color) {
+		if (innerRadius >= outerRadius) {
+			if (innerRadius == 0) Sector(guiGraphics, x, y, outerRadius, startArc, endArc, color);
+			return;
+		}
+		SectorX(guiGraphics, x, y, innerRadius, innerRadius, outerRadius, outerRadius, startArc, endArc, color);
+	}
+
+	public static void SectorX(GuiGraphicsExtractor guiGraphics, int x, int y, int innerRadiusX, int innerRadiusY, int outerRadiusX, int outerRadiusY, double startArc, double endArc, int color) {
+		guiGraphics.getRenderState().addGuiElement(new SectorXRenderState(
+				guiGraphics.pose(),
+				x, y,
+				innerRadiusX,
+				innerRadiusY,
+				outerRadiusX,
+				outerRadiusY,
+				startArc,
+				endArc,
+				color,
+				getBounds(x - outerRadiusX, y - outerRadiusY, outerRadiusX + outerRadiusX, outerRadiusY + outerRadiusY),
+				getBounds(x - outerRadiusX, y - outerRadiusY, outerRadiusX + outerRadiusX, outerRadiusY + outerRadiusY)
+		));
+	}
+
+	/**
+	 * 绘制圆角矩形
+	 * @param guiGraphics GuiGraphicsExtractor
+	 * @param x x
+	 * @param y y
+	 * @param width w
+	 * @param height h
+	 * @param radius r
+	 * @param borderColor 边框颜色
+	 * @param fillColor 填充颜色
+	 */
+	public static void RoundedRect(GuiGraphicsExtractor guiGraphics, int x, int y, int width, int height, int radius, int borderColor, int fillColor) {
+		//poseStack.translate(x,y);
+		/*guiGraphics.submitGuiElementRenderState(new RoundedRectGlowDataBorderRenderState(
+				poseStack,
+				x,y,
+				w,
+				height,
+				radius,borderColor,getBounds(x,y,w,height),getBounds(x,y,w,height)
+		));*/
+
+		Matrix3x2fStack poseStack = guiGraphics.pose();
+		poseStack.pushMatrix();
+		guiGraphics.getRenderState().addGuiElement(new RectRenderState(
+				RenderPipelines.GUI,
+				TextureSetup.noTexture(),
+				poseStack,
+				x,
+				y,
+				width,
+				height,
+				radius,
+				fillColor,
+				getBounds(x, y, width, height),
+				getBounds(x, y, width, height)
+		));
+		poseStack.popMatrix();
+		RoundedBorder(guiGraphics, x, y, width, height, radius, borderColor);
+	}
+
+	/**
+	 * 仅绘制圆角矩形边框，不绘制填充。
+	 * 用于发光等需要重复绘制边框的效果，避免每一层都提交一个透明填充 RectRenderState。
+	 */
+	public static void RoundedBorder(
+			GuiGraphicsExtractor guiGraphics,
+			int x,
+			int y,
+			int width,
+			int height,
+			int radius,
+			int borderColor
+	) {
+		if (width <= 0 || height <= 0) {
+			return;
+		}
+		//Math.max(0, Math.min(radius, Math.min(width, height) / 2));
+		radius = Math.clamp(radius, 0, Math.min(width, height) / 2);
+
+		Matrix3x2fStack poseStack = guiGraphics.pose();
+		poseStack.pushMatrix();
+		guiGraphics.getRenderState().addGuiElement(new BorderRenderState(
+				RenderPipelines.GUI,
+				TextureSetup.noTexture(),
+				poseStack,
+				x,
+				y,
+				width,
+				height,
+				radius,
+				borderColor,
+				getBounds(x, y, width, height),
+				getBounds(x, y, width, height)));
+		poseStack.popMatrix();
+
+		// radius == 0 时没有圆角扇区可绘制，避免提交 0x0 的 SectorRenderState。
+		if (radius > 0) {
+			Corners(guiGraphics, x, y, width, height, radius, borderColor);
+		}
+	}
+	public static void Corners(GuiGraphicsExtractor guiGraphics, int x, int y, int width, int height, int radius, int color) {
+		if (width <= 0 || height <= 0 || radius <= 0) return;
+
+		int minX = x + radius;
+		int minY = y + radius;
+		int maxX = x + width - radius;
+		int maxY = y + height - radius;
+		Matrix3x2fStack poseStack = guiGraphics.pose();
+		poseStack.pushMatrix();
+		GuiGraphicsHelper.SectorX(guiGraphics, minX, minY, 0, radius, _Arc.c(180), _Arc.c(270), color);
+		GuiGraphicsHelper.SectorX(guiGraphics, maxX, minY, 0, radius, _Arc.c(270), _Arc.c(360), color);
+		GuiGraphicsHelper.SectorX(guiGraphics, maxX, maxY, 0, radius, _Arc.c(0), _Arc.c(90), color);
+		GuiGraphicsHelper.SectorX(guiGraphics, minX, maxY, 0, radius, _Arc.c(90), _Arc.c(180), color);
+		poseStack.popMatrix();
+	}
+
+
+	public static void DrawString(GuiGraphicsExtractor guiGraphics, String str, int x, int y) {
+		DrawString(guiGraphics, Minecraft.getInstance().font, str, x, y, _ColorCDT.BLACK);
+	}
+
+	public static void DrawString(GuiGraphicsExtractor guiGraphics, Font font, String str, int x, int y, int color) {
+		guiGraphics.text(font, str, x, y, color);
+	}
+
+	public static void DrawString(GuiGraphicsExtractor guiGraphics, Font font, int x, int y, int color, boolean shadow, Component component) {
+		guiGraphics.text(font, component, x, y, color, shadow);
+	}
+
+	public void DrawString(GuiGraphicsExtractor guiGraphics, int x, int y, int color, boolean shadow, Component component) {
+		DrawString(guiGraphics, Minecraft.getInstance().font, x, y, color, shadow, component);
+	}
+
+	public void DrawString(GuiGraphicsExtractor guiGraphics, int x, int y, int color, Component component) {
+		DrawString(guiGraphics, Minecraft.getInstance().font, x, y, color, false, component);
+	}
+
+	public void DrawString(GuiGraphicsExtractor guiGraphics, int x, int y, Component component) {
+		DrawString(guiGraphics, Minecraft.getInstance().font, x, y, _ColorCDT.BLACK, false, component);
+	}
+
+	public static Vector2ic positionTooltip(int screenWidth, int screenHeight, int mouseX, int mouseY, int tooltipWidth, int tooltipHeight) {
+		return new Vector2i(mouseX + 16, mouseY);
+	}
+
+	public static void renderTooltip(GuiGraphicsExtractor guiGraphics, Font font, List<ClientTooltipComponent> components, int mouseX, int mouseY) {
+		guiGraphics.tooltip(font, components, mouseX, mouseY, GuiGraphicsHelper::positionTooltip, null,false);
+	}
+
+	public static ScreenRectangle getBounds(int x, int y, int w, int h) {
+		return new ScreenRectangle(x, y, w, h);
+	}
+
+	public static ScreenRectangle getBounds(int x, int y, int r) {
+		return new ScreenRectangle(x - r, y - r, r + r, r + r);
+	}
+
+
+
+}
